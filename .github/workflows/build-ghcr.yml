@@ -38,6 +38,7 @@ jobs:
           python3 tests/test-models.py
           python3 tests/test-workflows.py
           python3 tests/test-version-profile.py
+          python3 tests/test-runpod-template.py
           bash tests/test-backup.sh
           bash tests/test-secrets.sh
 

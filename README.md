@@ -68,7 +68,7 @@ Recommended initial target: **NVIDIA A100 80 GB**. H100/H200 and RTX PRO GPUs ma
 3. Attach persistent storage at `/workspace`. Plan for about **200 GB minimum / 250 GB recommended** for this profile's INT8 and BF16 weights, Hugging Face cache, outputs, and headroom. Confirm actual model sizes during release validation.
 4. Add `HF_TOKEN` in RunPod's environment/secret interface. The alias `HUGGING_FACE_HUB_TOKEN` is also accepted.
 5. Optionally add S3 variables and set `REALTIME_BACKUP=true`.
-6. Expose HTTP port `8188` and start the pod. Open ComfyUI after provisioning reaches readiness.
+6. Expose HTTP ports `8188` and `8080`; add `8888` only when enabling Jupyter. Start the pod and open ComfyUI after provisioning reaches readiness.
 
 There is no manual login, script run, model download, workflow import, or restart. Startup initializes `/workspace`, checks CUDA, downloads missing models to persistent storage, verifies workflows, then starts ComfyUI. If models are already present and valid, startup keeps them and does not need a token. Provisioning errors are written to `/workspace/logs/startup.log`.
 
@@ -134,6 +134,14 @@ To start a build after this repository change is committed and pushed:
 - Use **Actions → Build and publish LTX Studio image → Run workflow** for a commit-addressed `sha-<12 chars>` build. The workflow input defaults to `ltx-2.5`.
 - Push a release tag such as `v2.5.0` after the chosen validation gate. The tag build pushes the version tag, SHA tag, and `latest` after the CPU checks pass.
 - Check the workflow run and package digest in GHCR. Make `ghcr.io/acdevmedia/ltx25-studio` public in package settings before RunPod anonymous pulls.
+
+After the immutable SHA image is anonymously pullable from GHCR, create the public RunPod template from the reviewed payload in `config/runpod-template.json`:
+
+```bash
+python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx25-studio:<sha-tag>
+```
+
+The helper reads `RUNPOD_API_KEY` from the shell or ignored `.env`, verifies that GHCR allows anonymous pulls, checks for an existing template with the same name, and then calls RunPod's template API. It never puts Hugging Face or S3 credentials into the public template. Use RunPod Secrets to add those credentials to a Pod.
 
 The local build remains available for systems with enough disk:
 

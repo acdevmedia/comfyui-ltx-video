@@ -7,12 +7,14 @@
 | Name | ACDEV LTX-2.5 Studio |
 | Container image | `ghcr.io/acdevmedia/ltx25-studio:<version>` (use the digest recorded after publishing for a fixed release) |
 | GPU | A100 80GB recommended |
+| Container disk | 100 GB (matches the working ValyrianTech template and leaves room for CUDA/PyTorch application layers) |
 | Persistent volume | Mount at `/workspace`; 200 GB minimum, 250 GB preferred |
-| HTTP port | `8188` ComfyUI |
+| HTTP port | `8188` ComfyUI direct |
+| HTTP port | `8080` nginx reverse proxy to ComfyUI and output files |
 | HTTP port | `8888` only if `ENABLE_JUPYTER=true` and a Jupyter token is set |
 | TCP port | `22` SSH; add `PUBLIC_KEY` if SSH is needed |
 
-Do not add 7860, 8675, gallery, or model-serving ports. The image contains no model weights. First startup downloads the model manifest to persistent storage. Storage depends on which workflows and adapters are enabled; keep additional room for outputs.
+Do not add `8675` (the upstream port served its unrelated AI Toolkit UI) or other model-serving ports. HTTP `8080` retains the upstream nginx proxy. The image contains no model weights. First startup downloads the model manifest to persistent storage. Storage depends on which workflows and adapters are enabled; keep additional room for outputs.
 
 ## Environment variables
 
@@ -46,4 +48,10 @@ Optional admin services: `ENABLE_JUPYTER=true` requires a nonempty `JUPYTER_TOKE
 
 ## Publish the template
 
-First publish a versioned GHCR image, set the package public, and verify pull access. Create a RunPod template with the fields above, enter the Hugging Face secret, and launch a test pod on an A100 80GB with persistent storage. Confirm automatic model downloads, ComfyUI readiness, one short video/audio generation, the output browser, and backup verification before making the template public. See `docs/deployment.md` for release checks.
+First publish a versioned GHCR image, set the package public, and verify pull access. The reviewed API body is `config/runpod-template.json`; `scripts/create-runpod-template.py` checks for public pull access and duplicate names, then creates the public template using `RUNPOD_API_KEY` from the shell or ignored `.env`.
+
+```bash
+python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx25-studio:<sha-tag>
+```
+
+Add Hugging Face and S3 credentials through RunPod Secrets after creation. Launch a test pod on an A100 80GB with persistent storage. Confirm automatic model downloads, ComfyUI readiness, one short video/audio generation, the output browser, and backup verification. See `docs/deployment.md` for release checks.

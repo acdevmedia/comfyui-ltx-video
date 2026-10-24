@@ -29,6 +29,7 @@ COPY config /opt/ltx25-studio/config
 COPY versions /opt/ltx25-studio/versions
 COPY frontend/video-gallery/ /opt/ltx25-studio/ComfyUI/web/extensions/ACDEV-LTX25-video-gallery/
 COPY docker /opt/ltx25-studio/docker
+COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 COPY scripts /opt/ltx25-studio/scripts
 COPY backup /opt/ltx25-studio/backup
 COPY .env.example /opt/ltx25-studio/.env.example

@@ -25,6 +25,8 @@ if [[ "${ENABLE_JUPYTER:-false}" =~ ^(1|true|yes)$ ]]; then
 fi
 if [[ -n "${PUBLIC_KEY:-}" ]]; then install -d -m 700 /root/.ssh; printf '%s\n' "$PUBLIC_KEY" >> /root/.ssh/authorized_keys; chmod 600 /root/.ssh/authorized_keys; ssh-keygen -A; /usr/sbin/sshd; fi
 echo "[startup] Models and packaged workflows verified. Starting ComfyUI on :${COMFYUI_PORT:-8188}."
+nginx -t
+nginx -g 'daemon off;' >>/workspace/logs/nginx.log 2>&1 & children+=("$!")
 "$APP/docker/start-comfyui.sh" >>/workspace/logs/comfyui.log 2>&1 & children+=("$!")
 while true; do
   for pid in "${children[@]}"; do
