@@ -1,0 +1,92 @@
+name: Build and publish LTX Studio image
+
+on:
+  workflow_dispatch:
+    inputs:
+      ltx_version:
+        description: Version profile folder under versions/
+        required: true
+        default: ltx-2.5
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ghcr-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.10'
+      - name: Run project checks
+        run: |
+          python3 scripts/package-workflows.py
+          git diff --exit-code -- versions/ltx-2.5/workflows
+          bash tests/test-startup.sh
+          python3 tests/test-models.py
+          python3 tests/test-workflows.py
+          python3 tests/test-version-profile.py
+          bash tests/test-backup.sh
+          bash tests/test-secrets.sh
+
+  build-and-push:
+    needs: static-checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Read selected version profile
+        id: profile
+        env:
+          LTX_VERSION: ${{ github.event.inputs.ltx_version || 'ltx-2.5' }}
+        run: python3 scripts/profile-build-args.py --version "$LTX_VERSION" --github-output "$GITHUB_OUTPUT"
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Select image tags
+        id: tags
+        env:
+          REF: ${{ github.ref }}
+          SHA: ${{ github.sha }}
+        run: |
+          image=ghcr.io/acdevmedia/ltx25-studio
+          {
+            echo "tags<<EOF"
+            echo "$image:sha-${SHA:0:12}"
+            if [[ "$REF" == refs/tags/v* ]]; then
+              echo "$image:${REF#refs/tags/}"
+              echo "$image:latest"
+            fi
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+      - name: Build and push
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.tags.outputs.tags }}
+          build-args: |
+            LTX_VERSION=${{ steps.profile.outputs.ltx_version }}
+            CUDA_VERSION=${{ steps.profile.outputs.cuda_version }}
+          cache-from: type=gha,scope=ltx25-studio-${{ steps.profile.outputs.ltx_version }}
+          cache-to: type=gha,mode=max,scope=ltx25-studio-${{ steps.profile.outputs.ltx_version }}
+          provenance: true
+          sbom: true

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "model_variant": "int8-convrot",
+  "models": [
+    {"id":"ltx25-transformer-int8","repo":"Lightricks/LTX-2.5","file":"diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors","required_for":["image_to_video","text_to_video","audio_to_video","text_to_audio","two_stage"],"default":true},
+    {"id":"ltx25-text-encoder-int8","repo":"Lightricks/LTX-2.5","file":"text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors","required_for":["image_to_video","text_to_video","audio_to_video","text_to_audio","two_stage"],"default":true},
+    {"id":"gemma4-enhancer-int8","repo":"Comfy-Org/gemma-4","file":"text_encoders/gemma4_e2b_it_int8_convrot.safetensors","required_for":["prompt_enhancement-int8"],"default":true},
+    {"id":"gemma4-enhancer-bf16","repo":"Comfy-Org/gemma-4","file":"text_encoders/gemma4_e2b_it_bf16.safetensors","required_for":["official-workflow-prompt-enhancement"],"default":true},
+    {"id":"ltx25-video-vae-conv","repo":"Lightricks/LTX-2.5","file":"vae/ltx-2.5-video-vae-conv-bf16.safetensors","required_for":["image_to_video","text_to_video","audio_to_video","two_stage"],"default":true},
+    {"id":"ltx25-video-vae","repo":"Lightricks/LTX-2.5","file":"vae/ltx-2.5-video-vae-bf16.safetensors","required_for":["image_to_video","text_to_video","audio_to_video","two_stage","ingredients"],"default":true},
+    {"id":"ltx25-audio-vae","repo":"Lightricks/LTX-2.5","file":"vae/ltx-2.5-audio-vae-bf16.safetensors","required_for":["image_to_video","text_to_video","audio_to_video","text_to_audio","two_stage","ingredients"],"default":true},
+    {"id":"ltx25-upscaler","repo":"Lightricks/LTX-2.5","file":"latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors","required_for":["image_to_video","text_to_video","audio_to_video","two_stage"],"default":true},
+    {"id":"ingredients-transformer-bf16","repo":"Lightricks/LTX-2.5","file":"diffusion_models/ltx-2.5-22b-distilled-transformer-bf16.safetensors","required_for":["ingredients"],"default":true},
+    {"id":"ingredients-text-encoder-bf16","repo":"Lightricks/LTX-2.5","file":"text_encoders/gemma4-12b-with-proj-ltx-2.5-bf16.safetensors","required_for":["ingredients"],"default":true},
+    {"id":"ingredients-ic-lora","repo":"Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients","file":"ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors","target":"loras/ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors","required_for":["ingredients"],"default":true}
+  ]
+}

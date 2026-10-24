@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "note": "Only Ingredients is enabled and provisioned by default. Other adapters remain unavailable until their exact LTX-2.5 checkpoint and graph compatibility is verified.",
+  "adapters": [
+    {"id":"ingredients","name":"Ingredients — Character and Scene Continuity","repo":"Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients","file":"ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors","checkpoint":"ltx-2.5 distilled BF16","conditioning":"LTXAddVideoICLoRAGuide + repeat reference-sheet frames + crop guide frames after sampling","strength_default":1.0,"workflow":"07_LTX25_Ingredients.json","enabled":true},
+    {"id":"cinemagraph","name":"Cinemagraph","status":"not-provisioned; compatibility review required"},
+    {"id":"slow-motion-control","name":"Slow Motion Control","status":"not-provisioned; compatibility review required"},
+    {"id":"day-to-night","name":"Day to Night","status":"not-provisioned; compatibility review required"},
+    {"id":"refine-details","name":"Refine Details","status":"not-provisioned; compatibility review required"},
+    {"id":"deblur","name":"Deblur","status":"not-provisioned; compatibility review required"},
+    {"id":"decompression","name":"Decompression","status":"not-provisioned; compatibility review required"},
+    {"id":"sdr-to-hdr","name":"SDR to HDR","status":"not-provisioned; specialised color pipeline and output requirements"},
+    {"id":"colorization","name":"Colorization","status":"not-provisioned; compatibility review required"},
+    {"id":"pixel-spatial-upscaler","name":"Pixel Spatial Upscaler","status":"not-provisioned; compatibility review required"},
+    {"id":"motion-control","name":"Motion Control","status":"not-provisioned; specialised conditioning graph required"},
+    {"id":"union-control","name":"Union Control","status":"not-provisioned; specialised conditioning graph required"},
+    {"id":"layout-to-render","name":"Layout to Render","status":"not-provisioned; compatibility review required"}
+  ],
+  "excluded": ["Clean Plate", "Restore", "Water Simulation"]
+}

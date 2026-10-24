@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "ltx-2.5",
+  "product_name": "ACDEV LTX-2.5 Studio",
+  "model_family": "LTX-2.5 Distilled",
+  "workflow_schema": "ComfyUI API-format graphs with embedded UI subgraphs",
+  "default_workflow": "01_LTX25_Image_to_Video.json",
+  "defaults": {
+    "duration_seconds": 30,
+    "fps": 24,
+    "megapixels": 0.5,
+    "aspect_ratio": "16:9",
+    "seed": "random",
+    "prompt_rewriting": false,
+    "video_output": "mp4"
+  },
+  "assets": {
+    "models": "config/models.json",
+    "adapters": "config/adapters.json",
+    "workflows": "workflows",
+    "workflow_files": [
+      "01_LTX25_Image_to_Video.json",
+      "02_LTX25_Text_to_Video.json",
+      "03_LTX25_First_Last_Frame.json",
+      "04_LTX25_Audio_to_Video.json",
+      "05_LTX25_Text_to_Audio.json",
+      "06_LTX25_Two_Stage_Advanced.json",
+      "07_LTX25_Ingredients.json"
+    ]
+  },
+  "runtime": {
+    "cuda_version": "12.8.0",
+    "python_version": "3.10",
+    "torch_version": "2.8.0",
+    "torchvision_version": "0.23.0",
+    "torchaudio_version": "2.8.0",
+    "torch_index_url": "https://download.pytorch.org/whl/cu128",
+    "comfyui_commit": "06c67806",
+    "manager_commit": "7e1af9c202fbd0051df3da43572976acd12857dc",
+    "custom_scripts_commit": "609f3afaa74b2f88ef9ce8d939626065e3247469",
+    "ltxvideo_commit": "220e1d45aa0469f518e982102fca4dca92a61862",
+    "huggingface_hub_version": "0.36.0",
+    "transformers_version": "4.57.3",
+    "comfy_aimdo_version": "0.5.6",
+    "comfy_kitchen_version": "0.2.37",
+    "av_version": "17.0.0",
+    "boto3_version": "1.40.54",
+    "watchdog_version": "6.0.0",
+    "jupyterlab_version": "4.4.7"
+  },
+  "compatibility": {
+    "primary_gpu": "NVIDIA A100 80GB",
+    "gpu_render_verified": false,
+    "known_limits": [
+      "721 frames is a requested default and requires RunPod performance validation.",
+      "Ingredients defaults to its documented 121-frame, 768x448 training bucket.",
+      "INT8 and BF16 checkpoints are separate assets and are not interchangeable."
+    ]
+  }
+}

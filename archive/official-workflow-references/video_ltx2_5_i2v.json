@@ -1,19 +1,19 @@
 {
   "id": "07824bbb-6672-4bb0-ac36-4313a519e35b",
-  "revision": 5,
-  "last_node_id": 408,
-  "last_link_id": 785,
+  "revision": 0,
+  "last_node_id": 404,
+  "last_link_id": 784,
   "nodes": [
     {
       "id": 395,
       "type": "LoadImage",
       "pos": [
-        40,
-        30
+        1420,
+        6400
       ],
       "size": [
-        620,
-        480
+        530,
+        650
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
           "links": null
         }
       ],
-      "title": "Opening Shot — Reference Image",
+      "title": "Load First Frame",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.8.2",
@@ -54,18 +54,14 @@
       "widgets_values": [
         "neon_cyborg_portrait.png",
         "image"
-      ],
-      "widgets_values_named": {
-        "image": "neon_cyborg_portrait.png",
-        "upload": "image"
-      }
+      ]
     },
     {
       "id": 75,
       "type": "SaveVideo",
       "pos": [
-        1560,
-        30
+        2540,
+        6400
       ],
       "size": [
         800,
@@ -110,40 +106,32 @@
       "widgets_values": [
         "video/LTX-2.5_i2v",
         "auto",
-        "auto",
         "auto"
-      ],
-      "widgets_values_named": {
-        "filename_prefix": "video/LTX-2.5_i2v",
-        "format": "auto",
-        "format.codec": "auto",
-        "codec": "auto"
-      },
-      "title": "Final Cut — Export Video"
+      ]
     },
     {
       "id": 398,
       "type": "6e397a2b-68f7-48f6-8930-f3a5491a163c",
       "pos": [
-        760,
-        30
+        1990,
+        6400
       ],
       "size": [
-        650,
-        1300
+        500,
+        670
       ],
       "flags": {},
       "order": 6,
       "mode": 0,
       "inputs": [
         {
-          "label": "Opening Frame",
+          "label": "first_frame",
           "name": "input",
           "type": "IMAGE,MASK",
           "link": 764
         },
         {
-          "label": "Scene Prompt — Camera, Action, Dialogue & Sound",
+          "label": "prompt",
           "name": "value",
           "type": "STRING",
           "widget": {
@@ -152,7 +140,7 @@
           "link": null
         },
         {
-          "label": "Rewrite My Prompt with AI",
+          "label": "prompt_enhance",
           "name": "value_1",
           "type": "BOOLEAN",
           "widget": {
@@ -161,7 +149,7 @@
           "link": null
         },
         {
-          "label": "Clip Duration (seconds)",
+          "label": "duration",
           "name": "value_2",
           "type": "INT",
           "widget": {
@@ -170,7 +158,7 @@
           "link": null
         },
         {
-          "label": "Frame Width",
+          "label": "width",
           "name": "value_3",
           "type": "INT",
           "widget": {
@@ -179,7 +167,7 @@
           "link": 783
         },
         {
-          "label": "Frame Height",
+          "label": "height",
           "name": "value_4",
           "type": "INT",
           "widget": {
@@ -188,7 +176,7 @@
           "link": 784
         },
         {
-          "label": "Frame Rate (fps)",
+          "label": "frame_rate",
           "name": "value_5",
           "type": "INT",
           "widget": {
@@ -197,7 +185,7 @@
           "link": null
         },
         {
-          "label": "Picture Decoder",
+          "label": "video_vae",
           "name": "vae_name",
           "type": "COMBO",
           "widget": {
@@ -206,7 +194,7 @@
           "link": null
         },
         {
-          "label": "Sound Decoder",
+          "label": "audio_vae",
           "name": "vae_name_1",
           "type": "COMBO",
           "widget": {
@@ -215,7 +203,7 @@
           "link": null
         },
         {
-          "label": "Detail Upscaler",
+          "label": "upscale_model",
           "name": "model_name",
           "type": "COMBO",
           "widget": {
@@ -224,154 +212,13 @@
           "link": null
         },
         {
-          "label": "Prompt Rewrite Model",
+          "label": "prompt_enhance_model",
           "name": "clip_name_1",
           "type": "COMBO",
           "widget": {
             "name": "clip_name_1"
           },
           "link": null
-        },
-        {
-          "label": "Negative Prompt (CFG 1.0: little/no effect)",
-          "name": "director_negative_prompt",
-          "type": "STRING",
-          "link": 785
-        },
-        {
-          "label": "Video Guidance — First Render (CFG)",
-          "name": "director_stage_1_video_cfg",
-          "type": "FLOAT",
-          "widget": {
-            "name": "director_stage_1_video_cfg"
-          },
-          "link": null
-        },
-        {
-          "label": "Audio Guidance — First Render (CFG)",
-          "name": "director_stage_1_audio_cfg",
-          "type": "FLOAT",
-          "widget": {
-            "name": "director_stage_1_audio_cfg"
-          },
-          "link": null
-        },
-        {
-          "label": "Video Guidance — Detail Render (CFG)",
-          "name": "director_stage_2_video_cfg",
-          "type": "FLOAT",
-          "widget": {
-            "name": "director_stage_2_video_cfg"
-          },
-          "link": null
-        },
-        {
-          "label": "Audio Guidance — Detail Render (CFG)",
-          "name": "director_stage_2_audio_cfg",
-          "type": "FLOAT",
-          "widget": {
-            "name": "director_stage_2_audio_cfg"
-          },
-          "link": null
-        },
-        {
-          "label": "Take Variation Seed",
-          "name": "noise_seed",
-          "type": "INT",
-          "widget": {
-            "name": "noise_seed"
-          },
-          "link": null
-        },
-        {
-          "label": "Video Model File",
-          "name": "unet_name",
-          "type": "COMBO",
-          "widget": {
-            "name": "unet_name"
-          },
-          "link": null
-        },
-        {
-          "label": "Video Text Encoder",
-          "name": "clip_name",
-          "type": "COMBO",
-          "widget": {
-            "name": "clip_name"
-          },
-          "link": null
-        },
-        {
-          "name": "filmmaker_352_sampler_name",
-          "type": "COMBO",
-          "link": null,
-          "widget": {
-            "name": "filmmaker_352_sampler_name"
-          },
-          "label": "Video Sampling Method — First Render"
-        },
-        {
-          "name": "filmmaker_341_sampler_name",
-          "type": "COMBO",
-          "link": null,
-          "widget": {
-            "name": "filmmaker_341_sampler_name"
-          },
-          "label": "Video Sampling Method — Detail Render"
-        },
-        {
-          "name": "filmmaker_397_sigmas",
-          "type": "STRING",
-          "link": null,
-          "widget": {
-            "name": "filmmaker_397_sigmas"
-          },
-          "label": "Sampling Timings — First Render"
-        },
-        {
-          "name": "filmmaker_396_sigmas",
-          "type": "STRING",
-          "link": null,
-          "widget": {
-            "name": "filmmaker_396_sigmas"
-          },
-          "label": "Sampling Timings — Detail Render"
-        },
-        {
-          "name": "filmmaker_351_mode",
-          "type": "COMBO",
-          "link": null,
-          "widget": {
-            "name": "filmmaker_351_mode"
-          },
-          "label": "Opening Image — Resize Mode"
-        },
-        {
-          "name": "filmmaker_351_size",
-          "type": "INT",
-          "link": null,
-          "widget": {
-            "name": "filmmaker_351_size"
-          },
-          "label": "Opening Image — Resize Limit"
-        },
-        {
-          "name": "filmmaker_351_resampling",
-          "type": "COMBO",
-          "link": null,
-          "widget": {
-            "name": "filmmaker_351_resampling"
-          },
-          "label": "Opening Image — Resize Filter"
-        },
-        {
-          "name": "filmmaker_350_crf",
-          "type": "INT",
-          "link": null,
-          "widget": {
-            "name": "filmmaker_350_crf"
-          },
-          "label": "Opening Image — Compression Quality (CRF)"
         }
       ],
       "outputs": [
@@ -386,28 +233,7 @@
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.30.0",
-        "previewExposures": [],
-        "ue_properties": {
-          "widget_ue_connectable": {
-            "value": true,
-            "value_1": true,
-            "value_2": true,
-            "value_3": true,
-            "value_4": true,
-            "value_5": true,
-            "vae_name": true,
-            "vae_name_1": true,
-            "model_name": true,
-            "clip_name_1": true,
-            "director_negative_prompt": true,
-            "director_stage_1_video_cfg": true,
-            "director_stage_1_audio_cfg": true,
-            "director_stage_2_video_cfg": true,
-            "director_stage_2_audio_cfg": true
-          },
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
+        "previewExposures": []
       },
       "widgets_values": [
         "Use the provided start image as the first frame. The cybernetic figure slowly turns his head to the right, his glowing blue eyes scanning the horizon, mechanical joints in his neck whirring faintly. The camera follows his gaze, panning across the rooftop to reveal the city beyond: a river of light winding between dark towers, a flying vehicle gliding past between the buildings, its lights streaking. He watches it pass, then his eyes narrow slightly. The camera settles on his profile against the city glow, distant hover traffic humming, wind gusting across the rooftop. No text, no black frames.",
@@ -422,61 +248,91 @@
         "ltx-2.5-audio-vae-bf16.safetensors",
         "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
         "ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
-        "gemma4_e2b_it_int8_convrot.safetensors",
-        "pc game, console game, video game, cartoon, childish, ugly, underexposed, dark faces, muddy shadows, harsh shadows on faces, blown highlights, clipped whites, overexposure, uneven exposure, dramatic chiaroscuro, silhouetted faces, unnatural rim lighting, excessive bloom, lens flare, light streaks, volumetric light beams, god rays, spotlighting, theatrical lighting, orange and teal colour grading, oversaturated colours, unnatural skin tones, waxy skin, plastic skin, excessive skin smoothing, heavy colour grading, HDR look, artificial HDR, excessive sharpening, flat lifeless lighting, inconsistent lighting, exposure pumping, sudden colour shifts, background music, musical score, cinematic score, orchestral soundtrack, incidental music, dramatic music, ambient music, synthesizer music, musical stings, background singing, narration, voiceover, audience laughter, laugh track, applause, audio hiss, tape hiss, white noise, static, electrical interference, audio distortion, clipping, garbled dialogue, slurred speech, rushed dialogue, unnaturally fast speech, compressed speech, robotic voices, synthetic speech artifacts, audio glitches, audio popping, distorted environmental sounds, animation, CGI, 3D render, waxy face, distorted anatomy, extra fingers, fused hands, duplicate limbs, deformed face, inconsistent facial identity, flickering, frame jitter, temporal instability, camera jump, unwanted camera cut, text overlay, subtitles, watermark, black frames, frozen frames, harsh direct lighting, crushed blacks, unnatural colour cast, oversaturated grading, lighting flicker, cinematic soundtrack, orchestral music, unwanted narration, buzzing, crackling, robotic voice, repeated speech, lip sync errors, blurry, out of focus, soft focus, smeared details, excessive motion blur, ghosting, double exposure, frame blending, low resolution, pixelation, compression artifacts, blocky artifacts, ringing artifacts, excessive film grain, noisy image, chromatic aberration, color banding, posterization, aliasing, jagged edges, temporal flicker, strobing, skipped frames, duplicated frames, warped perspective, inconsistent depth of field, unnatural bokeh, distracting reflections, lens distortion, camera shake, sudden camera jumps, unwanted cuts, inconsistent framing, tilted horizon, mismatched eyelines, unnatural camera movement, inconsistent lighting direction, drifting shadows, inconsistent reflections, inconsistent colour grading, sudden exposure changes, flat lighting, excessive contrast, harsh direct sunlight, excessive backlighting, artificial glow, neon colour casts, unrealistic textures, cartoonish rendering, 3D CGI look, uncanny valley effect, poreless skin, overly smooth skin, asymmetrical face, deformed facial features, missing facial features, duplicated face, face swapping, changing facial identity, facial drift, warped eyes, crossed eyes, wandering gaze, mismatched pupils, asymmetrical eyes, malformed ears, distorted teeth, excessive teeth, missing teeth, distorted mouth, lip deformation, unnatural kissing, merged faces, fused lips, intersecting heads, unnatural facial contact, facial clipping, unnatural expressions, deformed body, distorted proportions, stretched torso, broken anatomy, extra limbs, missing limbs, duplicate arms, duplicate legs, dislocated joints, impossible joint angles, twisted wrists, deformed hands, missing fingers, fused fingers, incorrect finger count, extra thumbs, duplicated hands, malformed feet, unnatural walking, foot sliding, floating feet, sliding objects, object clipping, intersecting objects, disappearing objects, suddenly appearing objects, morphing objects, changing costumes, changing clothing colours, changing character appearance, changing object scale, inconsistent vehicle geometry, morphing vehicles, duplicate vehicles, incorrect vehicle count, impossible wheel rotation, inconsistent travel direction, teleporting objects, impossible physics, unrealistic collisions, rubbery motion, unrealistic fire, unrealistic smoke, inconsistent smoke direction, inconsistent shadows, changing background layout, changing architecture, disappearing doors, changing furniture, illegible text, garbled lettering, incorrect signage, text artifacts, watermarks, logos, unwanted subtitles, captions, title cards, background soundtrack, cinematic music, music bed, background score, musical underscoring, unwanted instrumental music, synthetic music, dramatic sound effects, fake whooshes, unwanted voiceover, off-screen narration, phantom voices, wrong speaker, speaker swapping, voice changing between shots, inconsistent accent, robotic speech, synthetic voice, metallic voice, mismatched lip sync, delayed audio, early audio, silent or muted audio, missing dialogue, added dialogue, incorrect dialogue, repetitive speech, repeated words, stuttering artifacts, speech compression, unnatural pauses, cut-off words, distorted consonants, muffled speech, broadband hiss, electrical hum, clicks, pops, overloaded audio, harsh sibilance, unwanted echo, excessive reverberation, abrupt audio cuts, inconsistent ambient sound, audio pumping",
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        "euler_ancestral",
-        "euler_ancestral",
-        "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0",
-        "0.85, 0.7250, 0.4219, 0.0",
-        "scale longer dimension",
-        1536,
-        "lanczos",
-        18
+        "gemma4_e2b_it_int8_convrot.safetensors"
+      ]
+    },
+    {
+      "id": 399,
+      "type": "MarkdownNote",
+      "pos": [
+        530,
+        6390
       ],
-      "widgets_values_named": {
-        "value": "Use the provided start image as the first frame. The cybernetic figure slowly turns his head to the right, his glowing blue eyes scanning the horizon, mechanical joints in his neck whirring faintly. The camera follows his gaze, panning across the rooftop to reveal the city beyond: a river of light winding between dark towers, a flying vehicle gliding past between the buildings, its lights streaking. He watches it pass, then his eyes narrow slightly. The camera settles on his profile against the city glow, distant hover traffic humming, wind gusting across the rooftop. No text, no black frames.",
-        "value_1": false,
-        "value_2": 5,
-        "value_3": 1280,
-        "value_4": 720,
-        "noise_seed": 900359092894726,
-        "value_5": 24,
-        "unet_name": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
-        "vae_name": "ltx-2.5-video-vae-bf16.safetensors",
-        "vae_name_1": "ltx-2.5-audio-vae-bf16.safetensors",
-        "clip_name": "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
-        "model_name": "ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
-        "clip_name_1": "gemma4_e2b_it_int8_convrot.safetensors",
-        "director_negative_prompt": "pc game, console game, video game, cartoon, childish, ugly, underexposed, dark faces, muddy shadows, harsh shadows on faces, blown highlights, clipped whites, overexposure, uneven exposure, dramatic chiaroscuro, silhouetted faces, unnatural rim lighting, excessive bloom, lens flare, light streaks, volumetric light beams, god rays, spotlighting, theatrical lighting, orange and teal colour grading, oversaturated colours, unnatural skin tones, waxy skin, plastic skin, excessive skin smoothing, heavy colour grading, HDR look, artificial HDR, excessive sharpening, flat lifeless lighting, inconsistent lighting, exposure pumping, sudden colour shifts, background music, musical score, cinematic score, orchestral soundtrack, incidental music, dramatic music, ambient music, synthesizer music, musical stings, background singing, narration, voiceover, audience laughter, laugh track, applause, audio hiss, tape hiss, white noise, static, electrical interference, audio distortion, clipping, garbled dialogue, slurred speech, rushed dialogue, unnaturally fast speech, compressed speech, robotic voices, synthetic speech artifacts, audio glitches, audio popping, distorted environmental sounds, animation, CGI, 3D render, waxy face, distorted anatomy, extra fingers, fused hands, duplicate limbs, deformed face, inconsistent facial identity, flickering, frame jitter, temporal instability, camera jump, unwanted camera cut, text overlay, subtitles, watermark, black frames, frozen frames, harsh direct lighting, crushed blacks, unnatural colour cast, oversaturated grading, lighting flicker, cinematic soundtrack, orchestral music, unwanted narration, buzzing, crackling, robotic voice, repeated speech, lip sync errors, blurry, out of focus, soft focus, smeared details, excessive motion blur, ghosting, double exposure, frame blending, low resolution, pixelation, compression artifacts, blocky artifacts, ringing artifacts, excessive film grain, noisy image, chromatic aberration, color banding, posterization, aliasing, jagged edges, temporal flicker, strobing, skipped frames, duplicated frames, warped perspective, inconsistent depth of field, unnatural bokeh, distracting reflections, lens distortion, camera shake, sudden camera jumps, unwanted cuts, inconsistent framing, tilted horizon, mismatched eyelines, unnatural camera movement, inconsistent lighting direction, drifting shadows, inconsistent reflections, inconsistent colour grading, sudden exposure changes, flat lighting, excessive contrast, harsh direct sunlight, excessive backlighting, artificial glow, neon colour casts, unrealistic textures, cartoonish rendering, 3D CGI look, uncanny valley effect, poreless skin, overly smooth skin, asymmetrical face, deformed facial features, missing facial features, duplicated face, face swapping, changing facial identity, facial drift, warped eyes, crossed eyes, wandering gaze, mismatched pupils, asymmetrical eyes, malformed ears, distorted teeth, excessive teeth, missing teeth, distorted mouth, lip deformation, unnatural kissing, merged faces, fused lips, intersecting heads, unnatural facial contact, facial clipping, unnatural expressions, deformed body, distorted proportions, stretched torso, broken anatomy, extra limbs, missing limbs, duplicate arms, duplicate legs, dislocated joints, impossible joint angles, twisted wrists, deformed hands, missing fingers, fused fingers, incorrect finger count, extra thumbs, duplicated hands, malformed feet, unnatural walking, foot sliding, floating feet, sliding objects, object clipping, intersecting objects, disappearing objects, suddenly appearing objects, morphing objects, changing costumes, changing clothing colours, changing character appearance, changing object scale, inconsistent vehicle geometry, morphing vehicles, duplicate vehicles, incorrect vehicle count, impossible wheel rotation, inconsistent travel direction, teleporting objects, impossible physics, unrealistic collisions, rubbery motion, unrealistic fire, unrealistic smoke, inconsistent smoke direction, inconsistent shadows, changing background layout, changing architecture, disappearing doors, changing furniture, illegible text, garbled lettering, incorrect signage, text artifacts, watermarks, logos, unwanted subtitles, captions, title cards, background soundtrack, cinematic music, music bed, background score, musical underscoring, unwanted instrumental music, synthetic music, dramatic sound effects, fake whooshes, unwanted voiceover, off-screen narration, phantom voices, wrong speaker, speaker swapping, voice changing between shots, inconsistent accent, robotic speech, synthetic voice, metallic voice, mismatched lip sync, delayed audio, early audio, silent or muted audio, missing dialogue, added dialogue, incorrect dialogue, repetitive speech, repeated words, stuttering artifacts, speech compression, unnatural pauses, cut-off words, distorted consonants, muffled speech, broadband hiss, electrical hum, clicks, pops, overloaded audio, harsh sibilance, unwanted echo, excessive reverberation, abrupt audio cuts, inconsistent ambient sound, audio pumping",
-        "director_stage_1_video_cfg": 1.0,
-        "director_stage_1_audio_cfg": 1.0,
-        "director_stage_2_video_cfg": 1.0,
-        "director_stage_2_audio_cfg": 1.0,
-        "filmmaker_352_sampler_name": "euler_ancestral",
-        "filmmaker_341_sampler_name": "euler_ancestral",
-        "filmmaker_397_sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0",
-        "filmmaker_396_sigmas": "0.85, 0.7250, 0.4219, 0.0",
-        "filmmaker_351_mode": "scale longer dimension",
-        "filmmaker_351_size": 1536,
-        "filmmaker_351_resampling": "lanczos",
-        "filmmaker_350_crf": 18
-      },
-      "title": "LTX-2.5 — Film & Sound Controls (Advanced)"
+      "size": [
+        780,
+        1280
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: About LTX-2.5",
+      "properties": {},
+      "widgets_values": [
+        "# LTX-2.5\n\nLTX-2.5 is Lightricks' open video generation model : fast, local-first, and built for production. Run it locally, fine-tune it for your own use case, or integrate it into your pipeline.\n\n**Key highlights:**\n\n- **Pixel Diffusion** : keyframes-first generation that builds every scene on a grid of high-fidelity keyframes for industry-leading pixel quality\n- **Diffusion Video Decoder** : sharper faces, legible text, fewer smears in fast motion\n- **Native multishot** : one generation yields multiple connected shots holding character, environment, lighting, voice, and style across cuts\n- **Custom Gemma 4 12B text encoder** : retains multiple subjects, actions, lighting, detail, and camera direction across complex prompts\n- **Dedicated Prompt Enhancer** *(optional)* : a lightweight model that expands short prompts into rich cinematic instructions\n- **Auto Duration** : predicts the right clip length from the described action before diffusion begins\n- **Better distilled model** : carries far more quality, prompt adherence, and motion into a smaller, faster variant\n- Carried over from LTX-2.3: native 4K, synchronized audio-video\n\nOfficial model & files: https://huggingface.co/Lightricks/LTX-2.5\n## What this workflow does\n\nThis **Image-to-Video** workflow animates a first frame into a video. Load a starting image, describe the motion in the prompt, and the model continues the scene while holding character, lighting, and style : with synchronized audio.\n\n## Subgraph parameters\n\nThe **Image to Video (LTX-2.5)** node is a subgraph. Click the **Enter subgraph** button at the bottom of the node to open its internal graph, where you can inspect and fine-tune every step of the pipeline (conditioning, sampler, CFG guider, VAE decode, and more).\n\n| Parameter | What it does |\n|---|---|\n| first_frame | Starting image that the video continues from (load your own image in **Load First Frame**) |\n| prompt | Text prompt describing the motion, scene, lighting, camera, and style |\n| prompt_enhance | *(Optional, off by default)* Toggle the built-in Prompt Enhancer, which expands short prompts into rich cinematic instructions. Requires the separate prompt enhancer model (~10 GB) below and adds ~1-2 min of generation time |\n| duration | Clip length in seconds (Auto Duration can predict it from the action) |\n| width / height | Output resolution in pixels (e.g. 1280×720) |\n| seed | Random seed : set a fixed value to reproduce the same result |\n| frame_rate | Frames per second |\n| unet_name | Main model: LTX-2.5 distilled transformer (ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors) |\n| video_vae | Video VAE used for decoding (ltx-2.5-video-vae-bf16.safetensors) |\n| audio_vae | Audio VAE that produces synchronized audio (ltx-2.5-audio-vae-bf16.safetensors) |\n| clip_name | Text encoder: custom Gemma 4 12B with projection (gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors) |\n| upscale_model | Latent upscaler applied before decoding for higher-fidelity output |\n| prompt_enhance_model | Model checkpoint used by the Prompt Enhancer |\n\n## How to use\n\n1. Download the models listed in **Note: Model Links** and place them in ComfyUI's `models/` folder (the prompt enhancer model is optional - skip it unless you enable **prompt_enhance**)\n2. Replace the image in **Load First Frame** with your own starting frame\n3. Write a prompt describing the motion, optionally toggle **prompt_enhance** for short prompts\n4. Set **duration** / **width** / **height** / **frame_rate** (defaults work well) and hit **Queue**\n5. To dive deeper, click **Enter subgraph** at the bottom of the main node : every internal step (conditioning, sampler, CFG, VAE decode) can be edited there\n"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 401,
+      "type": "MarkdownNote",
+      "pos": [
+        -60,
+        6390
+      ],
+      "size": [
+        550,
+        880
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: Model Links",
+      "properties": {},
+      "widgets_values": [
+        "Guide: [Subgraph](https://docs.comfy.org/interface/features/subgraph)\n\n## Model Links\n\n- [Hugging Face:Comfy-Org/gemma-4](https://huggingface.co/Comfy-Org/gemma-4)\n- [ModelScope:Comfy-Org/gemma-4](https://modelscope.cn/models/Comfy-Org/gemma-4)\n\n**Input Asset** \n\n- [neon_cyborg_portrait.png](https://raw.githubusercontent.com/Comfy-Org/workflow_templates/refs/heads/main/input/neon_cyborg_portrait.png) — required workflow input (`input/neon_cyborg_portrait.png`)\n\n**text_encoders**\n\n- [gemma4_e2b_it_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/gemma-4/resolve/main/text_encoders/gemma4_e2b_it_int8_convrot.safetensors) (4.84 GB) — *optional, only needed when **prompt_enhance** is enabled*\n- [gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors](https://huggingface.co/Lightricks/LTX-2.5/resolve/main/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors)\n\n**diffusion_models**\n\n- [ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors](https://huggingface.co/Lightricks/LTX-2.5/resolve/main/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors)\n\n**vae**\n\n- [ltx-2.5-video-vae-bf16.safetensors](https://huggingface.co/Lightricks/LTX-2.5/resolve/main/vae/ltx-2.5-video-vae-bf16.safetensors)\n- [ltx-2.5-audio-vae-bf16.safetensors](https://huggingface.co/Lightricks/LTX-2.5/resolve/main/vae/ltx-2.5-audio-vae-bf16.safetensors)\n\n**latent_upscale_models**\n\n- [ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors](https://huggingface.co/Lightricks/LTX-2.5/resolve/main/latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 text_encoders/\n│   │   ├── gemma4_e2b_it_int8_convrot.safetensors\n│   │   └── gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors\n│   ├── 📂 diffusion_models/\n│   │   └── ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors\n│   ├── 📂 vae/\n│   │   ├── ltx-2.5-video-vae-bf16.safetensors\n│   │   └── ltx-2.5-audio-vae-bf16.safetensors\n│   └── 📂 latent_upscale_models/\n│       └── ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors\n```\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 402,
+      "type": "MarkdownNote",
+      "pos": [
+        1540,
+        7460
+      ],
+      "size": [
+        300,
+        520
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: Size Settings Reference",
+      "properties": {},
+      "widgets_values": [
+        "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
     },
     {
       "id": 403,
       "type": "ResolutionSelector",
       "pos": [
-        760,
-        1490
+        1550,
+        7210
       ],
       "size": [
-        340,
-        200
+        270,
+        170
       ],
       "flags": {},
       "order": 4,
@@ -502,122 +358,48 @@
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.30.0",
-        "Node name for S&R": "ResolutionSelector",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
+        "Node name for S&R": "ResolutionSelector"
       },
       "widgets_values": [
         "16:9 (Widescreen)",
         0.9,
         32
-      ],
-      "widgets_values_named": {
-        "aspect_ratio": "16:9 (Widescreen)",
-        "megapixels": 0.9,
-        "multiple": 32
-      },
-      "title": "Picture Size & Aspect Ratio"
+      ]
     },
     {
-      "id": 407,
-      "type": "PrimitiveStringMultiline",
-      "pos": [
-        40,
-        800
-      ],
-      "size": [
-        640,
-        600
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "value",
-          "name": "value",
-          "type": "STRING",
-          "widget": {
-            "name": "value"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "STRING",
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            785
-          ]
-        }
-      ],
-      "title": "Avoid — Visual, Anatomy, Motion, Lighting & Audio",
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.16.3",
-        "Node name for S&R": "PrimitiveStringMultiline",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.7",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "pc game, console game, video game, cartoon, childish, ugly, underexposed, dark faces, muddy shadows, harsh shadows on faces, blown highlights, clipped whites, overexposure, uneven exposure, dramatic chiaroscuro, silhouetted faces, unnatural rim lighting, excessive bloom, lens flare, light streaks, volumetric light beams, god rays, spotlighting, theatrical lighting, orange and teal colour grading, oversaturated colours, unnatural skin tones, waxy skin, plastic skin, excessive skin smoothing, heavy colour grading, HDR look, artificial HDR, excessive sharpening, flat lifeless lighting, inconsistent lighting, exposure pumping, sudden colour shifts, background music, musical score, cinematic score, orchestral soundtrack, incidental music, dramatic music, ambient music, synthesizer music, musical stings, background singing, narration, voiceover, audience laughter, laugh track, applause, audio hiss, tape hiss, white noise, static, electrical interference, audio distortion, clipping, garbled dialogue, slurred speech, rushed dialogue, unnaturally fast speech, compressed speech, robotic voices, synthetic speech artifacts, audio glitches, audio popping, distorted environmental sounds, animation, CGI, 3D render, waxy face, distorted anatomy, extra fingers, fused hands, duplicate limbs, deformed face, inconsistent facial identity, flickering, frame jitter, temporal instability, camera jump, unwanted camera cut, text overlay, subtitles, watermark, black frames, frozen frames, harsh direct lighting, crushed blacks, unnatural colour cast, oversaturated grading, lighting flicker, cinematic soundtrack, orchestral music, unwanted narration, buzzing, crackling, robotic voice, repeated speech, lip sync errors, blurry, out of focus, soft focus, smeared details, excessive motion blur, ghosting, double exposure, frame blending, low resolution, pixelation, compression artifacts, blocky artifacts, ringing artifacts, excessive film grain, noisy image, chromatic aberration, color banding, posterization, aliasing, jagged edges, temporal flicker, strobing, skipped frames, duplicated frames, warped perspective, inconsistent depth of field, unnatural bokeh, distracting reflections, lens distortion, camera shake, sudden camera jumps, unwanted cuts, inconsistent framing, tilted horizon, mismatched eyelines, unnatural camera movement, inconsistent lighting direction, drifting shadows, inconsistent reflections, inconsistent colour grading, sudden exposure changes, flat lighting, excessive contrast, harsh direct sunlight, excessive backlighting, artificial glow, neon colour casts, unrealistic textures, cartoonish rendering, 3D CGI look, uncanny valley effect, poreless skin, overly smooth skin, asymmetrical face, deformed facial features, missing facial features, duplicated face, face swapping, changing facial identity, facial drift, warped eyes, crossed eyes, wandering gaze, mismatched pupils, asymmetrical eyes, malformed ears, distorted teeth, excessive teeth, missing teeth, distorted mouth, lip deformation, unnatural kissing, merged faces, fused lips, intersecting heads, unnatural facial contact, facial clipping, unnatural expressions, deformed body, distorted proportions, stretched torso, broken anatomy, extra limbs, missing limbs, duplicate arms, duplicate legs, dislocated joints, impossible joint angles, twisted wrists, deformed hands, missing fingers, fused fingers, incorrect finger count, extra thumbs, duplicated hands, malformed feet, unnatural walking, foot sliding, floating feet, sliding objects, object clipping, intersecting objects, disappearing objects, suddenly appearing objects, morphing objects, changing costumes, changing clothing colours, changing character appearance, changing object scale, inconsistent vehicle geometry, morphing vehicles, duplicate vehicles, incorrect vehicle count, impossible wheel rotation, inconsistent travel direction, teleporting objects, impossible physics, unrealistic collisions, rubbery motion, unrealistic fire, unrealistic smoke, inconsistent smoke direction, inconsistent shadows, changing background layout, changing architecture, disappearing doors, changing furniture, illegible text, garbled lettering, incorrect signage, text artifacts, watermarks, logos, unwanted subtitles, captions, title cards, background soundtrack, cinematic music, music bed, background score, musical underscoring, unwanted instrumental music, synthetic music, dramatic sound effects, fake whooshes, unwanted voiceover, off-screen narration, phantom voices, wrong speaker, speaker swapping, voice changing between shots, inconsistent accent, robotic speech, synthetic voice, metallic voice, mismatched lip sync, delayed audio, early audio, silent or muted audio, missing dialogue, added dialogue, incorrect dialogue, repetitive speech, repeated words, stuttering artifacts, speech compression, unnatural pauses, cut-off words, distorted consonants, muffled speech, broadband hiss, electrical hum, clicks, pops, overloaded audio, harsh sibilance, unwanted echo, excessive reverberation, abrupt audio cuts, inconsistent ambient sound, audio pumping"
-      ],
-      "widgets_values_named": {
-        "value": "pc game, console game, video game, cartoon, childish, ugly, underexposed, dark faces, muddy shadows, harsh shadows on faces, blown highlights, clipped whites, overexposure, uneven exposure, dramatic chiaroscuro, silhouetted faces, unnatural rim lighting, excessive bloom, lens flare, light streaks, volumetric light beams, god rays, spotlighting, theatrical lighting, orange and teal colour grading, oversaturated colours, unnatural skin tones, waxy skin, plastic skin, excessive skin smoothing, heavy colour grading, HDR look, artificial HDR, excessive sharpening, flat lifeless lighting, inconsistent lighting, exposure pumping, sudden colour shifts, background music, musical score, cinematic score, orchestral soundtrack, incidental music, dramatic music, ambient music, synthesizer music, musical stings, background singing, narration, voiceover, audience laughter, laugh track, applause, audio hiss, tape hiss, white noise, static, electrical interference, audio distortion, clipping, garbled dialogue, slurred speech, rushed dialogue, unnaturally fast speech, compressed speech, robotic voices, synthetic speech artifacts, audio glitches, audio popping, distorted environmental sounds, animation, CGI, 3D render, waxy face, distorted anatomy, extra fingers, fused hands, duplicate limbs, deformed face, inconsistent facial identity, flickering, frame jitter, temporal instability, camera jump, unwanted camera cut, text overlay, subtitles, watermark, black frames, frozen frames, harsh direct lighting, crushed blacks, unnatural colour cast, oversaturated grading, lighting flicker, cinematic soundtrack, orchestral music, unwanted narration, buzzing, crackling, robotic voice, repeated speech, lip sync errors"
-      }
-    },
-    {
-      "id": 408,
+      "id": 404,
       "type": "MarkdownNote",
       "pos": [
-        760,
-        1740
+        -60,
+        6260
       ],
       "size": [
-        420,
-        560
+        340,
+        90
       ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 3,
+      "flags": {},
+      "order": 5,
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "title": "Picture Size — Megapixels & Testing Reference",
-      "properties": {
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
+      "title": "Note: Model Links",
+      "properties": {},
       "widgets_values": [
-        "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n\n\n**Testing:** Fix the seed, switch prompt rewriting off, keep the same fps, resolution and frame count. At CFG 1.0 negative conditioning has little/no effect. Compare video CFG 1.0 vs 1.3 cautiously. The distilled sampler/sigma schedules remain at official defaults inside the subgraph."
+        "Before you download all the models, please make sure you have granted access to [LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5) first."
       ],
-      "widgets_values_named": {
-        "text": "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
-      },
-      "color": "#222",
-      "bgcolor": "#000"
+      "color": "#432",
+      "bgcolor": "#653"
     }
   ],
   "links": [
+    [
+      759,
+      398,
+      0,
+      75,
+      0,
+      "VIDEO"
+    ],
     [
       764,
       395,
@@ -641,22 +423,6 @@
       398,
       5,
       "INT"
-    ],
-    [
-      759,
-      398,
-      0,
-      75,
-      0,
-      "VIDEO"
-    ],
-    [
-      785,
-      407,
-      0,
-      398,
-      11,
-      "STRING"
     ]
   ],
   "groups": [],
@@ -668,12 +434,12 @@
         "state": {
           "lastGroupId": 27,
           "lastNodeId": 404,
-          "lastLinkId": 800,
+          "lastLinkId": 784,
           "lastRerouteId": 0
         },
         "revision": 0,
         "config": {},
-        "name": "LTX-2.5 I2V | Director Controls v1",
+        "name": "Image to Video (LTX-2.5)",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -700,7 +466,7 @@
             "linkIds": [
               763
             ],
-            "label": "Opening Frame",
+            "label": "first_frame",
             "pos": [
               -480.185546875,
               6484
@@ -713,7 +479,7 @@
             "linkIds": [
               765
             ],
-            "label": "Scene & Shot Direction",
+            "label": "prompt",
             "pos": [
               -480.185546875,
               6504
@@ -726,7 +492,7 @@
             "linkIds": [
               766
             ],
-            "label": "AI Prompt Rewrite",
+            "label": "prompt_enhance",
             "pos": [
               -480.185546875,
               6524
@@ -739,7 +505,7 @@
             "linkIds": [
               767
             ],
-            "label": "Clip Length (seconds)",
+            "label": "duration",
             "pos": [
               -480.185546875,
               6544
@@ -752,7 +518,7 @@
             "linkIds": [
               768
             ],
-            "label": "Frame Width",
+            "label": "width",
             "pos": [
               -480.185546875,
               6564
@@ -765,7 +531,7 @@
             "linkIds": [
               769
             ],
-            "label": "Frame Height",
+            "label": "height",
             "pos": [
               -480.185546875,
               6584
@@ -781,8 +547,7 @@
             "pos": [
               -480.185546875,
               6604
-            ],
-            "label": "Variation Seed"
+            ]
           },
           {
             "id": "85a2fb6d-1b63-40a7-adb6-5acc97a7cc99",
@@ -791,7 +556,7 @@
             "linkIds": [
               776
             ],
-            "label": "Frames Per Second",
+            "label": "frame_rate",
             "pos": [
               -480.185546875,
               6624
@@ -807,8 +572,7 @@
             "pos": [
               -480.185546875,
               6644
-            ],
-            "label": "Video Generation Model"
+            ]
           },
           {
             "id": "dd0f8943-da6e-4182-8265-efb74da42c33",
@@ -817,7 +581,7 @@
             "linkIds": [
               778
             ],
-            "label": "Picture Decoder",
+            "label": "video_vae",
             "pos": [
               -480.185546875,
               6664
@@ -830,7 +594,7 @@
             "linkIds": [
               779
             ],
-            "label": "Sound Decoder",
+            "label": "audio_vae",
             "pos": [
               -480.185546875,
               6684
@@ -846,8 +610,7 @@
             "pos": [
               -480.185546875,
               6704
-            ],
-            "label": "Scene Understanding Model"
+            ]
           },
           {
             "id": "83db7bd8-4276-4950-8d15-ee1803e29646",
@@ -856,7 +619,7 @@
             "linkIds": [
               781
             ],
-            "label": "Detail Upscaler",
+            "label": "upscale_model",
             "pos": [
               -480.185546875,
               6724
@@ -869,179 +632,10 @@
             "linkIds": [
               782
             ],
-            "label": "Prompt Rewrite Model",
+            "label": "prompt_enhance_model",
             "pos": [
               -480.185546875,
               6744
-            ]
-          },
-          {
-            "id": "d224ffb5-f6d4-4e07-92df-1db85cf5ab1d",
-            "name": "director_negative_prompt",
-            "type": "STRING",
-            "linkIds": [
-              783
-            ],
-            "label": "Avoid These (Picture & Sound)",
-            "pos": [
-              -480.1855,
-              7040
-            ]
-          },
-          {
-            "id": "989edf4f-2518-4489-b369-824ca788e831",
-            "name": "director_stage_1_video_cfg",
-            "type": "FLOAT",
-            "linkIds": [
-              784
-            ],
-            "label": "Picture Prompt Strength — Initial Render",
-            "pos": [
-              -480.1855,
-              7060
-            ]
-          },
-          {
-            "id": "9c324bd8-5331-4c93-8d7b-09fdeec0fabf",
-            "name": "director_stage_1_audio_cfg",
-            "type": "FLOAT",
-            "linkIds": [
-              785
-            ],
-            "label": "Sound Prompt Strength — Initial Render",
-            "pos": [
-              -480.1855,
-              7080
-            ]
-          },
-          {
-            "id": "fcecbd56-b952-4faa-b3b3-478790274440",
-            "name": "director_stage_2_video_cfg",
-            "type": "FLOAT",
-            "linkIds": [
-              786
-            ],
-            "label": "Picture Prompt Strength — Detail Pass",
-            "pos": [
-              -480.1855,
-              7100
-            ]
-          },
-          {
-            "id": "113a9ce3-b53c-4df0-8c34-9f78617e2bee",
-            "name": "director_stage_2_audio_cfg",
-            "type": "FLOAT",
-            "linkIds": [
-              787
-            ],
-            "label": "Sound Prompt Strength — Detail Pass",
-            "pos": [
-              -480.1855,
-              7120
-            ]
-          },
-          {
-            "id": "73c34c42-476c-4a62-a69a-d389a676e585",
-            "name": "filmmaker_352_sampler_name",
-            "type": "COMBO",
-            "linkIds": [
-              788
-            ],
-            "label": "Video Sampling Method — First Render",
-            "pos": [
-              -480,
-              7540
-            ]
-          },
-          {
-            "id": "fc21e200-a5ea-455b-8b0e-aa1f4f44b2d3",
-            "name": "filmmaker_341_sampler_name",
-            "type": "COMBO",
-            "linkIds": [
-              789
-            ],
-            "label": "Video Sampling Method — Detail Render",
-            "pos": [
-              -480,
-              7560
-            ]
-          },
-          {
-            "id": "661f6743-f1c0-4e21-bec6-23342f4af569",
-            "name": "filmmaker_397_sigmas",
-            "type": "STRING",
-            "linkIds": [
-              790
-            ],
-            "label": "Sampling Timings — First Render",
-            "pos": [
-              -480,
-              7580
-            ]
-          },
-          {
-            "id": "c3273c62-b00e-4e8c-8fb4-d242c1aeef1c",
-            "name": "filmmaker_396_sigmas",
-            "type": "STRING",
-            "linkIds": [
-              791
-            ],
-            "label": "Sampling Timings — Detail Render",
-            "pos": [
-              -480,
-              7600
-            ]
-          },
-          {
-            "id": "ad6f9325-fe12-4929-9e3a-53c64b3d1c65",
-            "name": "filmmaker_351_mode",
-            "type": "COMBO",
-            "linkIds": [
-              792
-            ],
-            "label": "Opening Image — Resize Mode",
-            "pos": [
-              -480,
-              7620
-            ]
-          },
-          {
-            "id": "5b530969-e78b-440f-9607-bccf5c3b904a",
-            "name": "filmmaker_351_size",
-            "type": "INT",
-            "linkIds": [
-              793
-            ],
-            "label": "Opening Image — Resize Limit",
-            "pos": [
-              -480,
-              7640
-            ]
-          },
-          {
-            "id": "8a85886b-e363-41fc-ab47-03cd6abb1c5f",
-            "name": "filmmaker_351_resampling",
-            "type": "COMBO",
-            "linkIds": [
-              794
-            ],
-            "label": "Opening Image — Resize Filter",
-            "pos": [
-              -480,
-              7660
-            ]
-          },
-          {
-            "id": "661b655b-1fa5-49fd-8072-ba4f2ef7a06e",
-            "name": "filmmaker_350_crf",
-            "type": "INT",
-            "linkIds": [
-              795
-            ],
-            "label": "Opening Image — Preprocess Level",
-            "pos": [
-              -480,
-              7680
             ]
           }
         ],
@@ -1107,23 +701,13 @@
                   "url": "https://huggingface.co/Comfy-Org/gemma-4/resolve/main/text_encoders/gemma4_e2b_it_int8_convrot.safetensors",
                   "directory": "text_encoders"
                 }
-              ],
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              ]
             },
             "widgets_values": [
               "gemma4_e2b_it_int8_convrot.safetensors",
               "ltxv",
               "default"
-            ],
-            "widgets_values_named": {
-              "clip_name": "gemma4_e2b_it_int8_convrot.safetensors",
-              "type": "ltxv",
-              "device": "default"
-            }
+            ]
           },
           {
             "id": 380,
@@ -1170,13 +754,6 @@
                 "link": null
               },
               {
-                "localized_name": "system_prompt",
-                "name": "system_prompt",
-                "shape": 7,
-                "type": "STRING",
-                "link": null
-              },
-              {
                 "localized_name": "prompt",
                 "name": "prompt",
                 "type": "STRING",
@@ -1194,12 +771,6 @@
                 "links": [
                   724
                 ]
-              },
-              {
-                "localized_name": "thinking",
-                "name": "thinking",
-                "type": "STRING",
-                "links": null
               }
             ],
             "properties": {
@@ -1212,12 +783,7 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65,
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              "secondTabWidth": 65
             },
             "widgets_values": [
               "",
@@ -1231,25 +797,8 @@
               0,
               0,
               false,
-              true,
-              "auto"
-            ],
-            "widgets_values_named": {
-              "prompt": "",
-              "max_length": 600,
-              "sampling_mode": "on",
-              "sampling_mode.temperature": 0.7,
-              "sampling_mode.top_k": 64,
-              "sampling_mode.top_p": 0.95,
-              "sampling_mode.min_p": 0.05,
-              "sampling_mode.repetition_penalty": 1.15,
-              "sampling_mode.seed": 0,
-              "sampling_mode.presence_penalty": 0,
-              "thinking": false,
-              "use_default_template": true,
-              "mtp": "auto"
-            },
-            "title": "OPTIONAL | prompt enhancement"
+              true
+            ]
           },
           {
             "id": 383,
@@ -1297,19 +846,11 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65,
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              "secondTabWidth": 65
             },
             "widgets_values": [
               true
-            ],
-            "widgets_values_named": {
-              "value": true
-            }
+            ]
           },
           {
             "id": 364,
@@ -1372,9 +913,6 @@
             "widgets_values": [
               ""
             ],
-            "widgets_values_named": {
-              "text": ""
-            },
             "color": "#232",
             "bgcolor": "#353"
           },
@@ -1414,7 +952,7 @@
                 ]
               }
             ],
-            "title": "POSITIVE PROMPT | main text",
+            "title": "Prompt",
             "properties": {
               "cnr_id": "comfy-core",
               "ver": "0.16.3",
@@ -1434,10 +972,7 @@
             },
             "widgets_values": [
               "Egyptian royal in blue-and-gold headdress and high collar, white dress with golden embroidery and armbands, desert, robot soldiers in formation left and right. She walks steadily forward, head held level and gaze fixed ahead—no dipping or lowering of the head. The camera performs a single, smooth push-in only: starting in a wider shot of her, the robots, and the desert, it moves steadily forward until she is in a medium or medium-close frame, then holds. She stops, posture and head still upright, and says: “The old gods are silent. I am not.” Robot soldiers shift or march in place; sand and fabric move with the wind. No pull-back; the only camera move is the continuous push-in."
-            ],
-            "widgets_values_named": {
-              "value": "Egyptian royal in blue-and-gold headdress and high collar, white dress with golden embroidery and armbands, desert, robot soldiers in formation left and right. She walks steadily forward, head held level and gaze fixed ahead—no dipping or lowering of the head. The camera performs a single, smooth push-in only: starting in a wider shot of her, the robots, and the desert, it moves steadily forward until she is in a medium or medium-close frame, then holds. She stops, posture and head still upright, and says: “The old gods are silent. I am not.” Robot soldiers shift or march in place; sand and fabric move with the wind. No pull-back; the only camera move is the continuous push-in."
-            }
+            ]
           },
           {
             "id": 382,
@@ -1457,14 +992,12 @@
               {
                 "localized_name": "on_false",
                 "name": "on_false",
-                "shape": 7,
                 "type": "STRING",
                 "link": 720
               },
               {
                 "localized_name": "on_true",
                 "name": "on_true",
-                "shape": 7,
                 "type": "STRING",
                 "link": 724
               },
@@ -1499,19 +1032,11 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65,
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              "secondTabWidth": 65
             },
             "widgets_values": [
               false
-            ],
-            "widgets_values_named": {
-              "switch": false
-            }
+            ]
           },
           {
             "id": 384,
@@ -1559,21 +1084,12 @@
                   "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
                   "directory": "diffusion_models"
                 }
-              ],
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              ]
             },
             "widgets_values": [
               "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
               "default"
-            ],
-            "widgets_values_named": {
-              "unet_name": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
-              "weight_dtype": "default"
-            }
+            ]
           },
           {
             "id": 381,
@@ -1615,15 +1131,9 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65,
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              "secondTabWidth": 65
             },
-            "widgets_values": [],
-            "widgets_values_named": {}
+            "widgets_values": []
           },
           {
             "id": 362,
@@ -1681,11 +1191,7 @@
             "widgets_values": [
               5,
               "fixed"
-            ],
-            "widgets_values_named": {
-              "value": 5,
-              "fixed": "fixed"
-            }
+            ]
           },
           {
             "id": 363,
@@ -1733,10 +1239,7 @@
             },
             "widgets_values": [
               false
-            ],
-            "widgets_values_named": {
-              "value": false
-            }
+            ]
           },
           {
             "id": 365,
@@ -1814,10 +1317,7 @@
             },
             "widgets_values": [
               24
-            ],
-            "widgets_values_named": {
-              "frame_rate": 24
-            }
+            ]
           },
           {
             "id": 385,
@@ -1867,19 +1367,11 @@
                   "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/vae/ltx-2.5-video-vae-bf16.safetensors",
                   "directory": "vae"
                 }
-              ],
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              ]
             },
             "widgets_values": [
               "ltx-2.5-video-vae-bf16.safetensors"
-            ],
-            "widgets_values_named": {
-              "vae_name": "ltx-2.5-video-vae-bf16.safetensors"
-            }
+            ]
           },
           {
             "id": 386,
@@ -1927,19 +1419,11 @@
                   "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/vae/ltx-2.5-audio-vae-bf16.safetensors",
                   "directory": "vae"
                 }
-              ],
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              ]
             },
             "widgets_values": [
               "ltx-2.5-audio-vae-bf16.safetensors"
-            ],
-            "widgets_values_named": {
-              "vae_name": "ltx-2.5-audio-vae-bf16.safetensors"
-            }
+            ]
           },
           {
             "id": 372,
@@ -1997,11 +1481,7 @@
             "widgets_values": [
               1280,
               "fixed"
-            ],
-            "widgets_values_named": {
-              "value": 1280,
-              "fixed": "fixed"
-            }
+            ]
           },
           {
             "id": 373,
@@ -2023,14 +1503,6 @@
                 "name": "clip",
                 "type": "CLIP",
                 "link": 731
-              },
-              {
-                "name": "text",
-                "type": "STRING",
-                "widget": {
-                  "name": "text"
-                },
-                "link": 783
               }
             ],
             "outputs": [
@@ -2061,14 +1533,10 @@
               }
             },
             "widgets_values": [
-              "cartoon, animation, video game, CGI, 3D render, plastic skin, waxy face, artificial skin texture, distorted anatomy, extra fingers, missing fingers, fused hands, duplicate limbs, duplicate people, deformed face, inconsistent facial identity, flickering, frame jitter, temporal instability, sudden camera jump, unwanted camera cut, text overlay, subtitles, captions, watermark, logo, black frames, frozen frames, oversaturated colours, excessive sharpening, artificial lens flare"
+              "pc game, console game, video game, cartoon, childish, ugly"
             ],
-            "widgets_values_named": {
-              "text": "cartoon, animation, video game, CGI, 3D render, plastic skin, waxy face, artificial skin texture, distorted anatomy, extra fingers, missing fingers, fused hands, duplicate limbs, duplicate people, deformed face, inconsistent facial identity, flickering, frame jitter, temporal instability, sudden camera jump, unwanted camera cut, text overlay, subtitles, captions, watermark, logo, black frames, frozen frames, oversaturated colours, excessive sharpening, artificial lens flare"
-            },
             "color": "#323",
-            "bgcolor": "#535",
-            "title": "NEGATIVE PROMPT | edit here"
+            "bgcolor": "#535"
           },
           {
             "id": 387,
@@ -2116,23 +1584,13 @@
                   "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
                   "directory": "text_encoders"
                 }
-              ],
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              ]
             },
             "widgets_values": [
               "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
               "ltxv",
               "default"
-            ],
-            "widgets_values_named": {
-              "clip_name": "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
-              "type": "ltxv",
-              "device": "default"
-            }
+            ]
           },
           {
             "id": 360,
@@ -2190,11 +1648,7 @@
             "widgets_values": [
               720,
               "fixed"
-            ],
-            "widgets_values_named": {
-              "value": 720,
-              "fixed": "fixed"
-            }
+            ]
           },
           {
             "id": 352,
@@ -2210,16 +1664,7 @@
             "flags": {},
             "order": 1,
             "mode": 0,
-            "inputs": [
-              {
-                "name": "sampler_name",
-                "type": "COMBO",
-                "link": 788,
-                "widget": {
-                  "name": "sampler_name"
-                }
-              }
-            ],
+            "inputs": [],
             "outputs": [
               {
                 "localized_name": "SAMPLER",
@@ -2249,11 +1694,7 @@
             },
             "widgets_values": [
               "euler_ancestral"
-            ],
-            "widgets_values_named": {
-              "sampler_name": "euler_ancestral"
-            },
-            "title": "STAGE 1 | sampler"
+            ]
           },
           {
             "id": 339,
@@ -2310,12 +1751,7 @@
             "widgets_values": [
               900359092894726,
               "randomize"
-            ],
-            "widgets_values_named": {
-              "noise_seed": 900359092894726,
-              "control_after_generate": "randomize"
-            },
-            "title": "STAGE 1 | noise seed"
+            ]
           },
           {
             "id": 397,
@@ -2331,16 +1767,7 @@
             "flags": {},
             "order": 2,
             "mode": 0,
-            "inputs": [
-              {
-                "name": "sigmas",
-                "type": "STRING",
-                "link": 790,
-                "widget": {
-                  "name": "sigmas"
-                }
-              }
-            ],
+            "inputs": [],
             "outputs": [
               {
                 "localized_name": "SIGMAS",
@@ -2354,20 +1781,11 @@
             "properties": {
               "cnr_id": "comfy-core",
               "ver": "0.14.1",
-              "Node name for S&R": "ManualSigmas",
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              "Node name for S&R": "ManualSigmas"
             },
             "widgets_values": [
               "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
-            ],
-            "widgets_values_named": {
-              "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
-            },
-            "title": "STAGE 1 | distilled sigma schedule"
+            ]
           },
           {
             "id": 361,
@@ -2426,11 +1844,7 @@
             "widgets_values": [
               24,
               "fixed"
-            ],
-            "widgets_values_named": {
-              "value": 24,
-              "fixed": "fixed"
-            }
+            ]
           },
           {
             "id": 371,
@@ -2493,10 +1907,7 @@
             },
             "widgets_values": [
               "ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors"
-            ],
-            "widgets_values_named": {
-              "model_name": "ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors"
-            }
+            ]
           },
           {
             "id": 388,
@@ -2530,22 +1941,6 @@
                 "name": "negative",
                 "type": "CONDITIONING",
                 "link": 736
-              },
-              {
-                "name": "video_cfg",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "video_cfg"
-                },
-                "link": 784
-              },
-              {
-                "name": "audio_cfg",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "audio_cfg"
-                },
-                "link": 785
               }
             ],
             "outputs": [
@@ -2568,22 +1963,12 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65,
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              "secondTabWidth": 65
             },
             "widgets_values": [
               1,
               1
-            ],
-            "widgets_values_named": {
-              "video_cfg": 1,
-              "audio_cfg": 1
-            },
-            "title": "STAGE 1 | video/audio CFG"
+            ]
           },
           {
             "id": 344,
@@ -2663,7 +2048,8 @@
                 "version": "7.7",
                 "input_ue_unconnectable": {}
               }
-            }
+            },
+            "widgets_values": []
           },
           {
             "id": 357,
@@ -2738,12 +2124,7 @@
             "widgets_values": [
               0.7,
               false
-            ],
-            "widgets_values_named": {
-              "strength": 0.7,
-              "bypass": false
-            },
-            "title": "STAGE 1 | first-frame strength"
+            ]
           },
           {
             "id": 366,
@@ -2761,7 +2142,7 @@
             "mode": 0,
             "inputs": [
               {
-                "localized_name": "Audio VAE",
+                "localized_name": "audio_vae",
                 "name": "audio_vae",
                 "type": "VAE",
                 "link": 729
@@ -2816,12 +2197,7 @@
               97,
               25,
               1
-            ],
-            "widgets_values_named": {
-              "frames_number": 97,
-              "frame_rate": 25,
-              "batch_size": 1
-            }
+            ]
           },
           {
             "id": 367,
@@ -2879,7 +2255,8 @@
                 "version": "7.7",
                 "input_ue_unconnectable": {}
               }
-            }
+            },
+            "widgets_values": []
           },
           {
             "id": 377,
@@ -2935,7 +2312,8 @@
                 "version": "7.7",
                 "input_ue_unconnectable": {}
               }
-            }
+            },
+            "widgets_values": []
           },
           {
             "id": 351,
@@ -2957,30 +2335,6 @@
                 "name": "input",
                 "type": "IMAGE,MASK",
                 "link": 763
-              },
-              {
-                "name": "mode",
-                "type": "COMBO",
-                "link": 792,
-                "widget": {
-                  "name": "mode"
-                }
-              },
-              {
-                "name": "size",
-                "type": "INT",
-                "link": 793,
-                "widget": {
-                  "name": "size"
-                }
-              },
-              {
-                "name": "resampling",
-                "type": "COMBO",
-                "link": 794,
-                "widget": {
-                  "name": "resampling"
-                }
               }
             ],
             "outputs": [
@@ -3014,12 +2368,7 @@
               "scale longer dimension",
               1536,
               "lanczos"
-            ],
-            "widgets_values_named": {
-              "resize_type": "scale longer dimension",
-              "resize_type.longer_size": 1536,
-              "scale_method": "lanczos"
-            }
+            ]
           },
           {
             "id": 353,
@@ -3030,7 +2379,7 @@
             ],
             "size": [
               225,
-              74
+              0
             ],
             "flags": {
               "collapsed": true
@@ -3040,13 +2389,14 @@
             "inputs": [
               {
                 "label": "a",
-                "localized_name": "a",
+                "localized_name": "values.a",
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
                 "link": 687
               },
               {
-                "localized_name": "b",
+                "label": "b",
+                "localized_name": "values.b",
                 "name": "values.b",
                 "shape": 7,
                 "type": "FLOAT,INT,BOOLEAN",
@@ -3094,10 +2444,7 @@
             },
             "widgets_values": [
               "a/2"
-            ],
-            "widgets_values_named": {
-              "expression": "a/2"
-            }
+            ]
           },
           {
             "id": 355,
@@ -3108,7 +2455,7 @@
             ],
             "size": [
               225,
-              74
+              0
             ],
             "flags": {
               "collapsed": true
@@ -3118,13 +2465,14 @@
             "inputs": [
               {
                 "label": "a",
-                "localized_name": "a",
+                "localized_name": "values.a",
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
                 "link": 688
               },
               {
-                "localized_name": "b",
+                "label": "b",
+                "localized_name": "values.b",
                 "name": "values.b",
                 "shape": 7,
                 "type": "FLOAT,INT,BOOLEAN",
@@ -3172,10 +2520,7 @@
             },
             "widgets_values": [
               "a/2"
-            ],
-            "widgets_values_named": {
-              "expression": "a/2"
-            }
+            ]
           },
           {
             "id": 350,
@@ -3197,14 +2542,6 @@
                 "name": "image",
                 "type": "IMAGE",
                 "link": 752
-              },
-              {
-                "name": "crf",
-                "type": "INT",
-                "link": 795,
-                "widget": {
-                  "name": "crf"
-                }
               }
             ],
             "outputs": [
@@ -3238,10 +2575,7 @@
             },
             "widgets_values": [
               18
-            ],
-            "widgets_values_named": {
-              "img_compression": 18
-            }
+            ]
           },
           {
             "id": 356,
@@ -3318,13 +2652,7 @@
               512,
               97,
               1
-            ],
-            "widgets_values_named": {
-              "width": 768,
-              "height": 512,
-              "length": 97,
-              "batch_size": 1
-            }
+            ]
           },
           {
             "id": 348,
@@ -3386,7 +2714,8 @@
                 "version": "7.7",
                 "input_ue_unconnectable": {}
               }
-            }
+            },
+            "widgets_values": []
           },
           {
             "id": 349,
@@ -3461,12 +2790,7 @@
             "widgets_values": [
               1,
               false
-            ],
-            "widgets_values_named": {
-              "strength": 1,
-              "bypass": false
-            },
-            "title": "STAGE 2 | first-frame strength"
+            ]
           },
           {
             "id": 359,
@@ -3477,7 +2801,7 @@
             ],
             "size": [
               225,
-              74
+              0
             ],
             "flags": {
               "collapsed": true
@@ -3487,13 +2811,14 @@
             "inputs": [
               {
                 "label": "a",
-                "localized_name": "a",
+                "localized_name": "values.a",
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
                 "link": 695
               },
               {
-                "localized_name": "b",
+                "label": "b",
+                "localized_name": "values.b",
                 "name": "values.b",
                 "shape": 7,
                 "type": "FLOAT,INT,BOOLEAN",
@@ -3545,10 +2870,7 @@
             },
             "widgets_values": [
               "a"
-            ],
-            "widgets_values_named": {
-              "expression": "a"
-            }
+            ]
           },
           {
             "id": 378,
@@ -3559,7 +2881,7 @@
             ],
             "size": [
               225,
-              94
+              0
             ],
             "flags": {
               "collapsed": true
@@ -3569,20 +2891,22 @@
             "inputs": [
               {
                 "label": "a",
-                "localized_name": "a",
+                "localized_name": "values.a",
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
                 "link": 715
               },
               {
-                "localized_name": "b",
+                "label": "b",
+                "localized_name": "values.b",
                 "name": "values.b",
                 "shape": 7,
                 "type": "FLOAT,INT,BOOLEAN",
                 "link": 716
               },
               {
-                "localized_name": "c",
+                "label": "c",
+                "localized_name": "values.c",
                 "name": "values.c",
                 "shape": 7,
                 "type": "FLOAT,INT,BOOLEAN",
@@ -3632,10 +2956,7 @@
             },
             "widgets_values": [
               "a * b + 1"
-            ],
-            "widgets_values_named": {
-              "expression": "a * b + 1"
-            }
+            ]
           },
           {
             "id": 338,
@@ -3682,12 +3003,7 @@
             "widgets_values": [
               42,
               "fixed"
-            ],
-            "widgets_values_named": {
-              "noise_seed": 42,
-              "control_after_generate": "fixed"
-            },
-            "title": "STAGE 2 | noise seed"
+            ]
           },
           {
             "id": 340,
@@ -3743,7 +3059,8 @@
                 "version": "7.7",
                 "input_ue_unconnectable": {}
               }
-            }
+            },
+            "widgets_values": []
           },
           {
             "id": 396,
@@ -3759,16 +3076,7 @@
             "flags": {},
             "order": 4,
             "mode": 0,
-            "inputs": [
-              {
-                "name": "sigmas",
-                "type": "STRING",
-                "link": 791,
-                "widget": {
-                  "name": "sigmas"
-                }
-              }
-            ],
+            "inputs": [],
             "outputs": [
               {
                 "localized_name": "SIGMAS",
@@ -3798,11 +3106,7 @@
             },
             "widgets_values": [
               "0.85, 0.7250, 0.4219, 0.0"
-            ],
-            "widgets_values_named": {
-              "sigmas": "0.85, 0.7250, 0.4219, 0.0"
-            },
-            "title": "STAGE 2 | distilled sigma schedule"
+            ]
           },
           {
             "id": 391,
@@ -3836,22 +3140,6 @@
                 "name": "negative",
                 "type": "CONDITIONING",
                 "link": 756
-              },
-              {
-                "name": "video_cfg",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "video_cfg"
-                },
-                "link": 786
-              },
-              {
-                "name": "audio_cfg",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "audio_cfg"
-                },
-                "link": 787
               }
             ],
             "outputs": [
@@ -3874,22 +3162,12 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65,
-              "ue_properties": {
-                "widget_ue_connectable": {},
-                "version": "7.8",
-                "input_ue_unconnectable": {}
-              }
+              "secondTabWidth": 65
             },
             "widgets_values": [
               1,
               1
-            ],
-            "widgets_values_named": {
-              "video_cfg": 1,
-              "audio_cfg": 1
-            },
-            "title": "STAGE 2 | video/audio CFG"
+            ]
           },
           {
             "id": 341,
@@ -3905,16 +3183,7 @@
             "flags": {},
             "order": 5,
             "mode": 0,
-            "inputs": [
-              {
-                "name": "sampler_name",
-                "type": "COMBO",
-                "link": 789,
-                "widget": {
-                  "name": "sampler_name"
-                }
-              }
-            ],
+            "inputs": [],
             "outputs": [
               {
                 "localized_name": "SAMPLER",
@@ -3944,11 +3213,7 @@
             },
             "widgets_values": [
               "euler_ancestral"
-            ],
-            "widgets_values_named": {
-              "sampler_name": "euler_ancestral"
-            },
-            "title": "STAGE 2 | sampler"
+            ]
           },
           {
             "id": 368,
@@ -4028,7 +3293,8 @@
                 "version": "7.7",
                 "input_ue_unconnectable": {}
               }
-            }
+            },
+            "widgets_values": []
           },
           {
             "id": 369,
@@ -4086,7 +3352,8 @@
                 "version": "7.7",
                 "input_ue_unconnectable": {}
               }
-            }
+            },
+            "widgets_values": []
           },
           {
             "id": 374,
@@ -4149,13 +3416,7 @@
               64,
               64,
               16
-            ],
-            "widgets_values_named": {
-              "tile_size": 512,
-              "overlap": 64,
-              "temporal_size": 64,
-              "temporal_overlap": 16
-            }
+            ]
           },
           {
             "id": 358,
@@ -4180,7 +3441,7 @@
               },
               {
                 "label": "Audio VAE",
-                "localized_name": "Audio VAE",
+                "localized_name": "audio_vae",
                 "name": "audio_vae",
                 "type": "VAE",
                 "link": 730
@@ -4212,7 +3473,8 @@
                 "version": "7.7",
                 "input_ue_unconnectable": {}
               }
-            }
+            },
+            "widgets_values": []
           },
           {
             "id": 370,
@@ -4223,7 +3485,7 @@
             ],
             "size": [
               280,
-              150
+              130
             ],
             "flags": {},
             "order": 28,
@@ -4281,16 +3543,8 @@
             },
             "widgets_values": [
               24,
-              8,
-              "sRGB",
-              "none"
-            ],
-            "widgets_values_named": {
-              "fps": 24,
-              "bit_depth": 8,
-              "color_space": "sRGB",
-              "codec": "none"
-            }
+              8
+            ]
           }
         ],
         "groups": [
@@ -4416,6 +3670,30 @@
           }
         ],
         "links": [
+          {
+            "id": 749,
+            "origin_id": 393,
+            "origin_slot": 0,
+            "target_id": 380,
+            "target_slot": 0,
+            "type": "CLIP"
+          },
+          {
+            "id": 757,
+            "origin_id": 350,
+            "origin_slot": 0,
+            "target_id": 380,
+            "target_slot": 1,
+            "type": "IMAGE"
+          },
+          {
+            "id": 723,
+            "origin_id": 376,
+            "origin_slot": 0,
+            "target_id": 380,
+            "target_slot": 4,
+            "type": "STRING"
+          },
           {
             "id": 732,
             "origin_id": 387,
@@ -4577,6 +3855,14 @@
             "type": "LATENT"
           },
           {
+            "id": 693,
+            "origin_id": 363,
+            "origin_slot": 0,
+            "target_id": 357,
+            "target_slot": 3,
+            "type": "BOOLEAN"
+          },
+          {
             "id": 729,
             "origin_id": 386,
             "origin_slot": 0,
@@ -4623,6 +3909,22 @@
             "target_id": 377,
             "target_slot": 1,
             "type": "LATENT"
+          },
+          {
+            "id": 687,
+            "origin_id": 372,
+            "origin_slot": 0,
+            "target_id": 353,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 688,
+            "origin_id": 360,
+            "origin_slot": 0,
+            "target_id": 355,
+            "target_slot": 0,
+            "type": "INT"
           },
           {
             "id": 752,
@@ -4687,6 +3989,38 @@
             "target_id": 349,
             "target_slot": 2,
             "type": "LATENT"
+          },
+          {
+            "id": 683,
+            "origin_id": 363,
+            "origin_slot": 0,
+            "target_id": 349,
+            "target_slot": 3,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 695,
+            "origin_id": 361,
+            "origin_slot": 0,
+            "target_id": 359,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 715,
+            "origin_id": 362,
+            "origin_slot": 0,
+            "target_id": 378,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 716,
+            "origin_id": 361,
+            "origin_slot": 0,
+            "target_id": 378,
+            "target_slot": 1,
+            "type": "INT"
           },
           {
             "id": 665,
@@ -4823,6 +4157,14 @@
             "target_id": -20,
             "target_slot": 0,
             "type": "VIDEO"
+          },
+          {
+            "id": 763,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 351,
+            "target_slot": 0,
+            "type": "IMAGE,MASK"
           },
           {
             "id": 765,
@@ -4967,198 +4309,6 @@
             "target_id": 393,
             "target_slot": 0,
             "type": "COMBO"
-          },
-          {
-            "id": 693,
-            "origin_id": 363,
-            "origin_slot": 0,
-            "target_id": 357,
-            "target_slot": 3,
-            "type": "BOOLEAN"
-          },
-          {
-            "id": 683,
-            "origin_id": 363,
-            "origin_slot": 0,
-            "target_id": 349,
-            "target_slot": 3,
-            "type": "BOOLEAN"
-          },
-          {
-            "id": 749,
-            "origin_id": 393,
-            "origin_slot": 0,
-            "target_id": 380,
-            "target_slot": 0,
-            "type": "CLIP"
-          },
-          {
-            "id": 757,
-            "origin_id": 350,
-            "origin_slot": 0,
-            "target_id": 380,
-            "target_slot": 1,
-            "type": "IMAGE"
-          },
-          {
-            "id": 723,
-            "origin_id": 376,
-            "origin_slot": 0,
-            "target_id": 380,
-            "target_slot": 5,
-            "type": "STRING"
-          },
-          {
-            "id": 763,
-            "origin_id": -10,
-            "origin_slot": 0,
-            "target_id": 351,
-            "target_slot": 0,
-            "type": "IMAGE,MASK"
-          },
-          {
-            "id": 687,
-            "origin_id": 372,
-            "origin_slot": 0,
-            "target_id": 353,
-            "target_slot": 0,
-            "type": "INT"
-          },
-          {
-            "id": 688,
-            "origin_id": 360,
-            "origin_slot": 0,
-            "target_id": 355,
-            "target_slot": 0,
-            "type": "INT"
-          },
-          {
-            "id": 695,
-            "origin_id": 361,
-            "origin_slot": 0,
-            "target_id": 359,
-            "target_slot": 0,
-            "type": "INT"
-          },
-          {
-            "id": 715,
-            "origin_id": 362,
-            "origin_slot": 0,
-            "target_id": 378,
-            "target_slot": 0,
-            "type": "INT"
-          },
-          {
-            "id": 716,
-            "origin_id": 361,
-            "origin_slot": 0,
-            "target_id": 378,
-            "target_slot": 1,
-            "type": "INT"
-          },
-          {
-            "id": 783,
-            "origin_id": -10,
-            "origin_slot": 14,
-            "target_id": 373,
-            "target_slot": 1,
-            "type": "STRING"
-          },
-          {
-            "id": 784,
-            "origin_id": -10,
-            "origin_slot": 15,
-            "target_id": 388,
-            "target_slot": 3,
-            "type": "FLOAT"
-          },
-          {
-            "id": 785,
-            "origin_id": -10,
-            "origin_slot": 16,
-            "target_id": 388,
-            "target_slot": 4,
-            "type": "FLOAT"
-          },
-          {
-            "id": 786,
-            "origin_id": -10,
-            "origin_slot": 17,
-            "target_id": 391,
-            "target_slot": 3,
-            "type": "FLOAT"
-          },
-          {
-            "id": 787,
-            "origin_id": -10,
-            "origin_slot": 18,
-            "target_id": 391,
-            "target_slot": 4,
-            "type": "FLOAT"
-          },
-          {
-            "id": 788,
-            "origin_id": -10,
-            "origin_slot": 19,
-            "target_id": 352,
-            "target_slot": 0,
-            "type": "COMBO"
-          },
-          {
-            "id": 789,
-            "origin_id": -10,
-            "origin_slot": 20,
-            "target_id": 341,
-            "target_slot": 0,
-            "type": "COMBO"
-          },
-          {
-            "id": 790,
-            "origin_id": -10,
-            "origin_slot": 21,
-            "target_id": 397,
-            "target_slot": 0,
-            "type": "STRING"
-          },
-          {
-            "id": 791,
-            "origin_id": -10,
-            "origin_slot": 22,
-            "target_id": 396,
-            "target_slot": 0,
-            "type": "STRING"
-          },
-          {
-            "id": 792,
-            "origin_id": -10,
-            "origin_slot": 23,
-            "target_id": 351,
-            "target_slot": 1,
-            "type": "COMBO"
-          },
-          {
-            "id": 793,
-            "origin_id": -10,
-            "origin_slot": 24,
-            "target_id": 351,
-            "target_slot": 2,
-            "type": "INT"
-          },
-          {
-            "id": 794,
-            "origin_id": -10,
-            "origin_slot": 25,
-            "target_id": 351,
-            "target_slot": 3,
-            "type": "COMBO"
-          },
-          {
-            "id": 795,
-            "origin_id": -10,
-            "origin_slot": 26,
-            "target_id": 350,
-            "target_slot": 1,
-            "type": "INT"
           }
         ],
         "extra": {}
@@ -5167,7 +4317,7 @@
   },
   "config": {},
   "extra": {
-    "frontendVersion": "1.55.14",
+    "frontendVersion": "1.48.7",
     "workflowRendererVersion": "Vue-corrected",
     "prompt": {
       "1": {
@@ -5567,10 +4717,10 @@
     "VHS_KeepIntermediate": true,
     "ue_links": [],
     "ds": {
-      "scale": 0.656709115695176,
+      "scale": 0.5372579276232843,
       "offset": [
-        -1063.7582742730908,
-        -6188.3604204896965
+        -997.9255316404019,
+        -5946.687550493496
       ]
     }
   },
