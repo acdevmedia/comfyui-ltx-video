@@ -64,7 +64,7 @@ See [workflow details](docs/workflows.md), [adapter compatibility](docs/adapters
 Recommended initial target: **NVIDIA A100 80 GB**. H100/H200 and RTX PRO GPUs may be suitable, but throughput, attention kernels, memory use, and compatibility must be checked for the chosen graph. This repository has not verified generation on any GPU yet.
 
 1. Sign in to Hugging Face and accept the gated LTX-2.5 model terms for the account used by your token.
-2. Select the published image `ghcr.io/acdevmedia/ltx25-studio:<release-tag>` in RunPod.
+2. Select the published image `ghcr.io/acdevmedia/ltx-studio:2.5` in RunPod.
 3. Attach persistent storage at `/workspace`. Plan for about **200 GB minimum / 250 GB recommended** for this profile's INT8 and BF16 weights, Hugging Face cache, outputs, and headroom. Confirm actual model sizes during release validation.
 4. Add `HF_TOKEN` in RunPod's environment/secret interface. The alias `HUGGING_FACE_HUB_TOKEN` is also accepted.
 5. Optionally add S3 variables and set `REALTIME_BACKUP=true`.
@@ -133,12 +133,12 @@ To start a build after this repository change is committed and pushed:
 
 - Use **Actions → Build and publish LTX Studio image → Run workflow** for a commit-addressed `sha-<12 chars>` build. The workflow input defaults to `ltx-2.5`.
 - Push a release tag such as `v2.5.0` after the chosen validation gate. The tag build pushes the version tag, SHA tag, and `latest` after the CPU checks pass.
-- Check the workflow run and package digest in GHCR. Make `ghcr.io/acdevmedia/ltx25-studio` public in package settings before RunPod anonymous pulls.
+- Check the workflow run and package digest in GHCR. Make `ghcr.io/acdevmedia/ltx-studio` public in package settings before RunPod anonymous pulls.
 
 After the immutable SHA image is anonymously pullable from GHCR, create the public RunPod template from the reviewed payload in `config/runpod-template.json`:
 
 ```bash
-python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx25-studio:<sha-tag>
+python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx-studio:2.5
 ```
 
 The helper reads `RUNPOD_API_KEY` from the shell or ignored `.env`, verifies that GHCR allows anonymous pulls, checks for an existing template with the same name, and then calls RunPod's template API. It never puts Hugging Face or S3 credentials into the public template. Use RunPod Secrets to add those credentials to a Pod.
@@ -147,7 +147,7 @@ The local build remains available for systems with enough disk:
 
 ```bash
 docker build --build-arg LTX_VERSION=ltx-2.5 --build-arg CUDA_VERSION=12.8.0 \
-  -t ghcr.io/acdevmedia/ltx25-studio:dev .
+  -t ghcr.io/acdevmedia/ltx-studio:dev .
 ```
 
 Static checks (no GPU required):

@@ -66,11 +66,14 @@ jobs:
         env:
           REF: ${{ github.ref }}
           SHA: ${{ github.sha }}
+          LTX_VERSION: ${{ steps.profile.outputs.ltx_version }}
         run: |
-          image=ghcr.io/acdevmedia/ltx25-studio
+          image=ghcr.io/acdevmedia/ltx-studio
+          version_tag="${LTX_VERSION#ltx-}"
           {
             echo "tags<<EOF"
             echo "$image:sha-${SHA:0:12}"
+            echo "$image:$version_tag"
             if [[ "$REF" == refs/tags/v* ]]; then
               echo "$image:${REF#refs/tags/}"
               echo "$image:latest"

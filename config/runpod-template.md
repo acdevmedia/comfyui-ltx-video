@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | Name | ACDEV LTX-2.5 Studio |
-| Container image | `ghcr.io/acdevmedia/ltx25-studio:<version>` (use the digest recorded after publishing for a fixed release) |
+| Container image | `ghcr.io/acdevmedia/ltx-studio:2.5` (use the digest recorded after publishing for a fixed release) |
 | GPU | A100 80GB recommended |
 | Container disk | 100 GB (matches the working ValyrianTech template and leaves room for CUDA/PyTorch application layers) |
 | Persistent volume | Mount at `/workspace`; 200 GB minimum, 250 GB preferred |
@@ -51,7 +51,7 @@ Optional admin services: `ENABLE_JUPYTER=true` requires a nonempty `JUPYTER_TOKE
 First publish a versioned GHCR image, set the package public, and verify pull access. The reviewed API body is `config/runpod-template.json`; `scripts/create-runpod-template.py` checks for public pull access and duplicate names, then creates the public template using `RUNPOD_API_KEY` from the shell or ignored `.env`.
 
 ```bash
-python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx25-studio:<sha-tag>
+python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx-studio:2.5
 ```
 
 Add Hugging Face and S3 credentials through RunPod Secrets after creation. Launch a test pod on an A100 80GB with persistent storage. Confirm automatic model downloads, ComfyUI readiness, one short video/audio generation, the output browser, and backup verification. See `docs/deployment.md` for release checks.

@@ -4,14 +4,14 @@
 
 `.github/workflows/build-ghcr.yml` runs CPU-only checks, reads `versions/<id>/profile.json`, builds a `linux/amd64` image, and pushes it with the repository `GITHUB_TOKEN`. The workflow requires `contents: read` and `packages: write`; no PAT or model credentials are needed by the image build.
 
-Commit and push the project changes, then choose **Actions → Build and publish LTX Studio image → Run workflow**. Use the profile ID `ltx-2.5` for this project. A manual run creates the immutable `sha-<12 chars>` image. A pushed `v*` Git tag creates that release tag, the SHA tag, and `latest`; only tag releases that have passed the required release checks should be used for production. Check the build logs and package digest in GHCR. Set package visibility to **Public** if RunPod should pull anonymously.
+Commit and push the project changes, then choose **Actions → Build and publish LTX Studio image → Run workflow**. Use the profile ID `ltx-2.5` for this project. A manual run creates `ghcr.io/acdevmedia/ltx-studio:2.5` and an immutable `sha-<12 chars>` image. A pushed `v*` Git tag creates that release tag, the SHA tag, and `latest`; only tag releases that have passed the required release checks should be used for production. Check the build logs and package digest in GHCR. Set package visibility to **Public** if RunPod should pull anonymously.
 
 The PAT in a local `.env` is not used by GitHub Actions. A maintainer with permission to push and dispatch workflows must push the workflow and code to the repository, then launch it. Publishing to the existing package requires the owner `acdevmedia` to grant the repository's workflow package write access.
 
 ## Optional local image build
 
 ```bash
-docker build --build-arg LTX_VERSION=ltx-2.5 --build-arg CUDA_VERSION=12.8.0 -t ghcr.io/acdevmedia/ltx25-studio:dev .
+docker build --build-arg LTX_VERSION=ltx-2.5 --build-arg CUDA_VERSION=12.8.0 -t ghcr.io/acdevmedia/ltx-studio:dev .
 ```
 
 The image is Linux/amd64 and requires the NVIDIA container runtime when run. Building can work on a machine with no GPU. RunPod GPU runtime and model generation still need GPU validation.

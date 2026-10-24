@@ -1,6 +1,6 @@
 {
   "name": "ACDEV LTX-2.5 Studio",
-  "imageName": "ghcr.io/acdevmedia/ltx25-studio:sha-c69add2",
+  "imageName": "ghcr.io/acdevmedia/ltx-studio:2.5",
   "category": "NVIDIA",
   "containerDiskInGb": 100,
   "dockerEntrypoint": [],

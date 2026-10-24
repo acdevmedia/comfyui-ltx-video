@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 cd "$(dirname "$0")/.."
 REGISTRY=ghcr.io
-IMAGE=ghcr.io/acdevmedia/ltx25-studio
+IMAGE=ghcr.io/acdevmedia/ltx-studio
 VERSION="${VERSION:-}"
 if [[ -z "$VERSION" ]]; then echo 'Set VERSION to a dated or semantic release tag.' >&2; exit 2; fi
 if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
