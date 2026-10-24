@@ -36,7 +36,9 @@ def request(method: str, url: str, key: str, payload=None):
             "Authorization": f"Bearer {key}",
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "User-Agent": "acdev-ltx-studio-template",
+            # RunPod's Cloudflare front end rejects this API client when the
+            # User-Agent resembles an automated browser signature.
+            "User-Agent": "curl/8.0",
         },
     )
     with urllib.request.urlopen(req, timeout=45) as response:
@@ -78,12 +80,15 @@ def check_public_image(image: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--image", help="Override the immutable image reference in the JSON payload")
+    parser.add_argument("--drop-port", action="append", default=[], help="Remove a port entry (repeatable), for example 8080/http")
+    parser.add_argument("--update-existing", action="store_true", help="PATCH the existing same-name template instead of refusing a duplicate")
     parser.add_argument("--dry-run", action="store_true", help="Print payload without calling RunPod")
     args = parser.parse_args()
 
     payload = json.loads((ROOT / "config/runpod-template.json").read_text(encoding="utf-8"))
     if args.image:
         payload["imageName"] = args.image
+    payload["ports"] = [port for port in payload.get("ports", []) if port not in args.drop_port]
     if args.dry_run:
         print(json.dumps(payload, indent=2))
         return
@@ -97,8 +102,12 @@ def main() -> None:
         raise SystemExit("RunPod returned an unexpected template list; refusing to create a duplicate.")
     matches = [item for item in existing if item.get("name") == payload["name"]]
     if matches:
-        info = ", ".join(f"id={item.get('id')} image={item.get('imageName')}" for item in matches)
-        raise SystemExit(f"A template named {payload['name']!r} already exists ({info}). No duplicate was created.")
+        if not args.update_existing:
+            info = ", ".join(f"id={item.get('id')} image={item.get('imageName')}" for item in matches)
+            raise SystemExit(f"A template named {payload['name']!r} already exists ({info}). No duplicate was created.")
+        result = request("PATCH", f"{API}/templates/{matches[0]['id']}", key, payload)[1]
+        print(f"Updated RunPod template {result.get('name')} (id {result.get('id')}) using {result.get('imageName')}.")
+        return
 
     status, result = request("POST", f"{API}/templates", key, payload)
     if status not in (200, 201):
