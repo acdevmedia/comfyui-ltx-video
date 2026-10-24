@@ -14,7 +14,7 @@ runtime = json.load(open(sys.argv[1], encoding="utf-8"))["runtime"]
 for key in (
     "cuda_version", "torch_version", "torchvision_version", "torchaudio_version",
     "torch_index_url", "comfyui_commit", "manager_commit", "custom_scripts_commit",
-    "ltxvideo_commit", "huggingface_hub_version", "transformers_version",
+    "ltxvideo_commit", "huggingface_hub_version", "transformers_version", "diffusers_version",
     "comfy_aimdo_version", "comfy_kitchen_version", "av_version", "boto3_version",
     "watchdog_version", "jupyterlab_version",
 ):
@@ -60,9 +60,10 @@ pip install --no-cache-dir -r custom_nodes/ComfyUI-LTXVideo/requirements.txt
 
 PINS=(
   "huggingface_hub==${SETTINGS[9]}" "transformers==${SETTINGS[10]}"
-  "comfy-aimdo==${SETTINGS[11]}" "comfy-kitchen==${SETTINGS[12]}"
-  "av==${SETTINGS[13]}" "boto3==${SETTINGS[14]}"
-  "watchdog==${SETTINGS[15]}" "jupyterlab==${SETTINGS[16]}"
+  "diffusers==${SETTINGS[11]}" "comfy-aimdo==${SETTINGS[12]}"
+  "comfy-kitchen==${SETTINGS[13]}" "av==${SETTINGS[14]}"
+  "boto3==${SETTINGS[15]}" "watchdog==${SETTINGS[16]}"
+  "jupyterlab==${SETTINGS[17]}"
 )
 pip install --no-cache-dir "${PINS[@]}"
 pip check

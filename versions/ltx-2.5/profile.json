@@ -41,6 +41,7 @@
     "ltxvideo_commit": "220e1d45aa0469f518e982102fca4dca92a61862",
     "huggingface_hub_version": "0.36.0",
     "transformers_version": "4.57.3",
+    "diffusers_version": "0.35.2",
     "comfy_aimdo_version": "0.5.6",
     "comfy_kitchen_version": "0.2.37",
     "av_version": "17.0.0",
