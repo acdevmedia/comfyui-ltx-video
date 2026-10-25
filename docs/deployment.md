@@ -28,9 +28,9 @@ VERSION=2026.10.24 ./scripts/publish-ghcr.sh
 
 ## RunPod template
 
-Create a template named **ACDEV LTX-2.5 Studio** with the immutable image tag, 100 GB container disk, a 250 GB persistent volume mounted at `/workspace`, HTTP ports 8188 and 8080, optional HTTP 8888 for Jupyter, and optional TCP 22 for SSH. The public request body is versioned in `config/runpod-template.json`; `scripts/create-runpod-template.py` verifies anonymous GHCR pull access and creates it through the RunPod REST API. Add Hugging Face and S3 values through RunPod Secrets. Never bake credentials into the template or image.
+Create/update the template named **LTX 2.5 Distilled Video and one click** using the versioned image `ghcr.io/acdevmedia/ltx-studio:2.5`. It has a 100 GB container disk, no persistent volume, an empty start command, no registry credentials, HTTP ports 8188/8888/8675, TCP ports 22/8080, and UDP ports 22/8080. The request body is versioned in `config/runpod-template.json`; `scripts/create-runpod-template.py` verifies anonymous GHCR pull access and creates or updates it. Add Hugging Face and optional S3 values through RunPod Secrets. Never bake credentials into the image.
 
-Choose **A100 80GB** for the target profile. Use H100/H200 or other CUDA cards only after checking workflow VRAM and kernel compatibility. Volume recommendation is 200GB minimum and 250GB preferred for the provisioned INT8+BF16 set plus outputs/cache.
+Choose **A100 80GB** for the target profile. Use H100/H200 or other CUDA cards only after checking workflow VRAM and kernel compatibility. The 100 GB container disk is temporary; model downloads and outputs do not survive Pod replacement. Enable S3 backup or download needed outputs before stopping the Pod.
 
 ## Startup triage
 

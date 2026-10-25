@@ -78,30 +78,33 @@ def check_public_image(image: str) -> None:
         raise RuntimeError(f"Could not verify {image} in GHCR (HTTP {exc.code}).") from None
 
 
-def apply_graphql_template(template_id: str, payload: dict, labels: dict, key: str) -> dict:
+def apply_graphql_template(template_id: str | None, payload: dict, labels: dict, key: str) -> dict:
     """Apply fields REST v1 omits from the UI, notably named port mappings."""
     ports = payload.get("ports", [])
+    port_configs = {}
+    for port in ports:
+        number = port.split("/", 1)[0]
+        port_configs.setdefault(number, {"port": number, "name": labels.get(port, number)})
     gql_input = {
-        "id": template_id,
         "name": payload["name"],
         "imageName": payload["imageName"],
         "containerDiskInGb": payload["containerDiskInGb"],
-        "volumeInGb": payload["volumeInGb"],
-        "volumeMountPath": payload["volumeMountPath"],
+        "volumeInGb": payload.get("volumeInGb", 0),
+        "volumeMountPath": payload.get("volumeMountPath", ""),
         "isPublic": payload["isPublic"],
         "isServerless": payload["isServerless"],
         "dockerArgs": "",
         "ports": ",".join(ports),
-        "portsConfig": [
-            {"port": port.split("/", 1)[0], "name": labels.get(port, port)}
-            for port in ports
-        ],
+        "portsConfig": list(port_configs.values()),
         "env": [
             {"key": name, "value": str(value)}
             for name, value in payload.get("env", {}).items()
         ],
         "readme": payload.get("readme", ""),
+        "category": payload.get("category", "NVIDIA"),
     }
+    if template_id:
+        gql_input["id"] = template_id
     query = "mutation($input: SaveTemplateInput!) { saveTemplate(input:$input) { id name imageName isPublic portsConfig { port name } } }"
     req = urllib.request.Request(
         GRAPHQL,
@@ -155,10 +158,7 @@ def main() -> None:
         print(f"Updated RunPod template {result.get('name')} (id {result.get('id')}) using {result.get('imageName')}.")
         return
 
-    status, result = request("POST", f"{API}/templates", key, payload)
-    if status not in (200, 201):
-        raise SystemExit(f"RunPod template creation returned HTTP {status}.")
-    result = apply_graphql_template(result["id"], payload, labels, key)
+    result = apply_graphql_template(None, payload, labels, key)
     print(f"Created RunPod template {result.get('name')} (id {result.get('id')}) using {result.get('imageName')}.")
     print("Template is public. Add HF_TOKEN and any S3 credentials through RunPod Secrets before starting a Pod.")
 

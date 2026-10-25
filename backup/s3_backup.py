@@ -13,31 +13,30 @@ def truthy(value): return str(value or '').strip().lower() in {'1','true','yes',
 
 class Config:
     def __init__(self):
-        generic_endpoint=os.getenv('S3_ENDPOINT_URL','').strip()
-        spaces_region=os.getenv('SPACES_REGION','').strip()
-        self.bucket=os.getenv('S3_BUCKET','').strip() or os.getenv('SPACES_BUCKET','').strip()
-        self.region=os.getenv('AWS_DEFAULT_REGION','').strip() or spaces_region or 'us-east-1'
-        self.endpoint=generic_endpoint or (f'https://{spaces_region}.digitaloceanspaces.com' if spaces_region else None)
-        if not generic_endpoint and spaces_region: self.region=spaces_region
-        self.prefix=(os.getenv('S3_PREFIX','').strip() or os.getenv('SPACES_PREFIX','').strip() or 'ltx25-studio').strip('/')
+        self.endpoint=os.getenv('S3_ENDPOINT_URL','').strip() or None
+        self.bucket=os.getenv('S3_BUCKET','').strip()
+        self.region=os.getenv('S3_REGION','').strip() or 'sfo3'
+        self.prefix=(os.getenv('S3_PREFIX','').strip() or 'ltx25-studio').strip('/')
         self.path_style=truthy(os.getenv('S3_FORCE_PATH_STYLE','false'))
         self.storage_class=os.getenv('S3_STORAGE_CLASS','').strip()
         self.sse=os.getenv('S3_SSE','').strip()
         self.settle=max(0,int(os.getenv('BACKUP_SETTLE_SECONDS','8')))
         self.recheck=max(10,int(os.getenv('BACKUP_RECHECK_SECONDS','120')))
-        self.session_token=os.getenv('AWS_SESSION_TOKEN','').strip()
-        self.access=os.getenv('AWS_ACCESS_KEY_ID','').strip()
-        self.secret=os.getenv('AWS_SECRET_ACCESS_KEY','').strip()
+        self.session_token=os.getenv('S3_SESSION_TOKEN','').strip()
+        self.access=os.getenv('S3_ACCESS_KEY_ID','').strip()
+        self.secret=os.getenv('S3_SECRET_ACCESS_KEY','').strip()
         missing=[]
-        if not self.bucket: missing.append('S3_BUCKET (or SPACES_BUCKET)')
-        if not self.region: missing.append('AWS_DEFAULT_REGION (or SPACES_REGION)')
-        if (self.access and not self.secret) or (self.secret and not self.access): missing.append('both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY')
+        if not self.bucket or self.bucket.startswith('YOUR_'): missing.append('S3_BUCKET')
+        if (self.access.startswith('YOUR_') or not self.access) != (self.secret.startswith('YOUR_') or not self.secret): missing.append('both S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY')
         if missing: raise ValueError('missing/invalid configuration: '+', '.join(missing))
 
     def client(self):
         import boto3
         from botocore.config import Config as BotoConfig
-        session=boto3.Session(region_name=self.region)
+        if self.access and self.secret and not self.access.startswith('YOUR_') and not self.secret.startswith('YOUR_'):
+            session=boto3.Session(aws_access_key_id=self.access,aws_secret_access_key=self.secret,aws_session_token=self.session_token or None,region_name=self.region)
+        else:
+            session=boto3.Session(region_name=self.region)
         creds=session.get_credentials()
         if not creds and self.endpoint:
             raise ValueError('S3 access key credentials are missing for the configured custom endpoint.')
@@ -48,7 +47,7 @@ class Config:
     def extra_args(self,path):
         args={'ContentType':mimetypes.guess_type(path.name)[0] or 'application/octet-stream'}
         if self.storage_class: args['StorageClass']=self.storage_class
-        if self.sse:
+        if self.sse and self.sse.lower() not in {'none','disabled','false'}:
             args['ServerSideEncryption']=self.sse
             if self.sse.upper().startswith('AWS:KMS:'): args['SSEKMSKeyId']=self.sse.split(':',2)[2]
         return args

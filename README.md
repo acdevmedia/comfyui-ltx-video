@@ -64,13 +64,13 @@ See [workflow details](docs/workflows.md), [adapter compatibility](docs/adapters
 Recommended initial target: **NVIDIA A100 80 GB**. H100/H200 and RTX PRO GPUs may be suitable, but throughput, attention kernels, memory use, and compatibility must be checked for the chosen graph. This repository has not verified generation on any GPU yet.
 
 1. Sign in to Hugging Face and accept the gated LTX-2.5 model terms for the account used by your token.
-2. Select **ACDEV LTX-2.5 Studio**. Replace the `HF_TOKEN` placeholder with your Hugging Face token and mark it secret in RunPod before starting the Pod.
-3. Attach persistent storage at `/workspace`. Plan for about **200 GB minimum / 250 GB recommended** for this profile's INT8 and BF16 weights, Hugging Face cache, outputs, and headroom. Confirm actual model sizes during release validation.
+2. Select **LTX 2.5 Distilled Video and one click**. Add your Hugging Face token as the `HF_TOKEN` RunPod environment secret before starting the Pod.
+3. The template uses a 100 GB container disk and no persistent volume. Container files, models, and outputs are temporary and may be lost when the Pod is stopped or replaced. Download valuable outputs or enable S3 backup.
 4. Add `HF_TOKEN` in RunPod's environment/secret interface. The alias `HUGGING_FACE_HUB_TOKEN` is also accepted.
 5. Optionally add S3 variables and set `REALTIME_BACKUP=true`.
-6. Expose HTTP ports `8188` and `8080`; add `8888` only when enabling Jupyter. Start the pod and open ComfyUI after provisioning reaches readiness.
+6. The template exposes HTTP `8188`, `8888`, `8675`, TCP `22`, `8080`, and UDP `22`, `8080`, matching the source ComfyUI template. Jupyter remains disabled by default. Start the pod and open ComfyUI after provisioning reaches readiness.
 
-There is no manual login, script run, model download, workflow import, or restart. Startup initializes `/workspace`, checks CUDA, downloads missing models to persistent storage, verifies workflows, then starts ComfyUI. If models are already present and valid, startup keeps them and does not need a token. Provisioning errors are written to `/workspace/logs/startup.log`.
+There is no manual login, script run, model download, workflow import, or restart. Startup initializes `/workspace`, checks CUDA, downloads missing models, verifies workflows, then starts ComfyUI. On this no-volume template, models and outputs are not persistent across Pod replacement. Provisioning errors are written to `/workspace/logs/startup.log`.
 
 RunPod settings, ports, and environment recommendations are listed in [the template guide](config/runpod-template.md). The full configuration example is [.env.example](.env.example); copy its values into RunPod's UI individually, and leave secrets out of local and committed files.
 
@@ -100,25 +100,26 @@ RunPod settings, ports, and environment recommendations are listed in [the templ
 | `ENABLE_JUPYTER` | `false` | Enable Jupyter on port 8888. |
 | `JUPYTER_TOKEN` | empty | Required if Jupyter is enabled. |
 | `PUBLIC_KEY` | empty | Optional SSH authorized key; SSH server is started only when supplied. |
+| `AI_TOOLKIT_AUTH` | Set a private value | Preserved from the upstream template for its optional AI Toolkit service. |
+| `DOWNLOAD_FLUX`, `DOWNLOAD_WAN` | `false` | Preserved upstream switches; both remain disabled in this LTX-only image. |
 
 ### S3-compatible output backup
 
 | Variable | Default | Purpose |
 |---|---:|---|
 | `REALTIME_BACKUP` | `false` | Enable the non-deleting background watcher. |
-| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | empty | S3 credentials; AWS role credentials can be used where available. |
-| `AWS_SESSION_TOKEN` | empty | Optional temporary credential token. |
-| `AWS_DEFAULT_REGION` | `us-east-1` | Region or provider region. |
-| `S3_BUCKET` | empty | Destination bucket; preferred over `SPACES_BUCKET`. |
-| `S3_ENDPOINT_URL` | empty | Custom endpoint for Spaces, MinIO, or compatible stores. |
-| `S3_PREFIX` | `ltx25-studio` | Object prefix; `SPACES_PREFIX` is the legacy fallback. |
+| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | empty | S3-compatible access credentials. |
+| `S3_BUCKET` | empty | Destination bucket. |
+| `S3_ENDPOINT_URL` | `https://sfo3.digitaloceanspaces.com` | S3 endpoint; defaults to DigitalOcean SFO3. |
 | `S3_FORCE_PATH_STYLE` | `false` | Enable path-style addressing for providers that require it. |
-| `S3_STORAGE_CLASS`, `S3_SSE` | empty | Optional storage class and server-side encryption. |
+| `S3_PREFIX` | `ltx25-studio` | Object prefix. |
+| `S3_REGION` | `sfo3` | Signing region; defaults to DigitalOcean SFO3. |
+| `S3_SECRET_ACCESS_KEY` | empty | S3-compatible secret key. |
+| `S3_SESSION_TOKEN` | empty | Optional temporary credential token. |
+| `S3_SSE`, `S3_STORAGE_CLASS` | `none`, `STANDARD` | Optional encryption and storage class. |
 | `BACKUP_SOURCE_DIR` | `/workspace/ComfyUI/output` | Eligible output directory. |
 | `BACKUP_RECHECK_SECONDS` | `120` | Reconciliation interval. |
 | `BACKUP_SETTLE_SECONDS` | `8` | Minimum file-stability interval before upload. |
-| `SPACES_BUCKET`, `SPACES_REGION`, `SPACES_PREFIX` | empty | Legacy DigitalOcean Spaces aliases, used only when generic S3 settings are absent. |
-
 See [storage setup and commands](docs/storage.md) for AWS, Spaces, MinIO, one-shot backup, verification, logs, and key layout.
 
 ## Outputs and browser previews

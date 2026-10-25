@@ -13,10 +13,10 @@ if [[ -f "$CONFIG_FILE" ]]; then
   set +a
 fi
 
-: "${SPACES_BUCKET:?Set SPACES_BUCKET in the config or environment}"
-: "${SPACES_REGION:?Set SPACES_REGION (e.g. nyc3)}"
-: "${AWS_ACCESS_KEY_ID:?Set AWS_ACCESS_KEY_ID (Spaces access key)}"
-: "${AWS_SECRET_ACCESS_KEY:?Set AWS_SECRET_ACCESS_KEY (Spaces secret key)}"
+: "${S3_BUCKET:?Set S3_BUCKET in the config or environment}"
+: "${S3_REGION:?Set S3_REGION (e.g. sfo3)}"
+: "${S3_ACCESS_KEY_ID:?Set S3_ACCESS_KEY_ID}"
+: "${S3_SECRET_ACCESS_KEY:?Set S3_SECRET_ACCESS_KEY}"
 
 command -v aws >/dev/null 2>&1 || { echo 'AWS CLI missing. Install: apt-get update && apt-get install -y awscli' >&2; exit 1; }
 [[ -d "$SOURCE_DIR" ]] || { echo "Missing source folder: $SOURCE_DIR" >&2; exit 1; }
@@ -24,12 +24,14 @@ command -v aws >/dev/null 2>&1 || { echo 'AWS CLI missing. Install: apt-get upda
 # One unique prefix per invocation; S3 prefixes are virtual folders.
 STAMP="$(date -u +%Y-%m-%dT%H-%M-%SZ)"
 SUFFIX="$(od -An -N4 -tx1 /dev/urandom | tr -d ' \n')"
-BASE_PREFIX="${SPACES_PREFIX:-comfyui-backups}"
+BASE_PREFIX="${S3_PREFIX:-ltx25-studio}"
 BASE_PREFIX="${BASE_PREFIX#/}"; BASE_PREFIX="${BASE_PREFIX%/}"
-DEST="s3://${SPACES_BUCKET}/${BASE_PREFIX}/${STAMP}-${SUFFIX}"
-ENDPOINT="https://${SPACES_REGION}.digitaloceanspaces.com"
+DEST="s3://${S3_BUCKET}/${BASE_PREFIX}/${STAMP}-${SUFFIX}"
+ENDPOINT="${S3_ENDPOINT_URL:-https://${S3_REGION}.digitaloceanspaces.com}"
 
-export AWS_DEFAULT_REGION="${SPACES_REGION}"
+export AWS_ACCESS_KEY_ID="$S3_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$S3_SECRET_ACCESS_KEY"
+export AWS_DEFAULT_REGION="${S3_REGION}"
+[[ -n "${S3_SESSION_TOKEN:-}" ]] && export AWS_SESSION_TOKEN="$S3_SESSION_TOKEN"
 export AWS_EC2_METADATA_DISABLED=true
 
 count=0

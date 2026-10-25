@@ -36,10 +36,10 @@ if [[ -f "$CONFIG_FILE" ]]; then
   source "$CONFIG_FILE"
   set +a
 fi
-: "${SPACES_BUCKET:?Set SPACES_BUCKET in config or environment}"
-: "${SPACES_REGION:?Set SPACES_REGION in config or environment}"
-: "${AWS_ACCESS_KEY_ID:?Set AWS_ACCESS_KEY_ID in config or environment}"
-: "${AWS_SECRET_ACCESS_KEY:?Set AWS_SECRET_ACCESS_KEY in config or environment}"
+: "${S3_BUCKET:?Set S3_BUCKET in config or environment}"
+: "${S3_REGION:?Set S3_REGION (e.g. sfo3) in config or environment}"
+: "${S3_ACCESS_KEY_ID:?Set S3_ACCESS_KEY_ID in config or environment}"
+: "${S3_SECRET_ACCESS_KEY:?Set S3_SECRET_ACCESS_KEY in config or environment}"
 for cmd in aws inotifywait flock; do command -v "$cmd" >/dev/null || { echo "Missing $cmd" >&2; exit 1; }; done
 
 # Stable instance-specific path avoids collisions with other RunPod containers.
@@ -49,11 +49,13 @@ if [[ ! -s "$ID_FILE" ]]; then
   (umask 077; printf '%s-%s\n' "$(date -u +%Y%m%dT%H%M%SZ)" "$(od -An -N5 -tx1 /dev/urandom | tr -d ' \n')" > "$ID_FILE")
 fi
 INSTANCE_ID="$(cat "$ID_FILE")"
-BASE_PREFIX="${SPACES_PREFIX:-comfyui-backups}"
+BASE_PREFIX="${S3_PREFIX:-ltx25-studio}"
 BASE_PREFIX="${BASE_PREFIX#/}"; BASE_PREFIX="${BASE_PREFIX%/}"
-DEST="s3://${SPACES_BUCKET}/${BASE_PREFIX}/${INSTANCE_ID}/video"
-ENDPOINT="https://${SPACES_REGION}.digitaloceanspaces.com"
-export AWS_DEFAULT_REGION="$SPACES_REGION" AWS_EC2_METADATA_DISABLED=true
+DEST="s3://${S3_BUCKET}/${BASE_PREFIX}/${INSTANCE_ID}/video"
+ENDPOINT="${S3_ENDPOINT_URL:-https://${S3_REGION}.digitaloceanspaces.com}"
+export AWS_ACCESS_KEY_ID="$S3_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$S3_SECRET_ACCESS_KEY"
+export AWS_DEFAULT_REGION="$S3_REGION" AWS_EC2_METADATA_DISABLED=true
+[[ -n "${S3_SESSION_TOKEN:-}" ]] && export AWS_SESSION_TOKEN="$S3_SESSION_TOKEN"
 
 backup() {
   if [[ ! -d "$SOURCE_DIR" ]]; then

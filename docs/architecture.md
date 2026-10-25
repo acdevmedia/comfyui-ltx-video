@@ -12,7 +12,7 @@ For LTX-2.5, `versions/ltx-2.5/profile.json` pins build components:
 | ComfyUI-LTXVideo | `220e1d45aa0469f518e982102fca4dca92a61862` |
 | Python dependencies | Exact package versions in `versions/ltx-2.5/profile.json` |
 
-The application and custom nodes live under `/opt/ltx25-studio/ComfyUI` in the image. `--input-directory`, `--output-directory`, `--user-directory`, and the extra model-path configuration direct mutable data to `/workspace/ComfyUI`. The image build sets `LTX_VERSION` and resolves that profile's model manifest and workflow source. Workflows are copied only when absent, so a restart does not replace user workflows. Model files, inputs, outputs, logs, cache, and instance state remain on the persistent volume.
+The application and custom nodes live under `/opt/ltx25-studio/ComfyUI` in the image. `--input-directory`, `--output-directory`, `--user-directory`, and the extra model-path configuration direct mutable data to `/workspace/ComfyUI`. The image build sets `LTX_VERSION` and resolves that profile's model manifest and workflow source. Workflows are copied only when absent, so a restart does not replace user workflows. The RunPod template has no persistent volume; model files, inputs, outputs, logs, cache, and instance state are ephemeral unless users configure external backup.
 
 Startup sequence: workspace initialization → CUDA access check → model provisioning / verification → workflow JSON verification → optional backup and Jupyter startup → ComfyUI. Docker health is based on ComfyUI's `/system_stats`. Since startup waits for model provisioning, health does not report ready while initial downloads are incomplete.
 
