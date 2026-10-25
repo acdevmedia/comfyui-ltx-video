@@ -61,6 +61,22 @@ def use_int8_stack(data):
         return value
     replace(data)
 
+def use_conv_video_vae(data):
+    """Select the faster convolutional video decoder; notes that describe both decoders are left as written."""
+    old='ltx-2.5-video-vae-bf16.safetensors'
+    new='ltx-2.5-video-vae-conv-bf16.safetensors'
+    def replace(value):
+        if isinstance(value,dict):
+            if value.get('name')==old and isinstance(value.get('url'),str):
+                value['name']=new; value['url']=value['url'].replace(old,new)
+            for key,item in value.items(): value[key]=replace(item)
+        elif isinstance(value,list):
+            for index,item in enumerate(value): value[index]=replace(item)
+        elif value==old:
+            value=new
+        return value
+    replace(data)
+
 def main():
     master=read(WORK/'LTX25_Filmmaker_Workflow_v9_Advanced.json')
     i2v=copy.deepcopy(master); rename(i2v,'Image to Video — Filmmaker'); set_duration(i2v)
@@ -72,7 +88,7 @@ def main():
             n['title']='Image to Video — Filmmaker Controls'
             n['widgets_values'][2]=30
             if 'value_2' in n.get('widgets_values_named',{}): n['widgets_values_named']['value_2']=30
-    write('01_LTX25_Image_to_Video.json',i2v)
+    use_conv_video_vae(i2v); write('01_LTX25_Image_to_Video.json',i2v)
 
     t2v=read(REF/'video_ltx2_5_t2v.json'); rename(t2v,'Text to Video — Filmmaker')
     for n in t2v['nodes']:
@@ -96,7 +112,7 @@ def main():
             if title=='width' and n.get('widgets_values'): n['widgets_values'][0]=960
             if title in ('height','height (pixels)') and n.get('widgets_values'): n['widgets_values'][0]=544
             if 'enable prompt enhance' in title and n.get('widgets_values'): n['widgets_values'][0]=False
-    write('02_LTX25_Text_to_Video.json',t2v)
+    use_conv_video_vae(t2v); write('02_LTX25_Text_to_Video.json',t2v)
 
     flf=read(REF/'video_ltx2_5_flf2v.json'); rename(flf,'First and Last Frame — Filmmaker')
     set_duration(flf)
@@ -114,7 +130,7 @@ def main():
             if n.get('type')=='PrimitiveInt' and n.get('title','').lower()=='width': n['widgets_values'][0]=960
             if n.get('type')=='PrimitiveInt' and n.get('title','').lower()=='height': n['widgets_values'][0]=544
             if n.get('type')=='PrimitiveBoolean' and 'prompt enhance' in n.get('title','').lower(): n['widgets_values']=[False]
-    write('03_LTX25_First_Last_Frame.json',flf)
+    use_conv_video_vae(flf); write('03_LTX25_First_Last_Frame.json',flf)
 
     a2v=read(REF/'LTX-2.5_A2V_Two_Stage_Distilled.json'); rename(a2v,'Audio to Video — Filmmaker'); set_duration(a2v); use_default_prompt_enhancer(a2v); use_int8_stack(a2v)
     for n in a2v['nodes']:
@@ -122,7 +138,7 @@ def main():
         if n.get('type')=='LoadAudio': n['title']='Source Audio — Preserved in Final Video'
         if n.get('id')==5512 and n.get('widgets_values'): n['widgets_values'][0]=30
         if n.get('id')==2004: n['title']='Optional Opening Frame'
-    write('04_LTX25_Audio_to_Video.json',a2v)
+    use_conv_video_vae(a2v); write('04_LTX25_Audio_to_Video.json',a2v)
 
     t2a=read(REF/'LTX-2.5_T2A_Single_Stage_Distilled.json'); rename(t2a,'Text to Audio — Sound Designer'); set_duration(t2a); use_default_prompt_enhancer(t2a); use_int8_stack(t2a)
     # The upstream nested graph has two root links aimed at the wrong input
@@ -143,7 +159,7 @@ def main():
         if n.get('type')=='LoadImage': n['widgets_values']=['','image']; n['title']='Opening Image'
         if n.get('id')==398: n['title']='Two Stage Generation — Advanced Filmmaker Controls'
         if n.get('type')=='ResolutionSelector' and len(n.get('widgets_values',[]))>1: n['widgets_values'][1]=0.5
-    write('06_LTX25_Two_Stage_Advanced.json',advanced)
+    use_conv_video_vae(advanced); write('06_LTX25_Two_Stage_Advanced.json',advanced)
 
     ing=read(REF/'LTX-2.5_ICLoRA_Ingredients_Single_Stage_Distilled.json'); rename(ing,'Ingredients — Character and Scene Continuity')
     for n in ing['nodes']:
