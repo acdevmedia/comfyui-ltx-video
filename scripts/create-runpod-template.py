@@ -102,6 +102,9 @@ def apply_graphql_template(template_id: str | None, payload: dict, labels: dict,
         ],
         "readme": payload.get("readme", ""),
         "category": payload.get("category", "NVIDIA"),
+        # RunPod adds Jupyter, SSH and helper ports on top of "ports" unless these are off.
+        "startJupyter": payload.get("startJupyter", False),
+        "startSsh": payload.get("startSsh", False),
     }
     if template_id:
         gql_input["id"] = template_id

@@ -12,6 +12,7 @@ assert template["containerDiskInGb"] == 200
 assert "volumeMountPath" not in template and "volumeInGb" not in template
 assert template["ports"] == ["8188/http"]
 assert template["portLabels"] == {"8188/http": "ComfyUI"}
+assert template["startJupyter"] is False and template["startSsh"] is False, "RunPod must not add Jupyter/SSH ports"
 assert not {"AI_TOOLKIT_AUTH", "ENABLE_JUPYTER", "JUPYTER_TOKEN", "PUBLIC_KEY"} & set(template["env"])
 assert "Web terminal" in template["readme"]
 assert template["env"]["HF_TOKEN"] == "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}"

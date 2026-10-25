@@ -44,5 +44,7 @@
   "portLabels": {
     "8188/http": "ComfyUI"
   },
+  "startJupyter": false,
+  "startSsh": false,
   "readme": "# LTX 2.5 Distilled ComfyUI Video One-Click\n\n## Quick start\n1. Create/sign in to Hugging Face: https://huggingface.co/join\n2. Create a Read token: https://huggingface.co/settings/tokens\n3. While signed in to that account, open and accept access terms for each required repository: Lightricks/LTX-2.5, Comfy-Org/gemma-4, and Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients. Approval is separate for each model/LoRA.\n4. In RunPod Settings → Secrets, create `HUGGINGFACE_TOKEN` and paste the token as its value. The template supplies it automatically to model downloads. Keep the token private.\n5. Launch this template on an NVIDIA GPU (A100 80 GB recommended). Container disk defaults to 200 GB; use at least 150 GB if changing it. First launch downloads about 43 GiB of models; set AUTO_DOWNLOAD_ADAPTERS=true to add the 65 GiB Ingredients set.\n6. Wait for the logs to say ComfyUI is ready, then open Connect → HTTP 8188 / ComfyUI. Use RunPod's built-in Web terminal in the Connect tab for a shell.\n\nIf the logs report gated access, accept the terms for that exact repository using the same Hugging Face account as your token. This template exposes only HTTP 8188 for ComfyUI; the built-in Web terminal is provided by RunPod and needs no exposed application port. This template has no persistent volume; download videos before stopping or replacing the Pod, or configure S3 backup."
 }
