@@ -25,7 +25,10 @@
       "04_LTX25_Audio_to_Video.json",
       "05_LTX25_Text_to_Audio.json",
       "06_LTX25_Two_Stage_Advanced.json",
-      "07_LTX25_Ingredients.json"
+      "07_LTX25_Ingredients.json",
+      "08_LTX25_Extend_After.json",
+      "09_LTX25_Extend_Before.json",
+      "10_LTX25_New_Angle.json"
     ]
   },
   "runtime": {

@@ -46,4 +46,4 @@ Choose **A100 80GB** for the target profile. Use H100/H200 or other CUDA cards o
 
 ## Release validation record
 
-Before labeling an image release verified, record the Docker build, package digest, RunPod startup, model provisioning, all seven workflow execution results, MP4/audio playback, S3 tests (if offered), and GPU/memory benchmark. Local static checks alone are not a verified release.
+Before labeling an image release verified, record the Docker build, package digest, RunPod startup, model provisioning, every packaged workflow's execution results, MP4/audio playback, S3 tests (if offered), and GPU/memory benchmark. Local static checks alone are not a verified release.

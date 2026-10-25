@@ -9,7 +9,7 @@ version = os.environ.get("LTX_VERSION", "ltx-2.5")
 profile_dir = root / "versions" / version
 profile = json.loads((profile_dir / "profile.json").read_text())
 assert profile["id"] == version
-assert len(profile["assets"]["workflow_files"]) == 7
+assert len(profile["assets"]["workflow_files"]) == 10
 assert profile["default_workflow"] in profile["assets"]["workflow_files"]
 for rel in (profile["assets"]["models"], profile["assets"]["adapters"]):
     assert (profile_dir / rel).is_file(), rel

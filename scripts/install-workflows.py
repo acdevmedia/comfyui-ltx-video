@@ -23,18 +23,22 @@ def customize(name, data):
     mp=float(os.getenv('LTX_DEFAULT_MEGAPIXELS','0.5')); aspect=os.getenv('LTX_DEFAULT_ASPECT_RATIO','16:9')
     if aspect not in ASPECTS: raise ValueError(f'Unsupported LTX_DEFAULT_ASPECT_RATIO={aspect}; use one of {", ".join(ASPECTS)}.')
     width,height=dimensions(mp,aspect)
+    # Node ids are only unique within one graph, so each id rule is scoped to the workflow it was written for.
+    prefix=name[:3]
     for n in data.get('nodes',[]):
         nid=n.get('id'); typ=n.get('type'); values=n.get('widgets_values',[])
         if typ=='ResolutionSelector' and len(values)>=2: values[0]=ASPECTS[aspect]; values[1]=mp
-        if nid in (398,405,251):
+        if (prefix,nid) in (('01_',398),('06_',398),('02_',405),('03_',251)):
             if len(values)>2: values[2]=duration
             if len(values)>4: values[3:5]=[width,height]
             if nid in (405,251) and len(values)>6: values[6]=fps
-        if nid==5511 and values: values[0]=fps
-        if nid==5512 and values: values[0]=duration
-        if nid==5514 and len(values)>3: values[2:4]=[width,height]
-        if nid==11 and values: values[0]=duration
-        if nid==10 and values: values[0]=fps
+        if prefix=='04_':
+            if nid==5511 and values: values[0]=fps
+            if nid==5512 and values: values[0]=duration
+            if nid==5514 and len(values)>3: values[2:4]=[width,height]
+        if prefix=='05_':
+            if nid==11 and values: values[0]=duration
+            if nid==10 and values: values[0]=fps
     if name.startswith('07_'):
         print('[workflows] Ingredients keeps its five-second / 121-frame training-bucket default despite generic duration settings.')
     return data
@@ -51,7 +55,7 @@ def main():
         target.write_text(json.dumps(customize(name,json.loads(source.read_text())),indent=2,ensure_ascii=False)+'\n')
         print(f'[workflows] Installed {name}')
     selected=os.getenv('LTX_DEFAULT_WORKFLOW',PROFILE['default_workflow']).removesuffix('.json')+'.json'
-    if selected not in NAMES: raise ValueError(f'Unknown LTX_DEFAULT_WORKFLOW={selected}; choose one of the seven packaged workflow names.')
+    if selected not in NAMES: raise ValueError(f'Unknown LTX_DEFAULT_WORKFLOW={selected}; choose one of the packaged workflow names.')
     default_template=APP/'ComfyUI/web/templates/default.json'
     default_template.parent.mkdir(parents=True,exist_ok=True)
     shutil.copy2(DEST/selected,default_template)

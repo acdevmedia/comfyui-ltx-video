@@ -31,8 +31,9 @@ The container disk is temporary, so download videos you want to keep before stop
 | `versions/<ltx-version>/profile.json` | Version identity, defaults, model/workflow paths, application revisions, and dependency pins. |
 | `versions/<ltx-version>/config/models.json` | Hugging Face repositories, exact files, destinations, and workflow requirements for that model version. |
 | `versions/<ltx-version>/config/adapters.json` | Compatible adapters, activation state, and specialist conditioning details for that version. |
-| `versions/<ltx-version>/workflows/` | The seven packaged filmmaker graphs plus the preserved v9 master source for LTX-2.5. |
+| `versions/<ltx-version>/workflows/` | The ten packaged filmmaker graphs plus the preserved v9 master source for LTX-2.5. |
 | `archive/official-workflow-references/` | Official graph references used to validate LTX conditioning behavior; these are engineering references, not the user-facing interface. |
+| `archive/v2v-workflow-sources/` | Editable UI graphs for workflows 08-10, converted by the installed ComfyUI frontend from `scripts/v2v_graphs.py`. |
 | `docker/` | Startup orchestration, persistent workspace setup, ComfyUI launch, and health checks. |
 | `scripts/` | Workflow generation/installation, model provisioning and checks, profile build arguments, diagnostics, GHCR publishing, and benchmarks. |
 | `backup/` | Optional real-time, one-shot, and verification tools for S3-compatible output backup. |
@@ -73,6 +74,9 @@ The default **Image to Video — Filmmaker** workflow is derived from `LTX25_Fil
 | `05_LTX25_Text_to_Audio.json` | Audio-only generation and audio export. |
 | `06_LTX25_Two_Stage_Advanced.json` | Detailed control of base generation, upscale, and enhancement stages. |
 | `07_LTX25_Ingredients.json` | Specialist Ingredients IC-LoRA conditioning for repeatable character, prop, costume, and location references. |
+| `08_LTX25_Extend_After.json` | Upload a clip and continue it: the model is shown real frames from the clip's ending, and the saved MP4 is the original plus the new section, with sound. GPU-tested. |
+| `09_LTX25_Extend_Before.json` | Upload a clip and generate a lead-in that runs straight into its first frame; saves the new section plus the original, with sound. GPU-tested. |
+| `10_LTX25_New_Angle.json` | Coverage for editing: re-stages a moment of an uploaded clip from a new camera position described in the prompt, locked to the clip's original sound. Needs an uploaded reference sheet and the Ingredients models. GPU-tested. |
 
 The standard video defaults are 30 seconds, 24 fps, 721 frames, 16:9, and 0.5 megapixels. LTX video frame counts must satisfy `frames % 8 == 1`. These are requested defaults, not a claim that every mode, GPU, or pod can render that duration efficiently. Ingredients intentionally uses the documented 121-frame, 768×448 training bucket and is a single-stage workflow. Shorten clips or resolution if the selected GPU needs it. The [LTX ComfyUI documentation](https://docs.ltx.io/open-source-model/integration-tools/comfy-ui) and [Ingredients model card](https://huggingface.co/Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients) are linked for current technical constraints.
 
@@ -202,7 +206,7 @@ bash tests/test-backup.sh
 bash tests/test-secrets.sh
 ```
 
-See [release and deployment notes](docs/deployment.md). Do not label the image or `latest` as verified until a RunPod GPU run covers model provisioning, all seven workflows, audio/video playback, backup behavior when offered, and benchmark measurements.
+See [release and deployment notes](docs/deployment.md). Do not label the image or `latest` as verified until a RunPod GPU run covers model provisioning, all ten workflows, audio/video playback, backup behavior when offered, and benchmark measurements.
 
 ## Startup logs
 

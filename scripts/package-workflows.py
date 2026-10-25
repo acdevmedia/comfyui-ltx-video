@@ -10,6 +10,8 @@ WORK=PROFILE_DIR/'workflows'
 PROFILE=json.loads((PROFILE_DIR/'profile.json').read_text())
 PRODUCT=PROFILE['product_name']
 REF=ROOT/'archive/official-workflow-references'
+# Video-in workflows: UI graphs converted by ComfyUI's own frontend from scripts/v2v_graphs.py.
+V2V=ROOT/'archive/v2v-workflow-sources'
 
 def read(path): return json.loads(path.read_text())
 def set_duration(data, value=30):
@@ -108,6 +110,38 @@ The negative prompt is a list of things you would rather not see or hear, such a
 It only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.
 
 For most shots, steer the result from the main prompt instead. Describe what you want ("steady locked-off camera", "soft window light", "no music") rather than listing what you don't.'''
+
+EXTEND_NOTE='''## How to extend a clip ({direction})
+
+1. Upload your clip in **Your Clip**.
+2. Write **{prompt_title}**. Describe the action and any dialogue, and keep the people, wardrobe, location and lens the same as your clip.
+3. Set **Seconds to Add** (5 is a good start).
+4. **Frames of Your Clip to Match** sets how much of your clip's {edge} the model sees. 25 frames is about one second at 24 fps. More frames give smoother motion across the join; the value is rounded to 9, 17, 25, 33 and so on.
+5. Run. The saved video is {result}, with sound.
+
+Your clip is resized and centre-cropped to **Width x Height** (default 1280 x 704). Use multiples of 32 that match your clip's shape. The new section's sound is generated, using five seconds of your clip's own sound as a voice reference so the voices stay the same. Extend the result again to build a longer scene.'''
+
+NEW_ANGLE_NOTE='''## How to shoot a new angle
+
+This re-stages a moment of your clip from a different camera position while keeping your clip's **exact sound**, so it cuts straight into your edit on the same audio track.
+
+1. Upload your clip in **Your Clip**. Set **Start Time** and **Shot Length**. Five seconds is what the model was trained on.
+2. Upload a **Reference Sheet**: one image with a clean panel for each person (a face close-up and a full-body view), each important prop, and the location, on a plain black background with no text. Make it from stills of your clip with an image tool. Bigger panels carry over better.
+3. In **Describe the Sheet and the New Angle**, keep the two parts. "Reference sheet:" names each panel by its position. "Generated video:" describes the new camera position and what happens.
+4. Run. The result carries your clip's original sound, so line it up at the same timecode in your editor.
+
+**Do not use a frame grabbed straight from your clip as the sheet.** The model copies its framing instead of moving the camera. This is a re-staged shot rather than a true camera move: the people, set and light stay close to the sheet, but the performance is newly generated. It needs the Ingredients models (start the Pod with AUTO_DOWNLOAD_ADAPTERS=true, or run scripts/download-ingredients-models.sh).'''
+
+def add_note(data, title, text):
+    """Place a note to the left of everything already in the graph."""
+    nodes=data['nodes']
+    state=data.get('state') or {}
+    node_id=max([n['id'] for n in nodes]+[data.get('last_node_id') or 0,state.get('lastNodeId',0)])+1
+    nodes.append({'id':node_id,'type':'MarkdownNote','pos':[min(n['pos'][0] for n in nodes)-560,min(n['pos'][1] for n in nodes)],'size':[500,520],
+        'flags':{},'order':len(nodes),'mode':0,'inputs':[],'outputs':[],'title':title,'properties':{},
+        'widgets_values':[text],'color':'#222','bgcolor':'#000'})
+    if 'last_node_id' in data: data['last_node_id']=node_id
+    if 'lastNodeId' in state: state['lastNodeId']=node_id
 
 def add_negative_prompt_note(data):
     """Explain in plain English, next to the controls, why the negative prompt is inert at CFG 1.0."""
@@ -243,5 +277,16 @@ def main():
             if n.get('type')=='PrimitiveInt' and (n.get('title') or '').lower()=='width' and n.get('widgets_values'): n['widgets_values'][0]=768
             if n.get('type')=='PrimitiveInt' and (n.get('title') or '').lower()=='height' and n.get('widgets_values'): n['widgets_values'][0]=448
     write('07_LTX25_Ingredients.json',ing)
+
+    for direction,name,title,prompt_title,edge,result in (
+        ('after','08_LTX25_Extend_After.json','Extend Video — Continue After Your Clip','What Happens Next','ending','your whole clip followed by the new section'),
+        ('before','09_LTX25_Extend_Before.json','Extend Video — Lead In Before Your Clip','What Happens Before','opening','the new section followed by your whole clip')):
+        ext=read(V2V/f'extend_{direction}.json'); rename(ext,title)
+        add_note(ext,'How to Extend a Clip',EXTEND_NOTE.format(direction=direction,prompt_title=prompt_title,edge=edge,result=result))
+        write(name,ext)
+
+    angle=read(V2V/'new_angle.json'); rename(angle,'New Angle — Coverage Locked to Your Clip\'s Sound')
+    add_note(angle,'How to Shoot a New Angle',NEW_ANGLE_NOTE)
+    write('10_LTX25_New_Angle.json',angle)
 
 if __name__=='__main__': main()

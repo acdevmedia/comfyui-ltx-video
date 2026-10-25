@@ -5,7 +5,8 @@ import os, shutil, tempfile
 root=Path(__file__).resolve().parents[1]
 version=root/'versions'/'ltx-2.5'
 subprocess.run([sys.executable,str(root/'scripts/verify-workflows.py')],check=True)
-for name in sorted(p.name for p in (version/'workflows').glob('0*.json')):
+profile_names=json.loads((version/'profile.json').read_text())['assets']['workflow_files']
+for name in profile_names:
     d=json.loads((version/'workflows'/name).read_text())
     assert d.get('nodes') and d.get('links') is not None, name
     assert any(n.get('title')=='About the Negative Prompt' for n in d['nodes']), f'{name}: missing negative prompt note'
@@ -32,6 +33,19 @@ for name in sorted(p.name for p in (version/'workflows').glob('0*.json')):
         encoder=next(n for n in sub['nodes'] if n['id']==link['target_id'])
         assert encoder['type']=='CLIPTextEncode' and encoder['inputs'][link['target_slot']]['name']=='text', f'{name}: negative prompt is not wired to an encoder'
         assert d['last_link_id']>=max(l['id'] for l in sub['links']), f'{name}: root link counter is behind subgraph link ids'
+    if name[:3] in ('08_','09_','10_'):
+        # Video in, video out: each graph loads a clip and saves an MP4, and keeps the clip's sound path.
+        types={n['type'] for n in d['nodes']}
+        assert {'LoadVideo','GetVideoComponents','CreateVideo','SaveVideo','AudioMerge'} <= types, f'{name}: missing video-in/video-out nodes'
+    if name[:3] in ('08_','09_'):
+        guide=next(n for n in d['nodes'] if n['type']=='LTXVAddGuide')
+        assert {'BatchImagesNode','AudioConcat','LTXVSetAudioRefTokens','LTXVCropGuides'} <= {n['type'] for n in d['nodes']}, f'{name}: extension must stitch picture and sound'
+        assert ('ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors' in json.dumps(d)), f'{name}: extension uses the default INT8 stack'
+    if name=='10_LTX25_New_Angle.json':
+        blob=json.dumps(d)
+        assert 'LTXAddVideoICLoRAGuide' in blob and 'ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors' in blob
+        assert any(n['type']=='LoadImage' for n in d['nodes']), 'New Angle needs an uploaded reference sheet'
+        assert 'LTXVSetAudioRefTokens' in blob and 'VAEEncodeAudio' in blob, 'New Angle must lock the source sound'
     if name == '05_LTX25_Text_to_Audio.json':
         # Keep the Load Models outputs connected to the matching exposed
         # Input Parameters slots: ckpt_path=7, text_encoder=8, enhancer=9.
@@ -49,7 +63,7 @@ with tempfile.TemporaryDirectory() as temp:
     env['LTX_DEFAULT_WORKFLOW']='02_LTX25_Text_to_Video'; env['LTX_DEFAULT_DURATION']='12'
     subprocess.run([sys.executable,str(root/'scripts/install-workflows.py')],env=env,check=True,capture_output=True,text=True)
     installed=Path(env['COMFYUI_DIR'])/'user/default/workflows'
-    assert len(list(installed.glob('0*.json')))==7
+    assert sorted(p.name for p in installed.glob('*.json') if p.name!='user-made.json')==sorted(profile_names)
     default=json.loads((app/'ComfyUI/web/templates/default.json').read_text())
     assert default['extra']['acdev_studio']['workflow']=='Text to Video — Filmmaker'
     graph=json.loads((installed/'02_LTX25_Text_to_Video.json').read_text())

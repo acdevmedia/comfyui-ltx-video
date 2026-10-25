@@ -27,7 +27,7 @@ python -c 'import torch; print("[startup] Technical details: PyTorch",torch.__ve
 echo "[setup 3/6] Checking required LTX-2.5 files and downloading anything missing. This default model set is about 43 GiB (65 GiB more when AUTO_DOWNLOAD_ADAPTERS=true for Ingredients); Hugging Face terms must be accepted for every gated repository."
 if [[ "${AUTO_DOWNLOAD_MODELS:-true}" =~ ^(1|true|yes)$ ]]; then python "$APP/scripts/download-models.py"; else echo "[models] Automatic downloads are disabled; verifying that all required weights are already installed."; python "$APP/scripts/verify-models.py" --required; fi
 if [[ ! "${AUTO_DOWNLOAD_ADAPTERS:-false}" =~ ^(1|true|yes)$ ]]; then echo "[models] Ingredients (workflow 07) BF16 models are not downloaded by default. To use it, run /opt/ltx25-studio/scripts/download-ingredients-models.sh in the Web terminal, or start the Pod with AUTO_DOWNLOAD_ADAPTERS=true."; fi
-echo "[setup 4/6] Verifying all seven packaged filmmaker workflows and their node graphs."
+echo "[setup 4/6] Verifying all packaged filmmaker workflows and their node graphs."
 python "$APP/scripts/verify-workflows.py" --installed
 echo "[setup 5/6] Starting output thumbnail generation and checking optional cloud backup."
 python "$APP/frontend/video-gallery/thumbnailer.py" >>/workspace/logs/thumbnailer.log 2>&1 & background+=("$!")
