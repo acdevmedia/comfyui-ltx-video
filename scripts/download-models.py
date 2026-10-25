@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Provision only declared LTX files; resumable through Hugging Face Hub cache."""
 import json
+import argparse
 import os
 import shutil
 import sys
@@ -33,14 +34,34 @@ def valid_local_file(path: Path) -> bool:
         return False
 
 
+def selected_models(data: dict, group: str, adapter_downloads: bool) -> list[dict]:
+    models = data["models"]
+    if group == "all":
+        return models
+    if group == "optional":
+        return [m for m in models if m.get("optional") or m.get("group") == "optional"]
+    if group == "ingredients":
+        return [m for m in models if m.get("group") == "ingredients"]
+    selected = [m for m in models if m.get("default", False) and not m.get("optional", False)]
+    if not adapter_downloads:
+        selected = [m for m in selected if m.get("group") != "ingredients"]
+    return selected
+
+
 def main() -> None:
-    if os.environ.get("AUTO_DOWNLOAD_MODELS", "true").lower() not in {"1", "true", "yes"}:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--group", choices=("default", "ingredients", "optional", "all"), default="default", help="Model set to download (default follows the RunPod startup profile).")
+    args = parser.parse_args()
+    if args.group == "default" and os.environ.get("AUTO_DOWNLOAD_MODELS", "true").lower() not in {"1", "true", "yes"}:
         print("[models] Automatic downloads disabled by AUTO_DOWNLOAD_MODELS.", flush=True)
         return
 
     data = json.loads(MANIFEST.read_text())
     adapter_downloads = os.environ.get("AUTO_DOWNLOAD_ADAPTERS", "true").lower() in {"1", "true", "yes"}
-    models = [m for m in data["models"] if m.get("default", False) and (adapter_downloads or m["id"] != "ingredients-ic-lora")]
+    models = selected_models(data, args.group, adapter_downloads)
+    if not models:
+        fail(f"The '{args.group}' model group is empty in {MANIFEST}.")
+    print(f"[models] Provisioning group '{args.group}' ({len(models)} files).", flush=True)
     pending = [m for m in models if not valid_local_file(MODEL_ROOT / m.get("target", m["file"]))]
     if not pending:
         print(f"[models] All {len(models)} default model files are present.", flush=True)
@@ -112,7 +133,7 @@ def main() -> None:
         except Exception as exc:
             fail(f"Download failed for {repo}:{filename} ({type(exc).__name__}). Check network and token permissions; retry is safe.", 28)
 
-    print("[models] All declared default model files are ready.", flush=True)
+    print(f"[models] All files in group '{args.group}' are ready.", flush=True)
 
 
 if __name__ == "__main__":

@@ -57,6 +57,20 @@ The default **Image to Video — Filmmaker** workflow is derived from `LTX25_Fil
 
 The standard video defaults are 30 seconds, 24 fps, 721 frames, 16:9, and 0.5 megapixels. LTX video frame counts must satisfy `frames % 8 == 1`. These are requested defaults, not a claim that every mode, GPU, or pod can render that duration efficiently. Ingredients intentionally uses the documented 121-frame, 768×448 training bucket and is a single-stage workflow. Shorten clips or resolution if the selected GPU needs it. The [LTX ComfyUI documentation](https://docs.ltx.io/open-source-model/integration-tools/comfy-ui) and [Ingredients model card](https://huggingface.co/Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients) are linked for current technical constraints.
 
+### Model downloads and storage
+
+Startup downloads the original v9 filmmaker workflow's INT8 ConvRot models and the Ingredients BF16 checkpoints/IC-LoRA. Other model files, including the separate BF16 prompt-enhancement encoder, are optional. The full default set is about **108 GiB**, plus 2 GiB preflight headroom, so the current 100 GB container-disk setting is too small. Use a **150 GB container disk** to provision the original workflow and Ingredients together. Do not stop startup preflight by deleting model files.
+
+Optional Hugging Face downloads can be run from the Pod's SSH or terminal session; the `HF_TOKEN` RunPod Secret is used automatically and should not be passed on the command line:
+
+```bash
+/opt/ltx25-studio/scripts/download-ingredients-models.sh
+/opt/ltx25-studio/scripts/download-optional-models.sh
+/opt/ltx25-studio/scripts/download-all-models.sh
+```
+
+The first command fetches the Ingredients model group, the second fetches only files marked optional in the profile manifest, and the third fetches every declared model. Each command checks free disk space before downloading. See [adapter/download groups](docs/adapters.md).
+
 See [workflow details](docs/workflows.md), [adapter compatibility](docs/adapters.md), and [official graph sources](LICENSES/WORKFLOW_REFERENCES.md).
 
 ## RunPod launch
@@ -90,7 +104,7 @@ RunPod settings, ports, and environment recommendations are listed in [the templ
 | `LTX_DEFAULT_MEGAPIXELS` | `0.5` | Starting video resolution budget. |
 | `LTX_DEFAULT_ASPECT_RATIO` | `16:9` | Supported values include 16:9, 9:16, 4:3, 1:1, and 21:9. |
 | `AUTO_DOWNLOAD_MODELS` | `true` | Provision missing default model files at startup. |
-| `AUTO_DOWNLOAD_ADAPTERS` | `true` | Include the required Ingredients IC-LoRA download. |
+| `AUTO_DOWNLOAD_ADAPTERS` | `true` | Include Ingredients BF16 checkpoints and IC-LoRA in default startup provisioning. Set false to defer that model group. |
 | `HF_HOME` | `/workspace/.cache/huggingface` | Persistent Hub cache location. |
 | `HF_TOKEN` | empty | Hugging Face read token for gated model downloads. |
 | `HUGGING_FACE_HUB_TOKEN` | empty | Alternate name for `HF_TOKEN`. `HF_TOKEN` takes precedence. |

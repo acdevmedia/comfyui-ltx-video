@@ -6,7 +6,7 @@
 |---|---|
 | Container image | `ghcr.io/acdevmedia/ltx-studio:2.5` |
 | GPU | NVIDIA; A100 80 GB recommended |
-| Container disk | 100 GB |
+| Container disk | 100 GB currently configured; 150 GB recommended |
 | Persistent volume | None |
 | Start command | Empty |
 | Registry credentials | None |
@@ -15,6 +15,8 @@
 | UDP ports | 22, 8080 |
 
 These ports match the original ComfyUI template. HTTP 8188 serves ComfyUI. HTTP 8888 is available if Jupyter is enabled. No persistent storage is configured: container files, models, cache, logs, and generated outputs can be lost when the Pod is stopped or replaced. Download outputs or configure S3 backup for durable copies.
+
+**Storage requirement:** The original INT8 ConvRot filmmaker workflow plus the required Ingredients BF16 weights total about 108 GiB, before the 2 GiB downloader headroom. The configured 100 GB container disk cannot hold this default set. Set the Pod's container disk to **150 GB** before retrying provisioning. The 100 GB value is retained in the template payload until the template configuration is updated.
 
 ## Environment variables
 
