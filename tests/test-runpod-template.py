@@ -12,11 +12,13 @@ assert template["containerDiskInGb"] == 200
 assert "volumeMountPath" not in template and "volumeInGb" not in template
 assert {"8188/http", "8888/http", "8675/http", "22/tcp", "8080/tcp", "22/udp", "8080/udp"}.issubset(template["ports"])
 assert template["env"]["HF_TOKEN"] == "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}"
+assert template["env"]["TINI_SUBREAPER"] == "1"
 assert template["env"]["S3_ACCESS_KEY_ID"] == "{{ RUNPOD_SECRET_S3_ACCESS_KEY_ID }}"
 assert template["env"]["S3_SECRET_ACCESS_KEY"] == "{{ RUNPOD_SECRET_S3_SECRET_ACCESS_KEY }}"
 assert list(template["env"]) == sorted(template["env"])
 assert "S3_SECRET_ACCESS_KEY" in template["env"]
 assert not any(key.startswith("AWS_") for key in template["env"])
+assert not any(key.startswith("DOWNLOAD_") for key in template["env"])
 assert not any(any(marker in key or marker in value for marker in ("SPACES_", "AWS_")) for key, value in template["env"].items())
 result = subprocess.run(
     [sys.executable, str(root / "scripts/create-runpod-template.py"), "--dry-run"],

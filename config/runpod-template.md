@@ -16,7 +16,7 @@
 
 These ports match the original ComfyUI template. HTTP 8188 serves ComfyUI. HTTP 8888 is available if Jupyter is enabled. No persistent storage is configured: container files, models, cache, logs, and generated outputs can be lost when the Pod is stopped or replaced. Download outputs or configure S3 backup for durable copies.
 
-**Storage requirement:** The original INT8 ConvRot filmmaker workflow plus the required Ingredients BF16 weights total about 108 GiB, before the 2 GiB downloader headroom. The 200 GB container disk leaves working room for temporary cache and generated files. No persistent volume is allocated.
+**Storage requirement:** The original INT8 ConvRot filmmaker workflow totals about 43.18 GiB. Ingredients adds about 64.81 GiB, making the default model set about 107.99 GiB before the 2 GiB downloader headroom. The optional BF16 prompt-enhancement encoder adds 9.57 GiB. The 200 GB container disk leaves working room for temporary cache and generated files. No persistent volume is allocated. See the README for the per-file size table.
 
 ## Environment variables
 

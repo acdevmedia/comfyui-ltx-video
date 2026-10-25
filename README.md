@@ -59,7 +59,23 @@ The standard video defaults are 30 seconds, 24 fps, 721 frames, 16:9, and 0.5 me
 
 ### Model downloads and storage
 
-Startup downloads the original v9 filmmaker workflow's INT8 ConvRot models and the Ingredients BF16 checkpoints/IC-LoRA. Other model files, including the separate BF16 prompt-enhancement encoder, are optional. The full default set is about **108 GiB**, plus 2 GiB preflight headroom. The template uses a **200 GB container disk** for the model set, temporary cache, and outputs. Do not stop startup preflight by deleting model files.
+Startup downloads the original v9 filmmaker workflow's INT8 ConvRot models and the Ingredients BF16 checkpoints/IC-LoRA. Other model files, including the separate BF16 prompt-enhancement encoder, are optional. The table lists approximate on-disk sizes reported by a successful RunPod A100 first launch; Hugging Face metadata and filesystem rounding can cause small differences. The core workflow set is about **43.18 GiB**, Ingredients adds **64.81 GiB**, and the default set totals about **107.99 GiB**. The optional BF16 prompt-enhancement encoder adds **9.57 GiB**. The template uses a **200 GB container disk** for the default model set, download headroom, temporary cache, and outputs. Do not stop startup preflight by deleting model files.
+
+| Group | ComfyUI model folder | SafeTensors file | Download size |
+|---|---|---|---:|
+| Core | `diffusion_models/` | `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors` | 20.03 GiB |
+| Core | `text_encoders/` | `gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors` | 14.32 GiB |
+| Core | `text_encoders/` | `gemma4_e2b_it_int8_convrot.safetensors` | 4.84 GiB |
+| Core | `vae/` | `ltx-2.5-video-vae-conv-bf16.safetensors` | 1.35 GiB |
+| Core | `vae/` | `ltx-2.5-video-vae-bf16.safetensors` | 1.37 GiB |
+| Core | `vae/` | `ltx-2.5-audio-vae-bf16.safetensors` | 0.34 GiB |
+| Core | `latent_upscale_models/` | `ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors` | 0.93 GiB |
+| Ingredients | `diffusion_models/` | `ltx-2.5-22b-distilled-transformer-bf16.safetensors` | 39.13 GiB |
+| Ingredients | `text_encoders/` | `gemma4-12b-with-proj-ltx-2.5-bf16.safetensors` | 24.46 GiB |
+| Ingredients | `loras/` | `ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors` | 1.22 GiB |
+| Optional | `text_encoders/` | `gemma4_e2b_it_bf16.safetensors` | 9.57 GiB |
+
+The default startup total is Core + Ingredients; the optional file is not needed by the default filmmaker workflows. Selecting all declared files brings the total to about **117.56 GiB**.
 
 Optional Hugging Face downloads can be run from the Pod's SSH or terminal session; the `HF_TOKEN` RunPod Secret is used automatically and should not be passed on the command line:
 
@@ -108,6 +124,7 @@ RunPod settings, ports, and environment recommendations are listed in [the templ
 | `HF_HOME` | `/workspace/.cache/huggingface` | Persistent Hub cache location. |
 | `HF_TOKEN` | empty | Hugging Face read token for gated model downloads. |
 | `HUGGING_FACE_HUB_TOKEN` | empty | Alternate name for `HF_TOKEN`. `HF_TOKEN` takes precedence. |
+| `TINI_SUBREAPER` | `1` | Registers Tini as a child subreaper when the upstream launcher runs it outside PID 1. |
 
 ### Optional access services
 
@@ -117,7 +134,6 @@ RunPod settings, ports, and environment recommendations are listed in [the templ
 | `JUPYTER_TOKEN` | empty | Required if Jupyter is enabled. |
 | `PUBLIC_KEY` | empty | Optional SSH authorized key; SSH server is started only when supplied. |
 | `AI_TOOLKIT_AUTH` | RunPod secret reference | Preserved from the upstream template for its optional AI Toolkit service. |
-| `DOWNLOAD_FLUX`, `DOWNLOAD_WAN` | `false` | Preserved upstream switches; both remain disabled in this LTX-only image. |
 
 ### S3-compatible output backup
 

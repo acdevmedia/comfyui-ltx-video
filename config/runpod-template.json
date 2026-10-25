@@ -13,8 +13,6 @@
     "BACKUP_SETTLE_SECONDS": "8",
     "BACKUP_SOURCE_DIR": "/workspace/ComfyUI/output",
     "COMFYUI_PORT": "8188",
-    "DOWNLOAD_FLUX": "false",
-    "DOWNLOAD_WAN": "false",
     "ENABLE_JUPYTER": "false",
     "HF_HOME": "/workspace/.cache/huggingface",
     "HF_TOKEN": "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}",
@@ -39,7 +37,8 @@
     "S3_SECRET_ACCESS_KEY": "{{ RUNPOD_SECRET_S3_SECRET_ACCESS_KEY }}",
     "S3_SESSION_TOKEN": "OPTIONAL_TEMPORARY_TOKEN",
     "S3_SSE": "none",
-    "S3_STORAGE_CLASS": "STANDARD"
+    "S3_STORAGE_CLASS": "STANDARD",
+    "TINI_SUBREAPER": "1"
   },
   "isPublic": true,
   "isServerless": false,
