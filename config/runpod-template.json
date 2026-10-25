@@ -48,6 +48,12 @@
     "8888/http",
     "22/tcp"
   ],
+  "portLabels": {
+    "8188/http": "ComfyUI",
+    "8080/http": "Studio proxy",
+    "8888/http": "JupyterLab",
+    "22/tcp": "SSH"
+  },
   "volumeInGb": 250,
   "volumeMountPath": "/workspace",
   "readme": "# ACDEV LTX-2.5 Studio\n\nLTX-2.5 filmmaking interfaces for ComfyUI. Select an NVIDIA GPU; A100 80 GB is the recommended starting point. Attach persistent storage at /workspace (250 GB recommended).\n\nSet HF_TOKEN through RunPod Secrets before first use, and accept the gated LTX-2.5 terms on Hugging Face. The pod downloads model weights automatically on first start. Open ComfyUI on port 8188 after provisioning completes.\n\nSeven workflows: Image to Video, Text to Video, First and Last Frame, Audio to Video, Text to Audio, Two Stage Advanced, and Ingredients. Generated files are saved under /workspace/ComfyUI/output.\n\nS3-compatible output backup is optional and disabled by default. Add credentials using RunPod Secrets and set REALTIME_BACKUP=true to enable it. Jupyter and SSH are optional. Review the full project README and deployment guide for configuration and current hardware validation status."

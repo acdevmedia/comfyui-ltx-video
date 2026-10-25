@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 API = "https://rest.runpod.io/v1"
+GRAPHQL = "https://api.runpod.io/graphql"
 
 
 def local_env() -> dict[str, str]:
@@ -77,6 +78,49 @@ def check_public_image(image: str) -> None:
         raise RuntimeError(f"Could not verify {image} in GHCR (HTTP {exc.code}).") from None
 
 
+def apply_graphql_template(template_id: str, payload: dict, labels: dict, key: str) -> dict:
+    """Apply fields REST v1 omits from the UI, notably named port mappings."""
+    ports = payload.get("ports", [])
+    gql_input = {
+        "id": template_id,
+        "name": payload["name"],
+        "imageName": payload["imageName"],
+        "containerDiskInGb": payload["containerDiskInGb"],
+        "volumeInGb": payload["volumeInGb"],
+        "volumeMountPath": payload["volumeMountPath"],
+        "isPublic": payload["isPublic"],
+        "isServerless": payload["isServerless"],
+        "dockerArgs": "",
+        "ports": ",".join(ports),
+        "portsConfig": [
+            {"port": port.split("/", 1)[0], "name": labels.get(port, port)}
+            for port in ports
+        ],
+        "env": [
+            {"key": name, "value": str(value)}
+            for name, value in payload.get("env", {}).items()
+        ],
+        "readme": payload.get("readme", ""),
+    }
+    query = "mutation($input: SaveTemplateInput!) { saveTemplate(input:$input) { id name imageName isPublic portsConfig { port name } } }"
+    req = urllib.request.Request(
+        GRAPHQL,
+        data=json.dumps({"query": query, "variables": {"input": gql_input}}).encode(),
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=45) as response:
+        result = json.load(response)
+    if result.get("errors"):
+        message = result["errors"][0].get("message", "GraphQL template update failed")
+        raise RuntimeError(message)
+    return result["data"]["saveTemplate"]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--image", help="Override the immutable image reference in the JSON payload")
@@ -86,9 +130,11 @@ def main() -> None:
     args = parser.parse_args()
 
     payload = json.loads((ROOT / "config/runpod-template.json").read_text(encoding="utf-8"))
+    labels = payload.pop("portLabels", {})
     if args.image:
         payload["imageName"] = args.image
     payload["ports"] = [port for port in payload.get("ports", []) if port not in args.drop_port]
+    labels = {port: label for port, label in labels.items() if port not in args.drop_port}
     if args.dry_run:
         print(json.dumps(payload, indent=2))
         return
@@ -105,13 +151,14 @@ def main() -> None:
         if not args.update_existing:
             info = ", ".join(f"id={item.get('id')} image={item.get('imageName')}" for item in matches)
             raise SystemExit(f"A template named {payload['name']!r} already exists ({info}). No duplicate was created.")
-        result = request("PATCH", f"{API}/templates/{matches[0]['id']}", key, payload)[1]
+        result = apply_graphql_template(matches[0]["id"], payload, labels, key)
         print(f"Updated RunPod template {result.get('name')} (id {result.get('id')}) using {result.get('imageName')}.")
         return
 
     status, result = request("POST", f"{API}/templates", key, payload)
     if status not in (200, 201):
         raise SystemExit(f"RunPod template creation returned HTTP {status}.")
+    result = apply_graphql_template(result["id"], payload, labels, key)
     print(f"Created RunPod template {result.get('name')} (id {result.get('id')}) using {result.get('imageName')}.")
     print("Template is public. Add HF_TOKEN and any S3 credentials through RunPod Secrets before starting a Pod.")
 
