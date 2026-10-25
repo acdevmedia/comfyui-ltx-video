@@ -4,7 +4,7 @@
 
 Other requested adapters remain listed as not provisioned. Their exact LTX-2.5 checkpoint compatibility, graph inputs, and controls must be verified before they appear as enabled switches. A generic LoRA dropdown would not correctly implement IC-LoRA controls. Clean Plate, Restore, and Water Simulation remain excluded.
 
-Set `AUTO_DOWNLOAD_ADAPTERS=false` to defer the entire Ingredients model group during automatic startup. The workflow JSON remains installed but cannot run until those weights are downloaded. No other adapter is exposed as ready. The original workflow and Ingredients defaults total about 108 GiB; use at least a 150 GB container disk to allow the 2 GiB download headroom and working room.
+Set `AUTO_DOWNLOAD_ADAPTERS=false` to defer the entire Ingredients model group during automatic startup. The workflow JSON remains installed but cannot run until those weights are downloaded. No other adapter is exposed as ready. The original workflow and Ingredients defaults total about 108 GiB; the RunPod template uses a 200 GB container disk to allow the 2 GiB download headroom, temporary cache, and outputs.
 
 From SSH or the Pod terminal, run the installed Hugging Face download wrappers without passing a token:
 

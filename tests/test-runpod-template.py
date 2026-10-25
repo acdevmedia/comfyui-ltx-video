@@ -8,7 +8,7 @@ template = json.loads((root / "config/runpod-template.json").read_text())
 assert template["name"] == "LTX 2.5 Distilled ComfyUI Video One-Click"
 assert template["category"] == "NVIDIA" and template["isPublic"] is True
 assert template["isServerless"] is False
-assert template["containerDiskInGb"] == 100
+assert template["containerDiskInGb"] == 200
 assert "volumeMountPath" not in template and "volumeInGb" not in template
 assert {"8188/http", "8888/http", "8675/http", "22/tcp", "8080/tcp", "22/udp", "8080/udp"}.issubset(template["ports"])
 assert template["env"]["HF_TOKEN"] == "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}"

@@ -2,7 +2,7 @@
   "name": "LTX 2.5 Distilled ComfyUI Video One-Click",
   "imageName": "ghcr.io/acdevmedia/ltx-studio:2.5",
   "category": "NVIDIA",
-  "containerDiskInGb": 100,
+  "containerDiskInGb": 200,
   "dockerEntrypoint": [],
   "dockerStartCmd": [],
   "env": {
@@ -61,5 +61,5 @@
     "22/udp": "SSH over UDP",
     "8080/udp": "Port 8080 over UDP"
   },
-  "readme": "# LTX 2.5 Distilled ComfyUI Video One-Click\n\nOne-click LTX-2.5 Distilled video and audio generation in ComfyUI. A100 80 GB is recommended. The template uses a 100 GB container disk and zero persistent volume.\n\nCreate the RunPod secret `HUGGINGFACE_TOKEN` and accept the gated LTX-2.5 model terms before launching. The template injects it through `{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}`. Models, cache, logs, and outputs live on temporary container storage unless outputs are backed up externally.\n\nRunPod environment fields are listed alphabetically. S3 settings default to DigitalOcean Spaces in SFO3. Create secrets named `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, fill in `S3_BUCKET`, and set `REALTIME_BACKUP=true` to enable output backup.\n\nHTTP ports: 8188, 8888, 8675. TCP ports: 22, 8080. UDP ports: 22, 8080. The image has no registry credentials or start-command override."
+  "readme": "# LTX 2.5 Distilled ComfyUI Video One-Click\n\nOne-click LTX-2.5 Distilled video and audio generation in ComfyUI. A100 80 GB is recommended. The template uses a 200 GB container disk and zero persistent volume to fit the original workflow and Ingredients model set with download headroom.\n\nCreate the RunPod secret `HUGGINGFACE_TOKEN` and accept the gated LTX-2.5 model terms before launching. The template injects it through `{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}`. Models, cache, logs, and outputs live on temporary container storage unless outputs are backed up externally.\n\nRunPod environment fields are listed alphabetically. S3 settings default to DigitalOcean Spaces in SFO3. Create secrets named `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, fill in `S3_BUCKET`, and set `REALTIME_BACKUP=true` to enable output backup.\n\nHTTP ports: 8188, 8888, 8675. TCP ports: 22, 8080. UDP ports: 22, 8080. The image has no registry credentials or start-command override."
 }

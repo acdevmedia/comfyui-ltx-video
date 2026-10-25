@@ -59,7 +59,7 @@ The standard video defaults are 30 seconds, 24 fps, 721 frames, 16:9, and 0.5 me
 
 ### Model downloads and storage
 
-Startup downloads the original v9 filmmaker workflow's INT8 ConvRot models and the Ingredients BF16 checkpoints/IC-LoRA. Other model files, including the separate BF16 prompt-enhancement encoder, are optional. The full default set is about **108 GiB**, plus 2 GiB preflight headroom, so the current 100 GB container-disk setting is too small. Use a **150 GB container disk** to provision the original workflow and Ingredients together. Do not stop startup preflight by deleting model files.
+Startup downloads the original v9 filmmaker workflow's INT8 ConvRot models and the Ingredients BF16 checkpoints/IC-LoRA. Other model files, including the separate BF16 prompt-enhancement encoder, are optional. The full default set is about **108 GiB**, plus 2 GiB preflight headroom. The template uses a **200 GB container disk** for the model set, temporary cache, and outputs. Do not stop startup preflight by deleting model files.
 
 Optional Hugging Face downloads can be run from the Pod's SSH or terminal session; the `HF_TOKEN` RunPod Secret is used automatically and should not be passed on the command line:
 
@@ -79,7 +79,7 @@ Recommended initial target: **NVIDIA A100 80 GB**. H100/H200 and RTX PRO GPUs ma
 
 1. Sign in to Hugging Face and accept the gated LTX-2.5 model terms for the account used by your token.
 2. Select **LTX 2.5 Distilled ComfyUI Video One-Click**. Create a RunPod Secret named `HUGGINGFACE_TOKEN`; the template injects it into `HF_TOKEN` using `{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}`.
-3. The template uses a 100 GB container disk and no persistent volume. Container files, models, and outputs are temporary and may be lost when the Pod is stopped or replaced. Download valuable outputs or enable S3 backup.
+3. The template uses a 200 GB container disk and no persistent volume. Container files, models, and outputs are temporary and may be lost when the Pod is stopped or replaced. Download valuable outputs or enable S3 backup.
 4. The alternate `HUGGING_FACE_HUB_TOKEN` name is accepted if you prefer that variable.
 5. For backup, create RunPod Secrets named `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, set the bucket and other S3 variables, then set `REALTIME_BACKUP=true`.
 6. The template exposes HTTP `8188`, `8888`, `8675`, TCP `22`, `8080`, and UDP `22`, `8080`, matching the source ComfyUI template. Jupyter remains disabled by default. Start the pod and open ComfyUI after provisioning reaches readiness.
