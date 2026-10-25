@@ -4114,7 +4114,7 @@
           },
           {
             "id": 374,
-            "type": "VAEDecodeTiled",
+            "type": "LTXVSpatioTemporalTiledVAEDecode",
             "pos": [
               4760,
               6360
@@ -4129,22 +4129,22 @@
             "showAdvanced": true,
             "inputs": [
               {
-                "localized_name": "samples",
-                "name": "samples",
-                "type": "LATENT",
-                "link": 709
-              },
-              {
                 "localized_name": "vae",
                 "name": "vae",
                 "type": "VAE",
                 "link": 775
+              },
+              {
+                "localized_name": "latents",
+                "name": "latents",
+                "type": "LATENT",
+                "link": 709
               }
             ],
             "outputs": [
               {
-                "localized_name": "IMAGE",
-                "name": "IMAGE",
+                "localized_name": "image",
+                "name": "image",
                 "type": "IMAGE",
                 "links": [
                   711
@@ -4154,7 +4154,7 @@
             "properties": {
               "cnr_id": "comfy-core",
               "ver": "0.14.1",
-              "Node name for S&R": "VAEDecodeTiled",
+              "Node name for S&R": "LTXVSpatioTemporalTiledVAEDecode",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
@@ -4169,10 +4169,13 @@
               }
             },
             "widgets_values": [
-              512,
-              64,
-              64,
-              16
+              2,
+              1,
+              16,
+              1,
+              false,
+              "auto",
+              "auto"
             ],
             "widgets_values_named": {
               "tile_size": 512,
@@ -4797,7 +4800,7 @@
             "origin_id": 369,
             "origin_slot": 0,
             "target_id": 374,
-            "target_slot": 0,
+            "target_slot": 1,
             "type": "LATENT"
           },
           {
@@ -4933,7 +4936,7 @@
             "origin_id": 385,
             "origin_slot": 0,
             "target_id": 374,
-            "target_slot": 1,
+            "target_slot": 0,
             "type": "VAE"
           },
           {

@@ -1002,38 +1002,6 @@
             "name": "bit_depth"
           },
           "link": null
-        },
-        {
-          "name": "tile_size",
-          "type": "INT",
-          "widget": {
-            "name": "tile_size"
-          },
-          "link": null
-        },
-        {
-          "name": "overlap",
-          "type": "INT",
-          "widget": {
-            "name": "overlap"
-          },
-          "link": null
-        },
-        {
-          "name": "temporal_size",
-          "type": "INT",
-          "widget": {
-            "name": "temporal_size"
-          },
-          "link": null
-        },
-        {
-          "name": "temporal_overlap",
-          "type": "INT",
-          "widget": {
-            "name": "temporal_overlap"
-          },
-          "link": null
         }
       ],
       "outputs": [
@@ -1053,11 +1021,7 @@
       },
       "widgets_values": [
         30,
-        8,
-        512,
-        64,
-        128,
-        32
+        8
       ]
     },
     {
@@ -6848,54 +6812,6 @@
               -1492.4011513324465,
               3703.526514780813
             ]
-          },
-          {
-            "id": "425f98fa-15bb-4a5a-82d3-81beb7e73a19",
-            "name": "tile_size",
-            "type": "INT",
-            "linkIds": [
-              13736
-            ],
-            "pos": [
-              -1492.4011513324465,
-              3723.526514780813
-            ]
-          },
-          {
-            "id": "6d49eb2c-deaa-4163-b4dc-230e2bcd51aa",
-            "name": "overlap",
-            "type": "INT",
-            "linkIds": [
-              13737
-            ],
-            "pos": [
-              -1492.4011513324465,
-              3743.526514780813
-            ]
-          },
-          {
-            "id": "f4fb2fb3-137b-4274-b5f3-5d08cb1f82fc",
-            "name": "temporal_size",
-            "type": "INT",
-            "linkIds": [
-              13738
-            ],
-            "pos": [
-              -1492.4011513324465,
-              3763.526514780813
-            ]
-          },
-          {
-            "id": "702f5a10-9a13-4e8a-9cc8-244b5f8ba7aa",
-            "name": "temporal_overlap",
-            "type": "INT",
-            "linkIds": [
-              13739
-            ],
-            "pos": [
-              -1492.4011513324465,
-              3783.526514780813
-            ]
           }
         ],
         "outputs": [
@@ -6985,7 +6901,7 @@
           },
           {
             "id": 5538,
-            "type": "VAEDecodeTiled",
+            "type": "LTXVSpatioTemporalTiledVAEDecode",
             "pos": [
               -1400.9462354838788,
               3370.8872234873465
@@ -6999,58 +6915,22 @@
             "mode": 0,
             "inputs": [
               {
-                "localized_name": "samples",
-                "name": "samples",
-                "type": "LATENT",
-                "link": 13711
-              },
-              {
                 "localized_name": "vae",
                 "name": "vae",
                 "type": "VAE",
                 "link": 13710
               },
               {
-                "localized_name": "tile_size",
-                "name": "tile_size",
-                "type": "INT",
-                "widget": {
-                  "name": "tile_size"
-                },
-                "link": 13736
-              },
-              {
-                "localized_name": "overlap",
-                "name": "overlap",
-                "type": "INT",
-                "widget": {
-                  "name": "overlap"
-                },
-                "link": 13737
-              },
-              {
-                "localized_name": "temporal_size",
-                "name": "temporal_size",
-                "type": "INT",
-                "widget": {
-                  "name": "temporal_size"
-                },
-                "link": 13738
-              },
-              {
-                "localized_name": "temporal_overlap",
-                "name": "temporal_overlap",
-                "type": "INT",
-                "widget": {
-                  "name": "temporal_overlap"
-                },
-                "link": 13739
+                "localized_name": "latents",
+                "name": "latents",
+                "type": "LATENT",
+                "link": 13711
               }
             ],
             "outputs": [
               {
-                "localized_name": "IMAGE",
-                "name": "IMAGE",
+                "localized_name": "image",
+                "name": "image",
                 "type": "IMAGE",
                 "links": [
                   13712
@@ -7060,13 +6940,16 @@
             "properties": {
               "cnr_id": "comfy-core",
               "ver": "0.32.0",
-              "Node name for S&R": "VAEDecodeTiled"
+              "Node name for S&R": "LTXVSpatioTemporalTiledVAEDecode"
             },
             "widgets_values": [
-              512,
-              64,
-              64,
-              8
+              2,
+              1,
+              16,
+              1,
+              false,
+              "auto",
+              "auto"
             ]
           }
         ],
@@ -7116,7 +6999,7 @@
             "origin_id": -10,
             "origin_slot": 0,
             "target_id": 5538,
-            "target_slot": 1,
+            "target_slot": 0,
             "type": "VAE"
           },
           {
@@ -7124,7 +7007,7 @@
             "origin_id": -10,
             "origin_slot": 1,
             "target_id": 5538,
-            "target_slot": 0,
+            "target_slot": 1,
             "type": "LATENT"
           },
           {
@@ -7134,38 +7017,6 @@
             "target_id": 4849,
             "target_slot": 0,
             "type": "IMAGE"
-          },
-          {
-            "id": 13736,
-            "origin_id": -10,
-            "origin_slot": 5,
-            "target_id": 5538,
-            "target_slot": 2,
-            "type": "INT"
-          },
-          {
-            "id": 13737,
-            "origin_id": -10,
-            "origin_slot": 6,
-            "target_id": 5538,
-            "target_slot": 3,
-            "type": "INT"
-          },
-          {
-            "id": 13738,
-            "origin_id": -10,
-            "origin_slot": 7,
-            "target_id": 5538,
-            "target_slot": 4,
-            "type": "INT"
-          },
-          {
-            "id": 13739,
-            "origin_id": -10,
-            "origin_slot": 8,
-            "target_id": 5538,
-            "target_slot": 5,
-            "type": "INT"
           },
           {
             "id": 14040,

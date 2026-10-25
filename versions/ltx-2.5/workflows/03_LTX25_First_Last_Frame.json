@@ -736,7 +736,7 @@
           },
           {
             "id": 219,
-            "type": "VAEDecodeTiled",
+            "type": "LTXVSpatioTemporalTiledVAEDecode",
             "pos": [
               2740,
               2150
@@ -751,22 +751,22 @@
             "showAdvanced": true,
             "inputs": [
               {
-                "localized_name": "samples",
-                "name": "samples",
-                "type": "LATENT",
-                "link": 319
-              },
-              {
                 "localized_name": "vae",
                 "name": "vae",
                 "type": "VAE",
                 "link": 336
+              },
+              {
+                "localized_name": "latents",
+                "name": "latents",
+                "type": "LATENT",
+                "link": 319
               }
             ],
             "outputs": [
               {
-                "localized_name": "IMAGE",
-                "name": "IMAGE",
+                "localized_name": "image",
+                "name": "image",
                 "type": "IMAGE",
                 "links": [
                   316
@@ -774,7 +774,7 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "VAEDecodeTiled",
+              "Node name for S&R": "LTXVSpatioTemporalTiledVAEDecode",
               "cnr_id": "comfy-core",
               "ver": "0.7.0",
               "ue_properties": {
@@ -791,10 +791,13 @@
               "secondTabWidth": 65
             },
             "widgets_values": [
-              512,
-              64,
-              64,
-              16
+              2,
+              1,
+              16,
+              1,
+              false,
+              "auto",
+              "auto"
             ]
           },
           {
@@ -3332,7 +3335,7 @@
             "origin_id": 200,
             "origin_slot": 2,
             "target_id": 219,
-            "target_slot": 0,
+            "target_slot": 1,
             "type": "LATENT"
           },
           {
@@ -3340,7 +3343,7 @@
             "origin_id": 229,
             "origin_slot": 0,
             "target_id": 219,
-            "target_slot": 1,
+            "target_slot": 0,
             "type": "VAE"
           },
           {

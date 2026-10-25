@@ -69,3 +69,7 @@ Limits: five seconds (121 frames at 24 fps, 768x448) is the trained bucket; the 
 
 `scripts/v2v_graphs.py` defines these three graphs in ComfyUI API format and can print a prompt for direct testing. The editable UI files in `archive/v2v-workflow-sources/` were produced from those definitions by the installed ComfyUI frontend (`app.loadApiJson`, then grouped and serialized), and each was checked to convert back to exactly the tested prompt. After changing a graph, repeat that conversion on a running Pod and re-run `scripts/package-workflows.py`.
 
+## Video decoding
+
+Workflows 01-04, 06, 08 and 09 decode with Lightricks' `LTXVSpatioTemporalTiledVAEDecode` (2x2 spatial tiles, 16-latent-frame chunks, 1-frame overlaps) instead of core `VAEDecodeTiled`. On an A100 it decoded a 1920x1088, 721-frame conv-VAE latent in 71 s against 126 s for the previous 512/64/64/16 setting, and Lightricks' larger "high-VRAM" core setting was slower still (230 s). Decoding the same sampled clips both ways gave frame-aligned, visually identical output (SSIM 0.98, PSNR 37-38 dB) with no visible seams or jumps at chunk joins. A default 30-second Image to Video render went from 430 s to 254 s end to end. Ingredients and New Angle keep core tiled decoding because they use the diffusion decoder, which was not part of that test. `scripts/benchmark-decode.py` repeats the comparison.
+

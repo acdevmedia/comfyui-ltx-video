@@ -2508,7 +2508,7 @@
     },
     {
       "id": 41,
-      "type": "VAEDecodeTiled",
+      "type": "LTXVSpatioTemporalTiledVAEDecode",
       "pos": [
         1290,
         1770
@@ -2522,58 +2522,22 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "samples",
-          "name": "samples",
-          "type": "LATENT",
-          "link": 59
-        },
-        {
           "localized_name": "vae",
           "name": "vae",
           "type": "VAE",
           "link": 60
         },
         {
-          "localized_name": "tile_size",
-          "name": "tile_size",
-          "type": "INT",
-          "widget": {
-            "name": "tile_size"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "overlap",
-          "name": "overlap",
-          "type": "INT",
-          "widget": {
-            "name": "overlap"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "temporal_size",
-          "name": "temporal_size",
-          "type": "INT",
-          "widget": {
-            "name": "temporal_size"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "temporal_overlap",
-          "name": "temporal_overlap",
-          "type": "INT",
-          "widget": {
-            "name": "temporal_overlap"
-          },
-          "link": null
+          "localized_name": "latents",
+          "name": "latents",
+          "type": "LATENT",
+          "link": 59
         }
       ],
       "outputs": [
         {
-          "localized_name": "IMAGE",
-          "name": "IMAGE",
+          "localized_name": "image",
+          "name": "image",
           "type": "IMAGE",
           "links": [
             65
@@ -2584,13 +2548,16 @@
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
-        "Node name for S&R": "VAEDecodeTiled"
+        "Node name for S&R": "LTXVSpatioTemporalTiledVAEDecode"
       },
       "widgets_values": [
-        512,
-        64,
-        64,
-        16
+        2,
+        1,
+        16,
+        1,
+        false,
+        "auto",
+        "auto"
       ],
       "widgets_values_named": {
         "tile_size": 512,
@@ -3258,7 +3225,7 @@
       "type": "MarkdownNote",
       "pos": [
         -1080,
-        672
+        1770
       ],
       "size": [
         500,
@@ -3748,7 +3715,7 @@
       40,
       2,
       41,
-      0,
+      1,
       "LATENT"
     ],
     [
@@ -3756,7 +3723,7 @@
       22,
       0,
       41,
-      1,
+      0,
       "VAE"
     ],
     [

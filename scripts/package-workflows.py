@@ -78,6 +78,59 @@ def use_conv_video_vae(data):
         return value
     replace(data)
 
+LTXV_DECODE=[2, 1, 16, 1, False, 'auto', 'auto']
+
+def use_ltxv_tiled_decode(data):
+    """Swap core VAEDecodeTiled for LTXVSpatioTemporalTiledVAEDecode (2x2 tiles, 16-latent-frame chunks).
+
+    On an A100 this decoded a 1920x1088x721 conv-VAE latent in 71 s against 126 s, with frame-aligned,
+    visually identical output (SSIM 0.98), including across temporal chunk joins.
+    """
+    graphs=[data]+data.get('definitions',{}).get('subgraphs',[])
+    for g in graphs:
+        def link_fields(link):
+            return (link['id'],link['target_slot']) if isinstance(link,dict) else (link[0],link[4])
+        def set_target_slot(link,slot):
+            if isinstance(link,dict): link['target_slot']=slot
+            else: link[4]=slot
+        links={link_fields(l)[0]:l for l in g.get('links',[])}
+        dropped=[]
+        for n in g.get('nodes',[]):
+            if n['type']!='VAEDecodeTiled': continue
+            by_name={i['name']:i.get('link') for i in n.get('inputs',[])}
+            for name in ('tile_size','overlap','temporal_size','temporal_overlap'):
+                if by_name.get(name) is not None: dropped.append(by_name[name])
+            for name,slot in (('vae',0),('samples',1)):
+                if by_name.get(name) is not None: set_target_slot(links[by_name[name]],slot)
+            n['type']='LTXVSpatioTemporalTiledVAEDecode'
+            n['inputs']=[{'localized_name':'vae','name':'vae','type':'VAE','link':by_name.get('vae')},
+                         {'localized_name':'latents','name':'latents','type':'LATENT','link':by_name.get('samples')}]
+            for out in n.get('outputs',[]): out['name']='image'; out['localized_name']='image'
+            n['widgets_values']=list(LTXV_DECODE)
+            n.setdefault('properties',{})['Node name for S&R']=n['type']
+        if not dropped: continue
+        # Tile settings that were fed from subgraph inputs no longer exist; remove those inputs too.
+        g['links']=[l for l in g['links'] if link_fields(l)[0] not in dropped]
+        removed=[]
+        for index,inp in enumerate(g.get('inputs',[])):
+            inp['linkIds']=[x for x in inp.get('linkIds',[]) if x not in dropped]
+            if not inp['linkIds'] and inp['name'] in ('tile_size','overlap','temporal_size','temporal_overlap'): removed.append(index)
+        names=[g['inputs'][i]['name'] for i in removed]
+        for index in reversed(removed): del g['inputs'][index]
+        for l in g['links']:
+            origin,slot=(l['origin_id'],l['origin_slot']) if isinstance(l,dict) else (l[1],l[2])
+            if origin==-10:
+                shift=sum(1 for r in removed if r<slot)
+                if isinstance(l,dict): l['origin_slot']-=shift
+                else: l[2]-=shift
+        for host in graphs:
+            for node in host.get('nodes',[]):
+                if node['type']!=g.get('id'): continue
+                widget_names=[i['name'] for i in node.get('inputs',[]) if i.get('widget')]
+                keep=[k for k,name in enumerate(widget_names) if name not in names]
+                node['widgets_values']=[node['widgets_values'][k] for k in keep] if len(node.get('widgets_values',[]))==len(widget_names) else node['widgets_values']
+                node['inputs']=[i for i in node['inputs'] if i['name'] not in names]
+
 NEGATIVE_LABEL='Negative Prompt (CFG 1.0: little/no effect)'
 NEGATIVE_PROMPT='blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping'
 
@@ -170,7 +223,7 @@ def main():
             n['title']='Image to Video — Filmmaker Controls'
             n['widgets_values'][2]=30
             if 'value_2' in n.get('widgets_values_named',{}): n['widgets_values_named']['value_2']=30
-    use_conv_video_vae(i2v); write('01_LTX25_Image_to_Video.json',i2v)
+    use_conv_video_vae(i2v); use_ltxv_tiled_decode(i2v); write('01_LTX25_Image_to_Video.json',i2v)
 
     t2v=read(REF/'video_ltx2_5_t2v.json'); rename(t2v,'Text to Video — Filmmaker')
     for n in t2v['nodes']:
@@ -195,7 +248,7 @@ def main():
             if title in ('height','height (pixels)') and n.get('widgets_values'): n['widgets_values'][0]=544
             if 'enable prompt enhance' in title and n.get('widgets_values'): n['widgets_values'][0]=False
     expose_negative_prompt(t2v,405,373)
-    use_conv_video_vae(t2v); write('02_LTX25_Text_to_Video.json',t2v)
+    use_conv_video_vae(t2v); use_ltxv_tiled_decode(t2v); write('02_LTX25_Text_to_Video.json',t2v)
 
     flf=read(REF/'video_ltx2_5_flf2v.json'); rename(flf,'First and Last Frame — Filmmaker')
     set_duration(flf)
@@ -214,7 +267,7 @@ def main():
             if n.get('type')=='PrimitiveInt' and n.get('title','').lower()=='height': n['widgets_values'][0]=544
             if n.get('type')=='PrimitiveBoolean' and 'prompt enhance' in n.get('title','').lower(): n['widgets_values']=[False]
     expose_negative_prompt(flf,251,217)
-    use_conv_video_vae(flf); write('03_LTX25_First_Last_Frame.json',flf)
+    use_conv_video_vae(flf); use_ltxv_tiled_decode(flf); write('03_LTX25_First_Last_Frame.json',flf)
 
     a2v=read(REF/'LTX-2.5_A2V_Two_Stage_Distilled.json'); rename(a2v,'Audio to Video — Filmmaker'); set_duration(a2v); use_default_prompt_enhancer(a2v); use_int8_stack(a2v)
     for n in a2v['nodes']:
@@ -222,7 +275,7 @@ def main():
         if n.get('type')=='LoadAudio': n['title']='Source Audio — Preserved in Final Video'
         if n.get('id')==5512 and n.get('widgets_values'): n['widgets_values'][0]=30
         if n.get('id')==2004: n['title']='Optional Opening Frame'
-    use_conv_video_vae(a2v); write('04_LTX25_Audio_to_Video.json',a2v)
+    use_conv_video_vae(a2v); use_ltxv_tiled_decode(a2v); write('04_LTX25_Audio_to_Video.json',a2v)
 
     t2a=read(REF/'LTX-2.5_T2A_Single_Stage_Distilled.json'); rename(t2a,'Text to Audio — Sound Designer'); set_duration(t2a); use_default_prompt_enhancer(t2a); use_int8_stack(t2a)
     # The upstream nested graph has two root links aimed at the wrong input
@@ -243,7 +296,7 @@ def main():
         if n.get('type')=='LoadImage': n['widgets_values']=['','image']; n['title']='Opening Image'
         if n.get('id')==398: n['title']='Two Stage Generation — Advanced Filmmaker Controls'
         if n.get('type')=='ResolutionSelector' and len(n.get('widgets_values',[]))>1: n['widgets_values'][1]=0.5
-    use_conv_video_vae(advanced); write('06_LTX25_Two_Stage_Advanced.json',advanced)
+    use_conv_video_vae(advanced); use_ltxv_tiled_decode(advanced); write('06_LTX25_Two_Stage_Advanced.json',advanced)
 
     ing=read(REF/'LTX-2.5_ICLoRA_Ingredients_Single_Stage_Distilled.json'); rename(ing,'Ingredients — Character and Scene Continuity')
     for n in ing['nodes']:
@@ -282,6 +335,7 @@ def main():
         ('after','08_LTX25_Extend_After.json','Extend Video — Continue After Your Clip','What Happens Next','ending','your whole clip followed by the new section'),
         ('before','09_LTX25_Extend_Before.json','Extend Video — Lead In Before Your Clip','What Happens Before','opening','the new section followed by your whole clip')):
         ext=read(V2V/f'extend_{direction}.json'); rename(ext,title)
+        use_ltxv_tiled_decode(ext)
         add_note(ext,'How to Extend a Clip',EXTEND_NOTE.format(direction=direction,prompt_title=prompt_title,edge=edge,result=result))
         write(name,ext)
 
