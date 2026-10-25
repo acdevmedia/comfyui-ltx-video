@@ -196,6 +196,10 @@ bash tests/test-secrets.sh
 
 See [release and deployment notes](docs/deployment.md). Do not label the image or `latest` as verified until a RunPod GPU run covers model provisioning, all seven workflows, audio/video playback, backup behavior when offered, and benchmark measurements.
 
+## Startup logs
+
+Startup prints a plain-language summary followed by six numbered checks: Hugging Face access, GPU/CUDA, required model downloads, workflow verification, optional backup/thumbnail services, and ComfyUI startup. A final `[ready]` message appears only after ComfyUI answers its local `/system_stats` health request. If startup fails, the log names the failed step and points to the relevant detail file. Logs are stored in `/workspace/logs/startup.log`, `/workspace/logs/comfyui.log`, `/workspace/logs/nginx.log`, and, when enabled, `/workspace/logs/backup.log`. Credential values are never included.
+
 ## Troubleshooting
 
 - **Missing or denied models:** accept the gated terms, confirm token read access, and inspect `/workspace/logs/startup.log`. Distinct messages identify missing token, denied access/gated acceptance, unavailable repository/file, network failure, and low disk.
