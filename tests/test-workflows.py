@@ -8,6 +8,7 @@ subprocess.run([sys.executable,str(root/'scripts/verify-workflows.py')],check=Tr
 for name in sorted(p.name for p in (version/'workflows').glob('0*.json')):
     d=json.loads((version/'workflows'/name).read_text())
     assert d.get('nodes') and d.get('links') is not None, name
+    assert any(n.get('title')=='About the Negative Prompt' for n in d['nodes']), f'{name}: missing negative prompt note'
     if name.startswith('02_'):
         assert not any(n.get('type')=='LoadImage' for n in d['nodes']), 'T2V must not have an image input node'
     if name.startswith('07_'):

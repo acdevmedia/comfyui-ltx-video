@@ -1,7 +1,7 @@
 {
   "id": "3f8c25d1-9a47-4be0-8d63-71c4ea9b5028",
   "revision": 0,
-  "last_node_id": 9017,
+  "last_node_id": 9018,
   "last_link_id": 13819,
   "nodes": [
     {
@@ -958,6 +958,30 @@
         "auto",
         "auto"
       ]
+    },
+    {
+      "id": 9018,
+      "type": "MarkdownNote",
+      "pos": [
+        -4587.492001622839,
+        3223.715688805756
+      ],
+      "size": [
+        500,
+        420
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "About the Negative Prompt",
+      "properties": {},
+      "widgets_values": [
+        "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
     }
   ],
   "links": [

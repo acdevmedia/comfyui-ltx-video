@@ -12,7 +12,6 @@ PRODUCT=PROFILE['product_name']
 REF=ROOT/'archive/official-workflow-references'
 
 def read(path): return json.loads(path.read_text())
-def write(name, data): (WORK/name).write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n')
 def set_duration(data, value=30):
     for node in data.get('nodes',[]):
         title=(node.get('title') or '').lower()
@@ -99,6 +98,32 @@ def expose_negative_prompt(data, control_id, encoder_id):
     data['last_link_id']=max(data.get('last_link_id',0),link_id)
     control['inputs'].append({'label':NEGATIVE_LABEL,'name':'director_negative_prompt','type':'STRING','widget':{'name':'director_negative_prompt'},'link':None})
     control['widgets_values'].append(NEGATIVE_PROMPT)
+
+NEGATIVE_NOTE='''## About the negative prompt
+
+The negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.
+
+**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.
+
+It only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.
+
+For most shots, steer the result from the main prompt instead. Describe what you want ("steady locked-off camera", "soft window light", "no music") rather than listing what you don't.'''
+
+def add_negative_prompt_note(data):
+    """Explain in plain English, next to the controls, why the negative prompt is inert at CFG 1.0."""
+    nodes=data['nodes']
+    anchor=max(nodes,key=lambda n:len(n['widgets_values']) if isinstance(n.get('widgets_values'),list) else 0)
+    state=data.get('state') or {}
+    node_id=max([n['id'] for n in nodes]+[data.get('last_node_id') or 0,state.get('lastNodeId',0)])+1
+    nodes.append({'id':node_id,'type':'MarkdownNote','pos':[min(n['pos'][0] for n in nodes)-560,anchor['pos'][1]],'size':[500,420],
+        'flags':{},'order':len(nodes),'mode':0,'inputs':[],'outputs':[],'title':'About the Negative Prompt','properties':{},
+        'widgets_values':[NEGATIVE_NOTE],'color':'#222','bgcolor':'#000'})
+    if 'last_node_id' in data: data['last_node_id']=node_id
+    if 'lastNodeId' in state: state['lastNodeId']=node_id
+
+def write(name, data):
+    add_negative_prompt_note(data)
+    (WORK/name).write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n')
 
 def main():
     master=read(WORK/'LTX25_Filmmaker_Workflow_v9_Advanced.json')
