@@ -18,6 +18,13 @@ for name in sorted(p.name for p in (version/'workflows').glob('0*.json')):
         blob=json.dumps(d)
         assert 'gemma4_e2b_it_int8_convrot.safetensors' in blob, f'{name}: must use the default-downloaded prompt enhancer'
         assert 'gemma4_e2b_it_bf16.safetensors' not in blob, f'{name}: must not require the optional BF16 prompt enhancer'
+    if name == '05_LTX25_Text_to_Audio.json':
+        # Keep the Load Models outputs connected to the matching exposed
+        # Input Parameters slots: ckpt_path=7, text_encoder=8, enhancer=9.
+        root_links={link[0]:link[4] for link in d['links']}
+        assert root_links.get(13812)==7, 'T2A checkpoint path must target ckpt_path'
+        assert root_links.get(13811)==8, 'T2A text encoder must target text_encoder'
+        assert root_links.get(4)==9, 'T2A prompt enhancer must target text_enhancer'
 print('Workflow JSON and mode-specific assertions passed.')
 with tempfile.TemporaryDirectory() as temp:
     temp=Path(temp); app=temp/'app'; (app/'workflows').mkdir(parents=True)

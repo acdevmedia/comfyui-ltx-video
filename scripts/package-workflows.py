@@ -109,6 +109,15 @@ def main():
     write('04_LTX25_Audio_to_Video.json',a2v)
 
     t2a=read(REF/'LTX-2.5_T2A_Single_Stage_Distilled.json'); rename(t2a,'Text to Audio — Sound Designer'); set_duration(t2a); use_default_prompt_enhancer(t2a)
+    # The upstream nested graph has two root links aimed at the wrong input
+    # slots: the text encoder is sent to ckpt_path, and the enhancer to
+    # text_encoder. Keep the visible input declarations and actual links in
+    # sync so ComfyUI receives a checkpoint path plus both CLIP objects.
+    for link in t2a.get('links',[]):
+        if link[0]==13811:  # Load Models: text_encoder -> Input Parameters
+            link[4]=8
+        elif link[0]==4:  # Load Models: text_enhancer -> Input Parameters
+            link[4]=9
     for n in t2a['nodes']:
         if n.get('type')=='PrimitiveFloat' and 'duration' in (n.get('title') or '').lower() and n.get('widgets_values'): n['widgets_values'][0]=30
     write('05_LTX25_Text_to_Audio.json',t2a)
