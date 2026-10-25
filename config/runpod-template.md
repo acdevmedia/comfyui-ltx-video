@@ -4,7 +4,7 @@
 
 | Setting | Value |
 |---|---|
-| Container image | `ghcr.io/acdevmedia/ltx-studio:2.5.1` |
+| Container image | `ghcr.io/acdevmedia/ltx-studio:2.5` |
 | GPU | NVIDIA; A100 80 GB recommended |
 | Container disk | 200 GB |
 | Persistent volume | None |
@@ -39,11 +39,11 @@ Jupyter is disabled by default. To enable it, set `ENABLE_JUPYTER=true` and crea
 
 ## Create or update the RunPod template
 
-Publish `ghcr.io/acdevmedia/ltx-studio:2.5.1` first and verify that it can be pulled anonymously. The script reads `RUNPOD_API_KEY` from the environment or ignored `.env`. It refuses to publish a template if the exact image tag is not publicly pullable, and avoids duplicates unless `--update-existing` is supplied.
+Publish `ghcr.io/acdevmedia/ltx-studio:2.5` first and verify that it can be pulled anonymously. The script reads `RUNPOD_API_KEY` from the environment or ignored `.env`. It refuses to publish a template if the exact image tag is not publicly pullable, and avoids duplicates unless `--update-existing` is supplied.
 
 ```bash
 python3 scripts/create-runpod-template.py --dry-run
-python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx-studio:2.5.1 --update-existing
+python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx-studio:2.5 --update-existing
 ```
 
 The template payload and the RunPod API update use no persistent volume, an empty start command, the port lists above, and no registry credentials. Set HF and optional S3 secrets in the RunPod UI after updating the template. See [deployment](../docs/deployment.md) for release validation.

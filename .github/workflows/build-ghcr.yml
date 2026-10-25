@@ -8,10 +8,6 @@ on:
         required: true
         default: ltx-2.5
         type: string
-      image_tag:
-        description: Optional image tag override, for example 2.5.1
-        required: false
-        type: string
   push:
     tags:
       - 'v*'
@@ -71,11 +67,9 @@ jobs:
         env:
           REF: ${{ github.ref }}
           LTX_VERSION: ${{ steps.profile.outputs.ltx_version }}
-          IMAGE_TAG: ${{ github.event.inputs.image_tag }}
         run: |
           image=ghcr.io/acdevmedia/ltx-studio
           version_tag="${LTX_VERSION#ltx-}"
-          if [[ -n "$IMAGE_TAG" ]]; then version_tag="$IMAGE_TAG"; fi
           {
             echo "tags<<EOF"
             echo "$image:$version_tag"

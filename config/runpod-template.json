@@ -1,6 +1,6 @@
 {
   "name": "LTX 2.5 Distilled ComfyUI Video One-Click",
-  "imageName": "ghcr.io/acdevmedia/ltx-studio:2.5.1",
+  "imageName": "ghcr.io/acdevmedia/ltx-studio:2.5",
   "category": "NVIDIA",
   "containerDiskInGb": 200,
   "dockerEntrypoint": [],
