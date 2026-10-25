@@ -2,11 +2,11 @@
 
 ## Build and publish with GitHub Actions
 
-`.github/workflows/build-ghcr.yml` runs CPU-only checks, reads `versions/<id>/profile.json`, builds a `linux/amd64` image, and pushes it with the short-lived repository `GITHUB_TOKEN`. In the `ltx-studio` package settings, set visibility to **Public** and grant repository `acdevmedia/comfyui-ltx-video` **Write** access under **Manage Actions access**. This one-time package permission is required because GHCR package permissions are granular. Hugging Face, AWS, and RunPod credentials are not used by image builds.
+`.github/workflows/build-ghcr.yml` runs CPU-only checks, reads `versions/<id>/profile.json`, builds a `linux/amd64` image, and pushes the version tag (for example, `2.5`) using the encrypted `GHCR_PACKAGES_PAT` Actions secret. Source it from the local `GITHUB_PACKAGES_PAT` in `.env`; the token is used only for registry login, never passed into Docker build or stored in image layers. Hugging Face, AWS, and RunPod credentials are not used by image builds.
 
-Commit and push the project changes, then choose **Actions → Build and publish LTX Studio image → Run workflow**. Use the profile ID `ltx-2.5` for this project. A manual run creates `ghcr.io/acdevmedia/ltx-studio:2.5` and an immutable `sha-<12 chars>` image. A pushed `v*` Git tag creates that release tag, the SHA tag, and `latest`; only tag releases that have passed the required release checks should be used for production. Check the build logs and package digest in GHCR. Set package visibility to **Public** if RunPod should pull anonymously.
+Commit and push the project changes, then choose **Actions → Build and publish LTX Studio image → Run workflow**. Use profile `ltx-2.5` to publish `ghcr.io/acdevmedia/ltx-studio:2.5`. A pushed `v*` Git tag also publishes that release tag and `latest`; use `latest` only for verified releases. Check the build logs and package digest in GHCR. Set the `ltx-studio` package visibility to **Public** for anonymous RunPod pulls.
 
-The PAT in a local `.env` is not used by GitHub Actions. A maintainer with permission to push and dispatch workflows must push the workflow and code to the repository, then launch it. Publishing to the existing package requires the owner `acdevmedia` to grant the repository's workflow package write access.
+The workflow requires the repository Actions secret `GHCR_PACKAGES_PAT`, set from `GITHUB_PACKAGES_PAT` in the maintainer's ignored `.env` using GitHub's encrypted secret API or repository settings. Never put the token in source, workflow YAML, a build argument, or an image layer.
 
 ## Optional local image build
 
@@ -18,7 +18,7 @@ The image is Linux/amd64 and requires the NVIDIA container runtime when run. Bui
 
 ## Manual GHCR publishing
 
-The local fallback helper reads `GITHUB_PACKAGES_PAT` from the environment or ignored `.env` (key name exactly `GITHUB_PACKAGES_PAT`). Use a dated immutable release tag or semantic version. It tags the image with the release and current Git SHA, authenticates with `docker login --password-stdin`, and pushes with Buildx. It never passes the token to Docker build or stores it in the image.
+The local fallback helper reads `GITHUB_PACKAGES_PAT` from the environment or ignored `.env` (key name exactly `GITHUB_PACKAGES_PAT`). Use a dated release tag or semantic version. It tags and pushes only that version tag, authenticates with `docker login --password-stdin`, and never passes the token to Docker build or stores it in the image.
 
 ```bash
 VERSION=2026.10.24 ./scripts/publish-ghcr.sh

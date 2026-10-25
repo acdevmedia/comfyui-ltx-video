@@ -22,7 +22,7 @@ Add secrets using RunPod's environment/secret interface; never add secret values
 
 Required for first gated download:
 
-- Replace the visible `HF_TOKEN` value `YOUR_HUGGING_FACE_TOKEN` with your Hugging Face token. Mark it as a secret in RunPod. `HUGGING_FACE_HUB_TOKEN` is also accepted if you prefer that name.
+- Replace the visible `HF_TOKEN` value `YOUR_HUGGING_FACE_TOKEN` with your Hugging Face token. Mark it as a secret in RunPod. The alternate `HUGGING_FACE_HUB_TOKEN` field is also present if you prefer that name; replace its placeholder too or leave it unused.
 
 Defaults:
 
@@ -42,7 +42,7 @@ Defaults:
 - `BACKUP_RECHECK_SECONDS=120`
 - `BACKUP_SETTLE_SECONDS=8`
 
-Optional backup: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`, `AWS_DEFAULT_REGION`, `S3_BUCKET`, `S3_ENDPOINT_URL`, `S3_PREFIX`, `S3_FORCE_PATH_STYLE`, `S3_STORAGE_CLASS`, `S3_SSE`. DigitalOcean aliases: `SPACES_BUCKET`, `SPACES_REGION`, `SPACES_PREFIX`. Generic `S3_*` values take precedence.
+Optional backup fields are included in the template. Replace the `YOUR_*`/`OPTIONAL_*` placeholders only when configuring a provider, mark credentials as secrets, and set `REALTIME_BACKUP=true` to enable uploads. The AWS S3 defaults are `AWS_DEFAULT_REGION=us-east-1`, `S3_ENDPOINT_URL=https://s3.us-east-1.amazonaws.com`, `S3_STORAGE_CLASS=STANDARD`, and `S3_SSE=AES256`. For Spaces or MinIO, replace `S3_BUCKET` and `S3_ENDPOINT_URL` with that provider's bucket and endpoint; generic `S3_*` values take precedence over the legacy `SPACES_*` aliases.
 
 Optional admin services: `ENABLE_JUPYTER=true` requires a nonempty `JUPYTER_TOKEN`; `PUBLIC_KEY` enables SSH authorized-key access.
 

@@ -59,20 +59,18 @@ jobs:
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: acdevmedia
+          password: ${{ secrets.GHCR_PACKAGES_PAT }}
       - name: Select image tags
         id: tags
         env:
           REF: ${{ github.ref }}
-          SHA: ${{ github.sha }}
           LTX_VERSION: ${{ steps.profile.outputs.ltx_version }}
         run: |
           image=ghcr.io/acdevmedia/ltx-studio
           version_tag="${LTX_VERSION#ltx-}"
           {
             echo "tags<<EOF"
-            echo "$image:sha-${SHA:0:12}"
             echo "$image:$version_tag"
             if [[ "$REF" == refs/tags/v* ]]; then
               echo "$image:${REF#refs/tags/}"

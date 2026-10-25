@@ -127,21 +127,21 @@ ComfyUI saves output under `/workspace/ComfyUI/output/`. The **Videos & Audio** 
 
 ## Build, test, and publish
 
-The recommended image build is GitHub Actions; this avoids requiring a local NVIDIA GPU or a large local Docker disk. The workflow in `.github/workflows/build-ghcr.yml` runs CPU-only checks, reads the selected profile, builds a Linux/amd64 image, and pushes it to GHCR using the short-lived repository `GITHUB_TOKEN`. Before the first publish, make `ghcr.io/acdevmedia/ltx-studio` public and grant repository `acdevmedia/comfyui-ltx-video` **Write** access under the package's **Manage Actions access** settings. Hugging Face and S3 credentials are never used by the image build.
+The recommended image build is GitHub Actions; this avoids requiring a local NVIDIA GPU or a large local Docker disk. The workflow in `.github/workflows/build-ghcr.yml` runs CPU-only checks, reads the selected profile, builds a Linux/amd64 image, and publishes the profile version tag, such as `ghcr.io/acdevmedia/ltx-studio:2.5`. It uses the encrypted `GHCR_PACKAGES_PAT` Actions secret sourced from the local `GITHUB_PACKAGES_PAT`; the credential is used only for GHCR registry authentication and never enters Docker build layers. Hugging Face and S3 credentials are never used by the image build.
 
 To start a build after this repository change is committed and pushed:
 
-- Use **Actions → Build and publish LTX Studio image → Run workflow** for a commit-addressed `sha-<12 chars>` build. The workflow input defaults to `ltx-2.5`.
-- Push a release tag such as `v2.5.0` after the chosen validation gate. The tag build pushes the version tag, SHA tag, and `latest` after the CPU checks pass.
+- Use **Actions → Build and publish LTX Studio image → Run workflow** with profile `ltx-2.5` to publish `ghcr.io/acdevmedia/ltx-studio:2.5`.
+- Push a release tag such as `v2.5.0` after the chosen validation gate. The tag build pushes `2.5`, `v2.5.0`, and `latest` after the CPU checks pass.
 - Check the workflow run and package digest in GHCR. Make `ghcr.io/acdevmedia/ltx-studio` public in package settings before RunPod anonymous pulls.
 
-After the immutable SHA image is anonymously pullable from GHCR, create the public RunPod template from the reviewed payload in `config/runpod-template.json`:
+After the versioned image is anonymously pullable from GHCR, create or update the public RunPod template from `config/runpod-template.json`:
 
 ```bash
 python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx-studio:2.5
 ```
 
-The helper reads `RUNPOD_API_KEY` from the shell or ignored `.env`, verifies that GHCR allows anonymous pulls, checks for an existing template with the same name, and then calls RunPod's template API. It never puts Hugging Face or S3 credentials into the public template. Use RunPod Secrets to add those credentials to a Pod.
+The helper reads `RUNPOD_API_KEY` from the shell or ignored `.env`, verifies anonymous GHCR pulls, and applies labeled ports and the complete environment list. Replace placeholder values with RunPod Secrets where appropriate.
 
 The local build remains available for systems with enough disk:
 

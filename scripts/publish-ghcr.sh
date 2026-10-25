@@ -6,7 +6,7 @@ IMAGE=ghcr.io/acdevmedia/ltx-studio
 VERSION="${VERSION:-}"
 if [[ -z "$VERSION" ]]; then echo 'Set VERSION to a dated or semantic release tag.' >&2; exit 2; fi
 if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
-  echo 'Commit the release source tree before publishing so the SHA tag identifies the built source.' >&2
+  echo 'Commit the release source tree before publishing so the version tag identifies the built source.' >&2
   exit 4
 fi
 
@@ -32,10 +32,9 @@ if [[ -z "$USERNAME" ]]; then
 fi
 printf '%s' "$TOKEN" | docker login "$REGISTRY" --username "$USERNAME" --password-stdin >/dev/null
 unset TOKEN PROFILE
-SHA="$(git rev-parse --short=12 HEAD)"
-TAGS=(-t "$IMAGE:$VERSION" -t "$IMAGE:$SHA")
+TAGS=(-t "$IMAGE:$VERSION")
 if [[ "${PUBLISH_LATEST:-false}" =~ ^(1|true|yes)$ ]]; then TAGS+=(-t "$IMAGE:latest"); fi
 docker buildx build --platform linux/amd64 --push "${TAGS[@]}" .
-echo "Published tags: $IMAGE:$VERSION $IMAGE:$SHA"
+echo "Published tag: $IMAGE:$VERSION"
 docker buildx imagetools inspect "$IMAGE:$VERSION" | sed -n '1,18p'
 echo 'Set the GHCR package visibility to Public in GitHub package settings if anonymous RunPod pulls are intended.'
