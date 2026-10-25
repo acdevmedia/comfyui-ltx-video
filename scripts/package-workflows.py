@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build filmmaker-named workflow assets from the preserved master and official graph refs."""
-import copy, json
+import copy, json, uuid
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -77,6 +77,29 @@ def use_conv_video_vae(data):
         return value
     replace(data)
 
+NEGATIVE_LABEL='Negative Prompt (CFG 1.0: little/no effect)'
+NEGATIVE_PROMPT='blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping'
+
+def expose_negative_prompt(data, control_id, encoder_id):
+    """Promote the subgraph's negative CLIPTextEncode text to the filmmaker control panel, as 01/06 already do.
+
+    LTXVDualCFGGuider at video/audio CFG 1.0 skips the negative pass, so this only matters when CFG is raised.
+    """
+    control=next(n for n in data['nodes'] if n['id']==control_id)
+    sub=next(s for s in data['definitions']['subgraphs'] if s['id']==control['type'])
+    encoder=next(n for n in sub['nodes'] if n['id']==encoder_id)
+    link_id=max([sub['state']['lastLinkId'],data.get('last_link_id',0)]+[l['id'] for l in sub['links']])+1
+    sub['inputs'].append({'id':str(uuid.uuid5(uuid.NAMESPACE_URL,f"{sub['id']}/director_negative_prompt")),'name':'director_negative_prompt',
+        'type':'STRING','linkIds':[link_id],'label':NEGATIVE_LABEL,'pos':list(sub['inputs'][-1].get('pos',[0,0]))})
+    sub['links'].append({'id':link_id,'origin_id':-10,'origin_slot':len(sub['inputs'])-1,'target_id':encoder_id,'target_slot':len(encoder['inputs']),'type':'STRING'})
+    encoder['inputs'].append({'localized_name':'text','name':'text','type':'STRING','widget':{'name':'text'},'link':link_id})
+    encoder['widgets_values'][0]=NEGATIVE_PROMPT
+    sub['state']['lastLinkId']=link_id
+    # Link ids share one counter across the root graph and its subgraphs.
+    data['last_link_id']=max(data.get('last_link_id',0),link_id)
+    control['inputs'].append({'label':NEGATIVE_LABEL,'name':'director_negative_prompt','type':'STRING','widget':{'name':'director_negative_prompt'},'link':None})
+    control['widgets_values'].append(NEGATIVE_PROMPT)
+
 def main():
     master=read(WORK/'LTX25_Filmmaker_Workflow_v9_Advanced.json')
     i2v=copy.deepcopy(master); rename(i2v,'Image to Video — Filmmaker'); set_duration(i2v)
@@ -112,6 +135,7 @@ def main():
             if title=='width' and n.get('widgets_values'): n['widgets_values'][0]=960
             if title in ('height','height (pixels)') and n.get('widgets_values'): n['widgets_values'][0]=544
             if 'enable prompt enhance' in title and n.get('widgets_values'): n['widgets_values'][0]=False
+    expose_negative_prompt(t2v,405,373)
     use_conv_video_vae(t2v); write('02_LTX25_Text_to_Video.json',t2v)
 
     flf=read(REF/'video_ltx2_5_flf2v.json'); rename(flf,'First and Last Frame — Filmmaker')
@@ -130,6 +154,7 @@ def main():
             if n.get('type')=='PrimitiveInt' and n.get('title','').lower()=='width': n['widgets_values'][0]=960
             if n.get('type')=='PrimitiveInt' and n.get('title','').lower()=='height': n['widgets_values'][0]=544
             if n.get('type')=='PrimitiveBoolean' and 'prompt enhance' in n.get('title','').lower(): n['widgets_values']=[False]
+    expose_negative_prompt(flf,251,217)
     use_conv_video_vae(flf); write('03_LTX25_First_Last_Frame.json',flf)
 
     a2v=read(REF/'LTX-2.5_A2V_Two_Stage_Distilled.json'); rename(a2v,'Audio to Video — Filmmaker'); set_duration(a2v); use_default_prompt_enhancer(a2v); use_int8_stack(a2v)

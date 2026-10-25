@@ -41,3 +41,7 @@ The model card's trained bucket is 768×448, 121 frames, 24 fps. Longer duration
 ## Inputs and output
 
 Workflows do not depend on sample image/audio files. Upload your own assets into the labeled Load nodes. Outputs are MP4 or audio under `/workspace/ComfyUI/output/`; temporary files and model weights are outside the output tree.
+
+## Negative prompts and CFG
+
+Image to Video, Text to Video, First and Last Frame, and Two Stage Advanced expose a negative prompt on their control panel, wired to the negative `CLIPTextEncode` inside the subgraph. The distilled defaults use `LTXVDualCFGGuider` with video and audio CFG both at 1.0. At equal scales of 1.0 ComfyUI skips the negative (unconditional) pass entirely, so the negative prompt has no effect until a CFG value is raised above 1.0. Raising CFG adds a second model evaluation to every sampling step, roughly doubling sampling time, and the distilled model is not tuned for higher guidance; test on short clips before relying on it.

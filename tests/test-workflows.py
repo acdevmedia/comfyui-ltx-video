@@ -22,6 +22,15 @@ for name in sorted(p.name for p in (version/'workflows').glob('0*.json')):
         assert 'gemma4-12b-with-proj-ltx-2.5-bf16.safetensors' not in blob, f'{name}: must share the default INT8 text encoder'
     if name[:3] in ('01_','02_','03_','04_','06_'):
         assert '"ltx-2.5-video-vae-bf16.safetensors"' not in json.dumps(d), f'{name}: must default to the convolutional video decoder'
+    if name[:3] in ('02_','03_'):
+        # The promoted negative prompt must feed the subgraph's negative CLIPTextEncode, not just sit on the panel.
+        control=next(n for n in d['nodes'] if any(i.get('name')=='director_negative_prompt' for i in n.get('inputs',[])))
+        sub=next(s for s in d['definitions']['subgraphs'] if s['id']==control['type'])
+        slot=[i['name'] for i in sub['inputs']].index('director_negative_prompt')
+        link=next(l for l in sub['links'] if l['origin_id']==-10 and l['origin_slot']==slot)
+        encoder=next(n for n in sub['nodes'] if n['id']==link['target_id'])
+        assert encoder['type']=='CLIPTextEncode' and encoder['inputs'][link['target_slot']]['name']=='text', f'{name}: negative prompt is not wired to an encoder'
+        assert d['last_link_id']>=max(l['id'] for l in sub['links']), f'{name}: root link counter is behind subgraph link ids'
     if name == '05_LTX25_Text_to_Audio.json':
         # Keep the Load Models outputs connected to the matching exposed
         # Input Parameters slots: ckpt_path=7, text_encoder=8, enhancer=9.

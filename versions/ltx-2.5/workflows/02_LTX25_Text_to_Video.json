@@ -2,7 +2,7 @@
   "id": "07824bbb-6672-4bb0-ac36-4313a519e35b",
   "revision": 0,
   "last_node_id": 412,
-  "last_link_id": 793,
+  "last_link_id": 794,
   "nodes": [
     {
       "id": 75,
@@ -170,6 +170,15 @@
             "name": "clip_name_1"
           },
           "link": null
+        },
+        {
+          "label": "Negative Prompt (CFG 1.0: little/no effect)",
+          "name": "director_negative_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "director_negative_prompt"
+          },
+          "link": null
         }
       ],
       "outputs": [
@@ -199,7 +208,8 @@
         "ltx-2.5-audio-vae-bf16.safetensors",
         "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
         "ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
-        "gemma4_e2b_it_int8_convrot.safetensors"
+        "gemma4_e2b_it_int8_convrot.safetensors",
+        "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping"
       ],
       "title": "Text to Video — Filmmaker Controls"
     },
@@ -378,7 +388,7 @@
         "state": {
           "lastGroupId": 27,
           "lastNodeId": 412,
-          "lastLinkId": 793,
+          "lastLinkId": 794,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -565,6 +575,19 @@
               791
             ],
             "label": "prompt_enhance_model",
+            "pos": [
+              -520.185546875,
+              6594
+            ]
+          },
+          {
+            "id": "f66039e2-ef36-5700-9dd2-7468b859820f",
+            "name": "director_negative_prompt",
+            "type": "STRING",
+            "linkIds": [
+              794
+            ],
+            "label": "Negative Prompt (CFG 1.0: little/no effect)",
             "pos": [
               -520.185546875,
               6594
@@ -1796,6 +1819,15 @@
                 "name": "clip",
                 "type": "CLIP",
                 "link": 731
+              },
+              {
+                "localized_name": "text",
+                "name": "text",
+                "type": "STRING",
+                "widget": {
+                  "name": "text"
+                },
+                "link": 794
               }
             ],
             "outputs": [
@@ -1826,7 +1858,7 @@
               }
             },
             "widgets_values": [
-              "pc game, console game, video game, cartoon, childish, ugly"
+              "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping"
             ],
             "color": "#323",
             "bgcolor": "#535"
@@ -3830,6 +3862,14 @@
             "target_id": 393,
             "target_slot": 0,
             "type": "COMBO"
+          },
+          {
+            "id": 794,
+            "origin_id": -10,
+            "origin_slot": 13,
+            "target_id": 373,
+            "target_slot": 1,
+            "type": "STRING"
           }
         ],
         "extra": {}

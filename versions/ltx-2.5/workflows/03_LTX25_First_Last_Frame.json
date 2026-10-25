@@ -2,7 +2,7 @@
   "id": "0112e9af-5129-48ba-af78-92c40ac40b40",
   "revision": 0,
   "last_node_id": 258,
-  "last_link_id": 386,
+  "last_link_id": 387,
   "nodes": [
     {
       "id": 39,
@@ -214,6 +214,15 @@
             "name": "clip_name_1"
           },
           "link": null
+        },
+        {
+          "label": "Negative Prompt (CFG 1.0: little/no effect)",
+          "name": "director_negative_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "director_negative_prompt"
+          },
+          "link": null
         }
       ],
       "outputs": [
@@ -242,7 +251,8 @@
         "ltx-2.5-video-vae-conv-bf16.safetensors",
         "ltx-2.5-audio-vae-bf16.safetensors",
         "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
-        "gemma4_e2b_it_int8_convrot.safetensors"
+        "gemma4_e2b_it_int8_convrot.safetensors",
+        "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping"
       ],
       "title": "First and Last Frame — Filmmaker Controls"
     },
@@ -406,7 +416,7 @@
         "state": {
           "lastGroupId": 9,
           "lastNodeId": 258,
-          "lastLinkId": 386,
+          "lastLinkId": 387,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -607,6 +617,19 @@
               384
             ],
             "label": "prompt_enhance_model",
+            "pos": [
+              -120.185546875,
+              2494
+            ]
+          },
+          {
+            "id": "0f8a6d23-cb58-56ff-ad3a-f59ef6f66307",
+            "name": "director_negative_prompt",
+            "type": "STRING",
+            "linkIds": [
+              387
+            ],
+            "label": "Negative Prompt (CFG 1.0: little/no effect)",
             "pos": [
               -120.185546875,
               2494
@@ -1760,6 +1783,15 @@
                 "name": "clip",
                 "type": "CLIP",
                 "link": 337
+              },
+              {
+                "localized_name": "text",
+                "name": "text",
+                "type": "STRING",
+                "widget": {
+                  "name": "text"
+                },
+                "link": 387
               }
             ],
             "outputs": [
@@ -1790,7 +1822,7 @@
               "secondTabWidth": 65
             },
             "widgets_values": [
-              "blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, poor lighting, flickering, motion blur, distorted proportions, unnatural skin tones, deformed facial features, asymmetrical face, missing facial features, extra limbs, disfigured hands, wrong hand count, artifacts around text, unreadable text on shirt or hat, incorrect lettering on cap (“PNTR”), incorrect t-shirt slogan (“JUST DO IT”), missing microphone, misplaced microphone, inconsistent perspective, camera shake, incorrect depth of field, background too sharp, background clutter, distracting reflections, harsh shadows, inconsistent lighting direction, color banding, cartoonish rendering, 3D CGI look, unrealistic materials, uncanny valley effect, incorrect ethnicity, wrong gender, exaggerated expressions, smiling, laughing, exaggerated sadness, wrong gaze direction, eyes looking at camera, mismatched lip sync, silent or muted audio, distorted voice, robotic voice, echo, background noise, off-sync audio, missing sniff sounds, incorrect dialogue, added dialogue, repetitive speech, jittery movement, awkward pauses, incorrect timing, unnatural transitions, inconsistent framing, tilted camera, missing door or shelves, missing shallow depth of field, flat lighting, inconsistent tone, cinematic oversaturation, stylized filters, or AI artifacts."
+              "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping"
             ],
             "color": "#323",
             "bgcolor": "#535"
@@ -3854,6 +3886,14 @@
             "target_id": 246,
             "target_slot": 0,
             "type": "COMBO"
+          },
+          {
+            "id": 387,
+            "origin_id": -10,
+            "origin_slot": 14,
+            "target_id": 217,
+            "target_slot": 1,
+            "type": "STRING"
           }
         ],
         "extra": {}
