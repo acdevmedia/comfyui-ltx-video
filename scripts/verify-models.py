@@ -8,7 +8,7 @@ for m in json.loads(manifest.read_text())['models']:
     group=m.get('group','core')
     if args.group=='default' and (not m.get('default') or m.get('optional')): continue
     if args.group!='all' and args.group!='default' and group!=args.group: continue
-    if args.group=='default' and group=='ingredients' and os.environ.get('AUTO_DOWNLOAD_ADAPTERS','true').lower() not in {'1','true','yes'}: continue
+    if args.group=='default' and group=='ingredients' and os.environ.get('AUTO_DOWNLOAD_ADAPTERS','false').lower() not in {'1','true','yes'}: continue
     p=root/m.get('target',m['file'])
     if p.is_file() and p.stat().st_size: print(f"[models] OK {m['id']} ({p.stat().st_size/1024**3:.2f} GiB)")
     else: print(f'[models] MISSING {m["id"]}: {p}'); missing.append(p)

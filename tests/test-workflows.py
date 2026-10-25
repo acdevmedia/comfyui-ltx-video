@@ -18,6 +18,8 @@ for name in sorted(p.name for p in (version/'workflows').glob('0*.json')):
         blob=json.dumps(d)
         assert 'gemma4_e2b_it_int8_convrot.safetensors' in blob, f'{name}: must use the default-downloaded prompt enhancer'
         assert 'gemma4_e2b_it_bf16.safetensors' not in blob, f'{name}: must not require the optional BF16 prompt enhancer'
+        assert 'ltx-2.5-22b-distilled-transformer-bf16.safetensors' not in blob, f'{name}: must share the default INT8 transformer'
+        assert 'gemma4-12b-with-proj-ltx-2.5-bf16.safetensors' not in blob, f'{name}: must share the default INT8 text encoder'
     if name == '05_LTX25_Text_to_Audio.json':
         # Keep the Load Models outputs connected to the matching exposed
         # Input Parameters slots: ckpt_path=7, text_encoder=8, enhancer=9.

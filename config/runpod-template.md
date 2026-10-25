@@ -9,7 +9,7 @@
 5. Create a Pod from **LTX 2.5 Distilled ComfyUI Video One-Click**. Keep the container disk at its **200 GB default**. If you change it, use **at least 150 GB**. Choose an NVIDIA GPU; A100 80 GB is recommended.
 6. On first launch, wait for model downloads to finish and for the Pod logs to say ComfyUI is ready. Then open **Connect → HTTP service 8188 / ComfyUI**.
 
-The first launch downloads about **108 GiB** of models. If logs say a repository is gated, accept access to that exact repository using the account associated with the token. If they say the token is missing, verify the RunPod Secret name is `HUGGINGFACE_TOKEN`.
+The first launch downloads about **43 GiB** of models (about 108 GiB with `AUTO_DOWNLOAD_ADAPTERS=true` for Ingredients). If logs say a repository is gated, accept access to that exact repository using the account associated with the token. If they say the token is missing, verify the RunPod Secret name is `HUGGINGFACE_TOKEN`.
 
 **Storage is temporary:** this template has no persistent volume. Download outputs before stopping or replacing the Pod, or set up optional S3 backup.
 
@@ -30,7 +30,7 @@ The template exposes only HTTP 8188 for ComfyUI. RunPod provides its browser-bas
 
 ## Storage estimate
 
-The original INT8 ConvRot filmmaker workflow uses about 43.18 GiB. Ingredients adds about 64.81 GiB, for a default download of about 107.99 GiB before temporary download/cache overhead. The optional BF16 prompt-enhancement encoder adds 9.57 GiB. The 200 GB default leaves room for downloads and generated files; do not reduce the container disk below 150 GB. The README has the per-file size table.
+The original INT8 ConvRot filmmaker workflow uses about 43.18 GiB. Ingredients adds about 64.81 GiB when `AUTO_DOWNLOAD_ADAPTERS=true`, for about 107.99 GiB before temporary download/cache overhead. The optional BF16 prompt-enhancement encoder adds 9.57 GiB. The 200 GB default leaves room for downloads and generated files; do not reduce the container disk below 150 GB. The README has the per-file size table.
 
 ## Optional S3 backup
 

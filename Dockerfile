@@ -19,10 +19,11 @@ RUN chmod +x /opt/ltx25-studio/scripts/build-comfy-stack.sh && /opt/ltx25-studio
 FROM nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu22.04 AS runtime
 ARG LTX_VERSION
 ENV DEBIAN_FRONTEND=noninteractive PATH="/opt/venv/bin:/usr/local/cuda/bin:${PATH}" SHELL=/bin/bash
+# gcc and python3-dev let Triton build its launcher at runtime for SageAttention.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-venv python-is-python3 openssh-server openssh-client git git-lfs \
     curl ca-certificates vim nginx libgl1 libglib2.0-0 libsqlite3-0 ffmpeg inotify-tools \
-    util-linux rsync tini && rm -rf /var/lib/apt/lists/*
+    util-linux rsync tini gcc libc6-dev python3-dev && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /opt/venv /opt/venv
 COPY --from=builder /opt/ltx25-studio/ComfyUI /opt/ltx25-studio/ComfyUI
 COPY config /opt/ltx25-studio/config
@@ -42,6 +43,7 @@ ENV COMFYUI_DIR=/workspace/ComfyUI HF_HOME=/workspace/.cache/huggingface \
     MODEL_MANIFEST=/opt/ltx25-studio/versions/${LTX_VERSION}/config/models.json \
     ADAPTER_MANIFEST=/opt/ltx25-studio/versions/${LTX_VERSION}/config/adapters.json \
     WORKFLOW_SOURCE_DIR=/opt/ltx25-studio/versions/${LTX_VERSION}/workflows \
+    COMFYUI_ATTENTION=sage HF_XET_HIGH_PERFORMANCE=1 \
     PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 EXPOSE 8188 8888 22
 HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 CMD ["/opt/ltx25-studio/docker/healthcheck.sh"]

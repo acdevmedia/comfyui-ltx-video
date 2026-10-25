@@ -59,21 +59,25 @@ app.registerExtension({
       try {
         const response = await api.fetchApi("/history?max_items=100");
         if (!response.ok) throw new Error(`History request failed (${response.status})`);
-        const items = collect(await response.json()); grid.replaceChildren();
-        if (!items.length) { grid.append(Object.assign(document.createElement("p"), { textContent: "No recent video or audio outputs found." })); return; }
-        for (const item of items) {
+        const items = collect(await response.json());
+        if (!items.length) { grid.replaceChildren(Object.assign(document.createElement("p"), { textContent: "No recent video or audio outputs found." })); return; }
+        const posters = await Promise.all(items.map((item) => (item.isVideo ? posterUrl(item) : null)));
+        const cards = document.createDocumentFragment();
+        items.forEach((item, index) => {
           const card = document.createElement("article"); card.className = "acdev-output-card";
           const media = document.createElement(item.isVideo ? "video" : "audio");
-          media.src = viewUrl(item); media.controls = true; media.preload = "metadata"; media.playsInline = true;
+          // Posters stand in for the first frame, so nothing is fetched until a card is played.
+          media.src = viewUrl(item); media.controls = true; media.preload = "none"; media.playsInline = true;
           if (item.isVideo) {
             media.muted = false;
-            media.poster = await posterUrl(item);
+            media.poster = posters[index];
             media.addEventListener("error", () => { media.removeAttribute("poster"); }, { once: true });
           }
           const name = document.createElement("div"); name.className = "acdev-name"; name.textContent = `${item.subfolder ? `${item.subfolder}/` : ""}${item.filename}`;
           const download = document.createElement("a"); download.href = media.src; download.download = item.filename; download.textContent = "Open / download original";
-          card.append(media, name, download); grid.append(card);
-        }
+          card.append(media, name, download); cards.append(card);
+        });
+        grid.replaceChildren(cards);
       } catch (error) {
         grid.replaceChildren(Object.assign(document.createElement("p"), { textContent: `Could not load outputs: ${error.message}` }));
       }

@@ -1,10 +1,10 @@
 # Adapter status
 
-`versions/ltx-2.5/config/adapters.json` is the source of truth for this profile's packaged adapters. Ingredients is integrated as a specialist graph and its LoRA plus BF16 base checkpoint/text encoder are downloaded by default. Its model card identifies the reference-sheet video guide, 1.0 recommended strength, two-part prompt, and 768×448 / 121-frame / 24-fps training bucket.
+`versions/ltx-2.5/config/adapters.json` is the source of truth for this profile's packaged adapters. Ingredients is integrated as a specialist graph and its LoRA plus BF16 base checkpoint/text encoder are opt-in downloads (about 65 GiB). Its model card identifies the reference-sheet video guide, 1.0 recommended strength, two-part prompt, and 768×448 / 121-frame / 24-fps training bucket.
 
 Other requested adapters remain listed as not provisioned. Their exact LTX-2.5 checkpoint compatibility, graph inputs, and controls must be verified before they appear as enabled switches. A generic LoRA dropdown would not correctly implement IC-LoRA controls. Clean Plate, Restore, and Water Simulation remain excluded.
 
-Set `AUTO_DOWNLOAD_ADAPTERS=false` to defer the entire Ingredients model group during automatic startup. The workflow JSON remains installed but cannot run until those weights are downloaded. No other adapter is exposed as ready. The original workflow and Ingredients defaults total about 108 GiB; the RunPod template uses a 200 GB container disk to allow the 2 GiB download headroom, temporary cache, and outputs.
+Ingredients is the only workflow that needs the BF16 stack, so `AUTO_DOWNLOAD_ADAPTERS` defaults to `false`. Set it to `true` to provision the group at startup, or run the script below. The workflow JSON remains installed but cannot run until those weights are downloaded. No other adapter is exposed as ready. The core set is about 43 GiB and about 108 GiB with Ingredients; the RunPod template uses a 200 GB container disk to allow the 2 GiB download headroom, temporary cache, and outputs.
 
 From SSH or the Pod terminal, run the installed Hugging Face download wrappers without passing a token:
 

@@ -16,7 +16,7 @@ for key in (
     "torch_index_url", "comfyui_commit", "manager_commit", "custom_scripts_commit",
     "ltxvideo_commit", "huggingface_hub_version", "transformers_version", "diffusers_version",
     "comfy_aimdo_version", "comfy_kitchen_version", "av_version", "boto3_version",
-    "watchdog_version", "jupyterlab_version",
+    "watchdog_version", "jupyterlab_version", "sageattention_version",
 ):
     print(runtime[key])
 PY
@@ -64,6 +64,7 @@ PINS=(
   "comfy-kitchen==${SETTINGS[13]}" "av==${SETTINGS[14]}"
   "boto3==${SETTINGS[15]}" "watchdog==${SETTINGS[16]}"
   "jupyterlab==${SETTINGS[17]}"
+  "sageattention==${SETTINGS[18]}"
 )
 pip install --no-cache-dir "${PINS[@]}"
 pip check

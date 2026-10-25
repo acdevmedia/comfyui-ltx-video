@@ -55,7 +55,8 @@ def make_poster(path: Path) -> None:
 
 
 class Handler(FileSystemEventHandler):
-    def on_created(self, event):
+    # ComfyUI writes videos in place, so creation fires on an empty file; wait for the writer to close it.
+    def on_closed(self, event):
         if not event.is_directory:
             make_poster(Path(event.src_path))
 

@@ -3,6 +3,7 @@
 import json
 import argparse
 import os
+from concurrent.futures import ThreadPoolExecutor
 import shutil
 import sys
 from pathlib import Path
@@ -11,6 +12,7 @@ ROOT = Path(os.environ.get("COMFYUI_DIR", "/workspace/ComfyUI"))
 MODEL_ROOT = ROOT / "models"
 MANIFEST = Path(os.environ.get("MODEL_MANIFEST", "/opt/ltx25-studio/versions/ltx-2.5/config/models.json"))
 HF_HOME = Path(os.environ.get("HF_HOME", "/workspace/.cache/huggingface"))
+WORKERS = max(1, int(os.environ.get("MODEL_DOWNLOAD_WORKERS", "3")))
 
 
 def fail(message: str, code: int = 1) -> None:
@@ -57,7 +59,7 @@ def main() -> None:
         return
 
     data = json.loads(MANIFEST.read_text())
-    adapter_downloads = os.environ.get("AUTO_DOWNLOAD_ADAPTERS", "true").lower() in {"1", "true", "yes"}
+    adapter_downloads = os.environ.get("AUTO_DOWNLOAD_ADAPTERS", "false").lower() in {"1", "true", "yes"}
     models = selected_models(data, args.group, adapter_downloads)
     if not models:
         fail(f"The '{args.group}' model group is empty in {MANIFEST}.")
@@ -108,16 +110,13 @@ def main() -> None:
     if expected_total:
         print(f"[models] Storage preflight passed: {expected_total / 1024**3:.1f} GiB required; {free / 1024**3:.1f} GiB free.", flush=True)
 
-    for item in pending:
+    def download(item: dict) -> None:
         repo, filename = item["repo"], item["file"]
         target_rel = item.get("target", filename)
         target = MODEL_ROOT / target_rel
         target.parent.mkdir(parents=True, exist_ok=True)
         _, expected = file_info[item["id"]]
-        if expected:
-            free = shutil.disk_usage(MODEL_ROOT).free
-            if free < expected + (2 * 1024**3):
-                fail(f"Insufficient free storage for {target_rel}: need about {expected / 1024**3:.1f} GiB plus 2 GiB headroom; have {free / 1024**3:.1f} GiB.", 25)
+        print(f"[models] Downloading {target_rel}" + (f" ({expected / 1024**3:.2f} GiB)" if expected else ""), flush=True)
         try:
             local_dir = MODEL_ROOT if target_rel == filename else target.parent
             downloaded = Path(hf_hub_download(repo_id=repo, filename=filename, repo_type="model", local_dir=str(local_dir), token=token))
@@ -132,6 +131,16 @@ def main() -> None:
             raise
         except Exception as exc:
             fail(f"Download failed for {repo}:{filename} ({type(exc).__name__}). Check network and token permissions; retry is safe.", 28)
+
+    # The storage preflight above already covers every pending file, so files can download concurrently.
+    with ThreadPoolExecutor(max_workers=min(WORKERS, len(pending))) as pool:
+        futures = [pool.submit(download, item) for item in pending]
+        try:
+            for future in futures:
+                future.result()
+        except BaseException:
+            pool.shutdown(wait=False, cancel_futures=True)
+            raise
 
     print(f"[models] All files in group '{args.group}' are ready.", flush=True)
 

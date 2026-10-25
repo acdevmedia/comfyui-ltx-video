@@ -47,7 +47,8 @@
     "av_version": "17.0.0",
     "boto3_version": "1.40.54",
     "watchdog_version": "6.0.0",
-    "jupyterlab_version": "4.4.7"
+    "jupyterlab_version": "4.4.7",
+    "sageattention_version": "1.0.6"
   },
   "compatibility": {
     "primary_gpu": "NVIDIA A100 80GB",

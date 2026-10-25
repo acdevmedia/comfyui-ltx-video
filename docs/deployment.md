@@ -40,6 +40,7 @@ Choose **A100 80GB** for the target profile. Use H100/H200 or other CUDA cards o
 - CUDA unavailable: check the RunPod GPU selection and NVIDIA runtime logs.
 - RunPod Connect link returns 403 on an older image digest: paste the proxy URL into a fresh blank tab as a temporary workaround. The republished `2.5` image allows only cross-site top-level GET navigation to `/`; cross-site API calls remain rejected. Existing Pods keep the image digest with which they were created.
 - Out of memory or excessive runtime: first reduce duration, base resolution, or decode tile size; measure the exact GPU/workflow combination before changing precision or installing acceleration packages.
+- Comparing attention backends: SageAttention is on by default (`COMFYUI_ATTENTION=sage`) after a startup GPU check that falls back to PyTorch attention if it fails. Start a Pod with `COMFYUI_ATTENTION=pytorch` to compare. Export the workflow in API format and run `scripts/benchmark.sh --workflow <name> --resolution 960x544 --frames 721 --prompt-json <file> --fresh` (add `--cold` to include model loading). Each line in `/workspace/logs/benchmarks.jsonl` records seconds per stage (load, text encode, each sampler pass, latent upscale, decode, export), the attention backend, and how many nodes came from cache.
 - ComfyUI is healthy but output preview is empty: inspect the workflow's `SaveVideo`/`SaveAudio` node and `/workspace/ComfyUI/output/`.
 
 ## Release validation record

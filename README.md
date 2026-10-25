@@ -6,7 +6,7 @@ The project is designed so another model generation can be added as a new profil
 
 ## Quick start for RunPod
 
-Do these steps before starting your first Pod. The template defaults to a **200 GB container disk**. Keep that size if possible; **150 GB is the minimum recommended**. The first launch downloads about 108 GiB of required model files and needs extra space to complete safely.
+Do these steps before starting your first Pod. The template defaults to a **200 GB container disk**. Keep that size if possible; **150 GB is the minimum recommended**. The first launch downloads about 43 GiB of required model files (108 GiB if you enable Ingredients) and needs extra space to complete safely.
 
 1. **Create or sign in to Hugging Face.** Go to [huggingface.co/join](https://huggingface.co/join). Use the account that will receive model access.
 2. **Create a read token.** Open [Hugging Face access tokens](https://huggingface.co/settings/tokens), choose **Create new token**, select **Read**, and copy the token. Keep it private.
@@ -18,7 +18,7 @@ Do these steps before starting your first Pod. The template defaults to a **200 
    Approvals are separate. Make sure you have access to each repository before launching.
 4. **Add the token to RunPod Secrets.** In RunPod, open **Settings → Secrets** and create a secret named exactly `HUGGINGFACE_TOKEN`. Paste the token as its value. The template connects this secret automatically; never put the token in a public field.
 5. **Launch the template.** Choose **LTX 2.5 Distilled ComfyUI Video One-Click**, select an NVIDIA GPU (A100 80 GB is recommended), and keep the container disk at its **200 GB default**. If you change it, select **at least 150 GB**. No persistent volume is used.
-6. **Wait for setup to finish.** First launch downloads about 108 GiB of models. Open the Pod's **Logs** tab and wait until it says ComfyUI is ready. Do not stop the Pod while files are downloading.
+6. **Wait for setup to finish.** First launch downloads about 43 GiB of models (more if Ingredients is enabled). Open the Pod's **Logs** tab and wait until it says ComfyUI is ready. Do not stop the Pod while files are downloading.
 7. **Open ComfyUI.** In the Pod's **Connect** tab, click the HTTP service for port **8188 / ComfyUI**. The workflows are installed automatically; Image to Video opens first.
 
 The container disk is temporary, so download videos you want to keep before stopping or replacing the Pod, or configure optional S3 backup. If startup says a repository is gated, approve that exact repository using the same Hugging Face account as your token. If the token is missing, check that the RunPod Secret is named `HUGGINGFACE_TOKEN`. See [the template guide](config/runpod-template.md) for settings and optional backup details.
@@ -78,7 +78,7 @@ The standard video defaults are 30 seconds, 24 fps, 721 frames, 16:9, and 0.5 me
 
 ### Model downloads and storage
 
-Startup downloads the original v9 filmmaker workflow's INT8 ConvRot models and the Ingredients BF16 checkpoints/IC-LoRA. Other model files, including the separate BF16 prompt-enhancement encoder, are optional. The table lists approximate on-disk sizes reported by a successful RunPod A100 first launch; Hugging Face metadata and filesystem rounding can cause small differences. The core workflow set is about **43.18 GiB**, Ingredients adds **64.81 GiB**, and the default set totals about **107.99 GiB**. The optional BF16 prompt-enhancement encoder adds **9.57 GiB**. The template uses a **200 GB container disk** for the default model set, download headroom, temporary cache, and outputs. Do not stop startup preflight by deleting model files.
+Startup downloads the INT8 ConvRot models shared by workflows 01–06. The Ingredients BF16 checkpoints/IC-LoRA are opt-in (`AUTO_DOWNLOAD_ADAPTERS=true` or `scripts/download-ingredients-models.sh`), and the separate BF16 prompt-enhancement encoder is optional. The table lists approximate on-disk sizes reported by a successful RunPod A100 first launch; Hugging Face metadata and filesystem rounding can cause small differences. The core workflow set is about **43.18 GiB**, Ingredients adds **64.81 GiB** when enabled, for about **107.99 GiB** with both. The optional BF16 prompt-enhancement encoder adds **9.57 GiB**. The template uses a **200 GB container disk** for the default model set, download headroom, temporary cache, and outputs. Do not stop startup preflight by deleting model files.
 
 | Group | ComfyUI model folder | SafeTensors file | Download size |
 |---|---|---|---:|
@@ -94,7 +94,7 @@ Startup downloads the original v9 filmmaker workflow's INT8 ConvRot models and t
 | Ingredients | `loras/` | `ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors` | 1.22 GiB |
 | Optional | `text_encoders/` | `gemma4_e2b_it_bf16.safetensors` | 9.57 GiB |
 
-The default startup total is Core + Ingredients; the optional file is not needed by the default filmmaker workflows. Selecting all declared files brings the total to about **117.56 GiB**.
+The default startup total is Core only; Ingredients is opt-in and the optional file is not needed by the default filmmaker workflows. Selecting all declared files brings the total to about **117.56 GiB**.
 
 Optional Hugging Face downloads can be run from the Pod's SSH or terminal session; the `HF_TOKEN` RunPod Secret is used automatically and should not be passed on the command line:
 
@@ -126,7 +126,9 @@ The public template recommends an **NVIDIA A100 80 GB**, uses a 200 GB temporary
 | `LTX_DEFAULT_MEGAPIXELS` | `0.5` | Starting video resolution budget. |
 | `LTX_DEFAULT_ASPECT_RATIO` | `16:9` | Supported values include 16:9, 9:16, 4:3, 1:1, and 21:9. |
 | `AUTO_DOWNLOAD_MODELS` | `true` | Provision missing default model files at startup. |
-| `AUTO_DOWNLOAD_ADAPTERS` | `true` | Include Ingredients BF16 checkpoints and IC-LoRA in default startup provisioning. Set false to defer that model group. |
+| `AUTO_DOWNLOAD_ADAPTERS` | `false` | Include Ingredients BF16 checkpoints and IC-LoRA (65 GiB) in startup provisioning. Only workflow 07 needs them. |
+| `MODEL_DOWNLOAD_WORKERS` | `3` | Number of model files downloaded concurrently. |
+| `COMFYUI_ATTENTION` | `sage` | `sage` uses SageAttention after a startup GPU check (falls back to PyTorch if it fails); `pytorch` forces PyTorch attention for comparison. |
 | `HF_HOME` | `/workspace/.cache/huggingface` | Persistent Hub cache location. |
 | `HF_TOKEN` | empty | Hugging Face read token for gated model downloads. |
 | `HUGGING_FACE_HUB_TOKEN` | empty | Alternate name for `HF_TOKEN`. `HF_TOKEN` takes precedence. |

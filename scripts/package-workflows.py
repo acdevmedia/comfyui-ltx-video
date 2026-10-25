@@ -45,6 +45,22 @@ def use_default_prompt_enhancer(data):
         return value
     replace(data)
 
+def use_int8_stack(data):
+    """Share the INT8 transformer/encoder with the video graphs so switching modes avoids a BF16 reload."""
+    swaps={
+        'ltx-2.5-22b-distilled-transformer-bf16.safetensors':'ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors',
+        'gemma4-12b-with-proj-ltx-2.5-bf16.safetensors':'gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors',
+    }
+    def replace(value):
+        if isinstance(value,dict):
+            for key,item in value.items(): value[key]=replace(item)
+        elif isinstance(value,list):
+            for index,item in enumerate(value): value[index]=replace(item)
+        elif isinstance(value,str):
+            for old,new in swaps.items(): value=value.replace(old,new)
+        return value
+    replace(data)
+
 def main():
     master=read(WORK/'LTX25_Filmmaker_Workflow_v9_Advanced.json')
     i2v=copy.deepcopy(master); rename(i2v,'Image to Video — Filmmaker'); set_duration(i2v)
@@ -100,7 +116,7 @@ def main():
             if n.get('type')=='PrimitiveBoolean' and 'prompt enhance' in n.get('title','').lower(): n['widgets_values']=[False]
     write('03_LTX25_First_Last_Frame.json',flf)
 
-    a2v=read(REF/'LTX-2.5_A2V_Two_Stage_Distilled.json'); rename(a2v,'Audio to Video — Filmmaker'); set_duration(a2v); use_default_prompt_enhancer(a2v)
+    a2v=read(REF/'LTX-2.5_A2V_Two_Stage_Distilled.json'); rename(a2v,'Audio to Video — Filmmaker'); set_duration(a2v); use_default_prompt_enhancer(a2v); use_int8_stack(a2v)
     for n in a2v['nodes']:
         if n.get('type')=='LoadImage': n['widgets_values']=['','image']; n['title']='Optional Opening Frame'
         if n.get('type')=='LoadAudio': n['title']='Source Audio — Preserved in Final Video'
@@ -108,7 +124,7 @@ def main():
         if n.get('id')==2004: n['title']='Optional Opening Frame'
     write('04_LTX25_Audio_to_Video.json',a2v)
 
-    t2a=read(REF/'LTX-2.5_T2A_Single_Stage_Distilled.json'); rename(t2a,'Text to Audio — Sound Designer'); set_duration(t2a); use_default_prompt_enhancer(t2a)
+    t2a=read(REF/'LTX-2.5_T2A_Single_Stage_Distilled.json'); rename(t2a,'Text to Audio — Sound Designer'); set_duration(t2a); use_default_prompt_enhancer(t2a); use_int8_stack(t2a)
     # The upstream nested graph has two root links aimed at the wrong input
     # slots: the text encoder is sent to ckpt_path, and the enhancer to
     # text_encoder. Keep the visible input declarations and actual links in
