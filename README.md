@@ -127,7 +127,7 @@ ComfyUI saves output under `/workspace/ComfyUI/output/`. The **Videos & Audio** 
 
 ## Build, test, and publish
 
-The recommended image build is GitHub Actions; this avoids requiring a local NVIDIA GPU or a large local Docker disk. The workflow in `.github/workflows/build-ghcr.yml` runs CPU-only checks, reads the selected profile, builds a Linux/amd64 image, and pushes it to GHCR using the repository-scoped `GITHUB_TOKEN`. No Hugging Face, AWS, or personal package token is passed to the build.
+The recommended image build is GitHub Actions; this avoids requiring a local NVIDIA GPU or a large local Docker disk. The workflow in `.github/workflows/build-ghcr.yml` runs CPU-only checks, reads the selected profile, builds a Linux/amd64 image, and pushes it to GHCR. GHCR publishing uses the encrypted repository Actions secret `GHCR_PACKAGES_PAT` because this package has separate granular access permissions. The token is used only for registry authentication; it is not passed to Docker build steps or stored in image layers. Hugging Face and S3 credentials are never used by the image build.
 
 To start a build after this repository change is committed and pushed:
 
