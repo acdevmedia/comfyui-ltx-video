@@ -2,9 +2,9 @@
 
 ## Build and publish with GitHub Actions
 
-`.github/workflows/build-ghcr.yml` runs CPU-only checks, reads `versions/<id>/profile.json`, builds a `linux/amd64` image, and pushes the version tag (for example, `2.5`) using the encrypted `GHCR_PACKAGES_PAT` Actions secret. Source it from the local `GITHUB_PACKAGES_PAT` in `.env`; the token is used only for registry login, never passed into Docker build or stored in image layers. Hugging Face, AWS, and RunPod credentials are not used by image builds.
+`.github/workflows/build-ghcr.yml` runs CPU-only checks, reads `versions/<id>/profile.json`, builds a `linux/amd64` image, and pushes a version tag using the encrypted `GHCR_PACKAGES_PAT` Actions secret. The optional `image_tag` input lets container maintenance releases (such as `2.5.1`) retain the same model profile (`ltx-2.5`). Source the secret from the local `GITHUB_PACKAGES_PAT` in `.env`; the token is used only for registry login, never passed into Docker build or stored in image layers. Hugging Face, AWS, and RunPod credentials are not used by image builds.
 
-Commit and push the project changes, then choose **Actions → Build and publish LTX Studio image → Run workflow**. Use profile `ltx-2.5` to publish `ghcr.io/acdevmedia/ltx-studio:2.5`. A pushed `v*` Git tag also publishes that release tag and `latest`; use `latest` only for verified releases. Check the build logs and package digest in GHCR. Set the `ltx-studio` package visibility to **Public** for anonymous RunPod pulls.
+Commit and push the project changes, then choose **Actions → Build and publish LTX Studio image → Run workflow**. Use profile `ltx-2.5` and image tag `2.5.1` to publish `ghcr.io/acdevmedia/ltx-studio:2.5.1`. The optional image tag separates container maintenance releases from the packaged LTX model profile. A pushed `v*` Git tag also publishes that release tag and `latest`; use `latest` only for verified releases. Check the build logs and package digest in GHCR. Set the `ltx-studio` package visibility to **Public** for anonymous RunPod pulls.
 
 The workflow requires the repository Actions secret `GHCR_PACKAGES_PAT`, set from `GITHUB_PACKAGES_PAT` in the maintainer's ignored `.env` using GitHub's encrypted secret API or repository settings. Never put the token in source, workflow YAML, a build argument, or an image layer.
 
@@ -28,7 +28,7 @@ VERSION=2026.10.24 ./scripts/publish-ghcr.sh
 
 ## RunPod template
 
-Create/update the template named **LTX 2.5 Distilled ComfyUI Video One-Click** using the versioned image `ghcr.io/acdevmedia/ltx-studio:2.5`. It has a 200 GB container disk, zero persistent volume, an empty start command, no registry credentials, HTTP ports 8188/8888/8675, TCP ports 22/8080, and UDP ports 22/8080. The request body is versioned in `config/runpod-template.json`; `scripts/create-runpod-template.py` verifies anonymous GHCR pull access and creates or updates it. Add Hugging Face and optional S3 values through RunPod Secrets. Never bake credentials into the image.
+Create/update the template named **LTX 2.5 Distilled ComfyUI Video One-Click** using the versioned image `ghcr.io/acdevmedia/ltx-studio:2.5.1`. It has a 200 GB container disk, zero persistent volume, an empty start command, no registry credentials, HTTP ports 8188/8888/8675, TCP ports 22/8080, and UDP ports 22/8080. The request body is versioned in `config/runpod-template.json`; `scripts/create-runpod-template.py` verifies anonymous GHCR pull access and creates or updates it. Add Hugging Face and optional S3 values through RunPod Secrets. Never bake credentials into the image.
 
 Choose **A100 80GB** for the target profile. Use H100/H200 or other CUDA cards only after checking workflow VRAM and kernel compatibility. The 200 GB container disk is temporary; model downloads and outputs do not survive Pod replacement. Enable S3 backup or download needed outputs before stopping the Pod.
 
@@ -38,6 +38,7 @@ Choose **A100 80GB** for the target profile. Use H100/H200 or other CUDA cards o
 - S3 backup reports missing credentials: create RunPod Secrets `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, set `S3_BUCKET`, and confirm the template's `RUNPOD_SECRET_*` references resolve. Generation continues while backup is skipped.
 - Missing nodes: inspect `/workspace/logs/comfyui.log` for import failures and compare node repositories to the pinned build revisions.
 - CUDA unavailable: check the RunPod GPU selection and NVIDIA runtime logs.
+- RunPod Connect link returns 403 on image `2.5`: paste the proxy URL into a fresh blank tab as a temporary workaround. The `2.5.1` image allows only cross-site top-level GET navigation to `/`; cross-site API calls remain rejected.
 - Out of memory or excessive runtime: first reduce duration, base resolution, or decode tile size; measure the exact GPU/workflow combination before changing precision or installing acceleration packages.
 - ComfyUI is healthy but output preview is empty: inspect the workflow's `SaveVideo`/`SaveAudio` node and `/workspace/ComfyUI/output/`.
 

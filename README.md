@@ -160,18 +160,18 @@ ComfyUI saves output under `/workspace/ComfyUI/output/`. The **Videos & Audio** 
 
 ## Build, test, and publish
 
-The recommended image build is GitHub Actions; this avoids requiring a local NVIDIA GPU or a large local Docker disk. The workflow in `.github/workflows/build-ghcr.yml` runs CPU-only checks, reads the selected profile, builds a Linux/amd64 image, and publishes the profile version tag, such as `ghcr.io/acdevmedia/ltx-studio:2.5`. It uses the encrypted `GHCR_PACKAGES_PAT` Actions secret sourced from the local `GITHUB_PACKAGES_PAT`; the credential is used only for GHCR registry authentication and never enters Docker build layers. Hugging Face and S3 credentials are never used by the image build.
+The recommended image build is GitHub Actions; this avoids requiring a local NVIDIA GPU or a large local Docker disk. The workflow in `.github/workflows/build-ghcr.yml` runs CPU-only checks, reads the selected LTX profile, builds a Linux/amd64 image, and publishes a versioned image tag. The current RunPod template uses `ghcr.io/acdevmedia/ltx-studio:2.5.1` (LTX-2.5 profile). It uses the encrypted `GHCR_PACKAGES_PAT` Actions secret sourced from the local `GITHUB_PACKAGES_PAT`; the credential is used only for GHCR registry authentication and never enters Docker build layers. Hugging Face and S3 credentials are never used by the image build.
 
 To start a build after this repository change is committed and pushed:
 
-- Use **Actions → Build and publish LTX Studio image → Run workflow** with profile `ltx-2.5` to publish `ghcr.io/acdevmedia/ltx-studio:2.5`.
+- Use **Actions → Build and publish LTX Studio image → Run workflow** with profile `ltx-2.5` and image tag `2.5.1` to publish `ghcr.io/acdevmedia/ltx-studio:2.5.1`.
 - Push a release tag such as `v2.5.0` after the chosen validation gate. The tag build pushes `2.5`, `v2.5.0`, and `latest` after the CPU checks pass.
 - Check the workflow run and package digest in GHCR. Make `ghcr.io/acdevmedia/ltx-studio` public in package settings before RunPod anonymous pulls.
 
 After the versioned image is anonymously pullable from GHCR, create or update the public RunPod template from `config/runpod-template.json`:
 
 ```bash
-python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx-studio:2.5
+python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx-studio:2.5.1
 ```
 
 The helper reads `RUNPOD_API_KEY` from the shell or ignored `.env`, verifies anonymous GHCR pulls, and applies labeled ports and the complete environment list. Replace placeholder values with RunPod Secrets where appropriate.
@@ -199,6 +199,7 @@ See [release and deployment notes](docs/deployment.md). Do not label the image o
 ## Troubleshooting
 
 - **Missing or denied models:** accept the gated terms, confirm token read access, and inspect `/workspace/logs/startup.log`. Distinct messages identify missing token, denied access/gated acceptance, unavailable repository/file, network failure, and low disk.
+- **RunPod Connect opens ComfyUI with HTTP 403:** in image `2.5`, ComfyUI's built-in browser-origin guard rejects a dashboard-launched cross-site page navigation. As a temporary workaround, open a fresh blank tab and paste the full `https://<pod-id>-8188.proxy.runpod.net` URL into the address bar. Image `2.5.1` permits only that safe top-level page navigation; cross-site API and form requests remain blocked.
 - **ComfyUI does not become ready:** provisioning happens before ComfyUI starts. Read `startup.log` and `comfyui.log`; missing files or node import errors should be resolved before generation.
 - **CUDA unavailable:** select a CUDA NVIDIA GPU pod and verify the RunPod GPU runtime. This laptop has no NVIDIA card; local container generation has not been attempted.
 - **Out of GPU memory or slow render:** reduce resolution, duration, or decode workload. Record the GPU, graph, frame count, elapsed time, and peak memory before changing precision or adding acceleration libraries.
