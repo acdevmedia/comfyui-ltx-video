@@ -1,4 +1,4 @@
-# RunPod template: LTX 2.5 Distilled Video and one click
+# RunPod template: LTX 2.5 Distilled ComfyUI Video One-Click
 
 ## Template settings
 
@@ -20,7 +20,7 @@ These ports match the original ComfyUI template. HTTP 8188 serves ComfyUI. HTTP 
 
 The checked-in template payload in `config/runpod-template.json` lists all environment keys in ascending alphabetical order. Add sensitive values through RunPod Secrets. Do not use registry credentials or a template start-command override.
 
-For gated model downloads, supply `HF_TOKEN` with an account that has accepted the LTX-2.5 model terms. `HUGGING_FACE_HUB_TOKEN` is an alternate token name; `HF_TOKEN` takes precedence.
+For gated model downloads, create a RunPod Secret named `HUGGINGFACE_TOKEN` with an account token that has accepted the LTX-2.5 model terms. The template references it as `{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}` for the `HF_TOKEN` variable. `HUGGING_FACE_HUB_TOKEN` is left empty as an optional alternate token name; `HF_TOKEN` takes precedence.
 
 The S3 fields default to DigitalOcean Spaces in SFO3:
 
@@ -31,9 +31,9 @@ The S3 fields default to DigitalOcean Spaces in SFO3:
 - `S3_SSE=none`
 - `REALTIME_BACKUP=false`
 
-Set `S3_BUCKET`, `S3_ACCESS_KEY_ID`, and `S3_SECRET_ACCESS_KEY`, then set `REALTIME_BACKUP=true` to enable real-time backup. All exposed backup configuration uses `S3_*` names, including for AWS S3. See [storage setup](../docs/storage.md) for AWS, DigitalOcean Spaces, and MinIO examples.
+Create RunPod Secrets named `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, set `S3_BUCKET`, then set `REALTIME_BACKUP=true` to enable real-time backup. The template references credential secrets with `{{ RUNPOD_SECRET_S3_ACCESS_KEY_ID }}` and `{{ RUNPOD_SECRET_S3_SECRET_ACCESS_KEY }}`. All exposed backup configuration uses `S3_*` names, including for AWS S3. See [storage setup](../docs/storage.md) for AWS, DigitalOcean Spaces, and MinIO examples.
 
-Jupyter is disabled by default. To enable it, set `ENABLE_JUPYTER=true` and a private `JUPYTER_TOKEN`. The optional SSH public key uses `PUBLIC_KEY`.
+Jupyter is disabled by default. To enable it, set `ENABLE_JUPYTER=true` and create a RunPod Secret named `JUPYTER_TOKEN`. The optional SSH public key uses `PUBLIC_KEY`. `AI_TOOLKIT_AUTH` is also populated through a RunPod Secret.
 
 ## Create or update the RunPod template
 

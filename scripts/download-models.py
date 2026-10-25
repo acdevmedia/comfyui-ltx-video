@@ -17,6 +17,11 @@ def fail(message: str, code: int = 1) -> None:
     raise SystemExit(code)
 
 
+def usable_token(value: str | None) -> bool:
+    token = (value or "").strip()
+    return bool(token) and not token.startswith("{{ RUNPOD_SECRET_") and not token.startswith("YOUR_")
+
+
 def valid_local_file(path: Path) -> bool:
     if not path.is_file() or path.stat().st_size == 0:
         return False
@@ -41,9 +46,10 @@ def main() -> None:
         print(f"[models] All {len(models)} default model files are present.", flush=True)
         return
 
-    token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+    candidates = [os.environ.get("HF_TOKEN"), os.environ.get("HUGGING_FACE_HUB_TOKEN")]
+    token = next((value.strip() for value in candidates if usable_token(value)), None)
     if not token:
-        fail("A Hugging Face token is required to fetch missing gated model files. Set HF_TOKEN in the RunPod template, and accept the LTX-2.5 model terms on Hugging Face.", 20)
+        fail("Hugging Face authentication is missing or unresolved. In RunPod, create a Secret named HUGGINGFACE_TOKEN and make sure the template maps it to HF_TOKEN ({{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}). Accept the gated LTX-2.5 model terms for that account, then restart the Pod. No token value was logged.", 20)
 
     os.environ["HF_HOME"] = str(HF_HOME)
     try:

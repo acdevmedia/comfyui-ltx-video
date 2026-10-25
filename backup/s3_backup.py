@@ -23,6 +23,7 @@ class Config:
         self.settle=max(0,int(os.getenv('BACKUP_SETTLE_SECONDS','8')))
         self.recheck=max(10,int(os.getenv('BACKUP_RECHECK_SECONDS','120')))
         self.session_token=os.getenv('S3_SESSION_TOKEN','').strip()
+        if self.session_token.startswith('OPTIONAL_'): self.session_token=''
         self.access=os.getenv('S3_ACCESS_KEY_ID','').strip()
         self.secret=os.getenv('S3_SECRET_ACCESS_KEY','').strip()
         missing=[]
