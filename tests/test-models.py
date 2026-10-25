@@ -18,6 +18,6 @@ with tempfile.TemporaryDirectory() as temp:
     env.pop('HF_TOKEN',None); env.pop('HUGGING_FACE_HUB_TOKEN',None)
     result=subprocess.run([sys.executable,str(root/'scripts/download-models.py')],env=env,text=True,capture_output=True)
     assert result.returncode==20, result.stdout+result.stderr
-    assert 'Hugging Face token is required' in result.stderr
+    assert 'Hugging Face authentication is missing or unresolved' in result.stderr
     assert 'token=' not in result.stdout+result.stderr
 print('Missing-token provisioning diagnostic is distinct and does not expose a token.')
