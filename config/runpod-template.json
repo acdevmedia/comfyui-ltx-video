@@ -16,7 +16,7 @@
     "AUTO_DOWNLOAD_MODELS": "true",
     "AUTO_DOWNLOAD_ADAPTERS": "true",
     "HF_HOME": "/workspace/.cache/huggingface",
-    "HF_TOKEN": "",
+    "HF_TOKEN": "YOUR_HUGGING_FACE_TOKEN",
     "HUGGING_FACE_HUB_TOKEN": "",
     "REALTIME_BACKUP": "false",
     "AWS_ACCESS_KEY_ID": "",

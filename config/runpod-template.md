@@ -22,7 +22,7 @@ Add secrets using RunPod's environment/secret interface; never add secret values
 
 Required for first gated download:
 
-- `HF_TOKEN` (or `HUGGING_FACE_HUB_TOKEN`)
+- Replace the visible `HF_TOKEN` value `YOUR_HUGGING_FACE_TOKEN` with your Hugging Face token. Mark it as a secret in RunPod. `HUGGING_FACE_HUB_TOKEN` is also accepted if you prefer that name.
 
 Defaults:
 

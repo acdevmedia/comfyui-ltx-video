@@ -64,7 +64,7 @@ See [workflow details](docs/workflows.md), [adapter compatibility](docs/adapters
 Recommended initial target: **NVIDIA A100 80 GB**. H100/H200 and RTX PRO GPUs may be suitable, but throughput, attention kernels, memory use, and compatibility must be checked for the chosen graph. This repository has not verified generation on any GPU yet.
 
 1. Sign in to Hugging Face and accept the gated LTX-2.5 model terms for the account used by your token.
-2. Select the published image `ghcr.io/acdevmedia/ltx-studio:2.5` in RunPod.
+2. Select **ACDEV LTX-2.5 Studio**. Replace the `HF_TOKEN` placeholder with your Hugging Face token and mark it secret in RunPod before starting the Pod.
 3. Attach persistent storage at `/workspace`. Plan for about **200 GB minimum / 250 GB recommended** for this profile's INT8 and BF16 weights, Hugging Face cache, outputs, and headroom. Confirm actual model sizes during release validation.
 4. Add `HF_TOKEN` in RunPod's environment/secret interface. The alias `HUGGING_FACE_HUB_TOKEN` is also accepted.
 5. Optionally add S3 variables and set `REALTIME_BACKUP=true`.
