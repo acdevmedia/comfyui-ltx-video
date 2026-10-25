@@ -28,7 +28,7 @@ VERSION=2026.10.24 ./scripts/publish-ghcr.sh
 
 ## RunPod template
 
-Create/update the template named **LTX 2.5 Distilled ComfyUI Video One-Click** using the versioned image `ghcr.io/acdevmedia/ltx-studio:2.5`. It has a 200 GB container disk, zero persistent volume, an empty start command, no registry credentials, HTTP ports 8188/8888/8675, TCP ports 22/8080, and UDP ports 22/8080. The request body is versioned in `config/runpod-template.json`; `scripts/create-runpod-template.py` verifies anonymous GHCR pull access and creates or updates it. Add Hugging Face and optional S3 values through RunPod Secrets. Never bake credentials into the image.
+Create/update the template named **LTX 2.5 Distilled ComfyUI Video One-Click** using the versioned image `ghcr.io/acdevmedia/ltx-studio:2.5`. It has a 200 GB container disk, zero persistent volume, an empty start command, no registry credentials, and only HTTP port 8188 for ComfyUI. RunPod provides the browser-based Web terminal from the Pod Connect tab without requiring an exposed app port. Jupyter, SSH, and legacy file-manager ports are not exposed. The request body is versioned in `config/runpod-template.json`; `scripts/create-runpod-template.py` verifies anonymous GHCR pull access and creates or updates it. Add Hugging Face and optional S3 values through RunPod Secrets. Never bake credentials into the image.
 
 Choose **A100 80GB** for the target profile. Use H100/H200 or other CUDA cards only after checking workflow VRAM and kernel compatibility. The 200 GB container disk is temporary; model downloads and outputs do not survive Pod replacement. Enable S3 backup or download needed outputs before stopping the Pod.
 

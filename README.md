@@ -110,7 +110,7 @@ See [workflow details](docs/workflows.md), [adapter compatibility](docs/adapters
 
 ## RunPod template and advanced setup
 
-The public template recommends an **NVIDIA A100 80 GB**, uses a 200 GB temporary container disk, and has no persistent volume. H100/H200 and RTX PRO GPUs may work, but performance and compatibility vary. Startup provisions models and workflows automatically; no terminal commands, manual downloads, workflow imports, or ComfyUI restarts are required. The template exposes HTTP `8188`, `8888`, `8675`, TCP `22`, `8080`, and UDP `22`, `8080`. Jupyter is disabled by default. See [the template guide](config/runpod-template.md) for the full settings and [.env.example](.env.example) for configuration names. Never commit or share secret values.
+The public template recommends an **NVIDIA A100 80 GB**, uses a 200 GB temporary container disk, and has no persistent volume. H100/H200 and RTX PRO GPUs may work, but performance and compatibility vary. Startup provisions models and workflows automatically; no terminal commands, manual downloads, workflow imports, or ComfyUI restarts are required. The template exposes only HTTP `8188` for ComfyUI. RunPod provides its browser-based Web terminal directly from the Pod Connect tab, with no additional app port. Jupyter, SSH, and legacy file-manager ports are not exposed. See [the template guide](config/runpod-template.md) for the full settings and [.env.example](.env.example) for configuration names. Never commit or share secret values.
 
 ## Environment variables
 
@@ -136,10 +136,10 @@ The public template recommends an **NVIDIA A100 80 GB**, uses a 200 GB temporary
 
 | Variable | Default | Purpose |
 |---|---:|---|
-| `ENABLE_JUPYTER` | `false` | Enable Jupyter on port 8888. |
-| `JUPYTER_TOKEN` | empty | Required if Jupyter is enabled. |
-| `PUBLIC_KEY` | empty | Optional SSH authorized key; SSH server is started only when supplied. |
-| `AI_TOOLKIT_AUTH` | RunPod secret reference | Preserved from the upstream template for its optional AI Toolkit service. |
+| `ENABLE_JUPYTER` | `false` | Optional for custom deployments; Jupyter is not exposed by the standard RunPod template. |
+| `JUPYTER_TOKEN` | empty | Required only when Jupyter is enabled in a custom deployment. |
+| `PUBLIC_KEY` | empty | Optional SSH key for custom deployments; the standard template uses RunPod Web terminal instead. |
+| `AI_TOOLKIT_AUTH` | empty | Optional upstream AI Toolkit authentication; not used by the standard template. |
 
 ### S3-compatible output backup
 

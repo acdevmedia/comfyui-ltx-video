@@ -6,18 +6,15 @@
   "dockerEntrypoint": [],
   "dockerStartCmd": [],
   "env": {
-    "AI_TOOLKIT_AUTH": "{{ RUNPOD_SECRET_AI_TOOLKIT_AUTH }}",
     "AUTO_DOWNLOAD_ADAPTERS": "true",
     "AUTO_DOWNLOAD_MODELS": "true",
     "BACKUP_RECHECK_SECONDS": "120",
     "BACKUP_SETTLE_SECONDS": "8",
     "BACKUP_SOURCE_DIR": "/workspace/ComfyUI/output",
     "COMFYUI_PORT": "8188",
-    "ENABLE_JUPYTER": "false",
     "HF_HOME": "/workspace/.cache/huggingface",
     "HF_TOKEN": "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}",
     "HUGGING_FACE_HUB_TOKEN": "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}",
-    "JUPYTER_TOKEN": "{{ RUNPOD_SECRET_JUPYTER_TOKEN }}",
     "LOG_LEVEL": "INFO",
     "LTX_DEFAULT_ASPECT_RATIO": "16:9",
     "LTX_DEFAULT_DURATION": "30",
@@ -26,7 +23,6 @@
     "LTX_DEFAULT_WORKFLOW": "01_LTX25_Image_to_Video",
     "LTX_MODEL_VARIANT": "int8-convrot",
     "LTX_VERSION": "ltx-2.5",
-    "PUBLIC_KEY": "OPTIONAL_SSH_PUBLIC_KEY",
     "REALTIME_BACKUP": "false",
     "S3_ACCESS_KEY_ID": "{{ RUNPOD_SECRET_S3_ACCESS_KEY_ID }}",
     "S3_BUCKET": "YOUR_BUCKET",
@@ -43,22 +39,10 @@
   "isPublic": true,
   "isServerless": false,
   "ports": [
-    "8188/http",
-    "8888/http",
-    "8675/http",
-    "22/tcp",
-    "8080/tcp",
-    "22/udp",
-    "8080/udp"
+    "8188/http"
   ],
   "portLabels": {
-    "8188/http": "ComfyUI",
-    "8888/http": "JupyterLab (optional)",
-    "8675/http": "Reserved legacy port",
-    "22/tcp": "SSH",
-    "8080/tcp": "File and proxy access",
-    "22/udp": "SSH over UDP",
-    "8080/udp": "Port 8080 over UDP"
+    "8188/http": "ComfyUI"
   },
-  "readme": "# LTX 2.5 Distilled ComfyUI Video One-Click\n\n## Quick start\n1. Create/sign in to Hugging Face: https://huggingface.co/join\n2. Create a Read token: https://huggingface.co/settings/tokens\n3. While signed in to that account, open and accept access terms for each required repository: Lightricks/LTX-2.5, Comfy-Org/gemma-4, and Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients. Approval is separate for each model/LoRA.\n4. In RunPod Settings → Secrets, create `HUGGINGFACE_TOKEN` and paste the token as its value. The template supplies it automatically to model downloads. Keep the token private.\n5. Launch this template on an NVIDIA GPU (A100 80 GB recommended). Container disk defaults to 200 GB; use at least 150 GB if changing it. First launch downloads about 108 GiB of models.\n6. Wait for the logs to say ComfyUI is ready, then open Connect → HTTP 8188 / ComfyUI. Workflows install automatically.\n\nIf the logs report gated access, accept the terms for that exact repository using the same Hugging Face account as your token. This template has no persistent volume; download videos before stopping or replacing the Pod, or configure S3 backup. No terminal commands or manual model downloads are required."
+  "readme": "# LTX 2.5 Distilled ComfyUI Video One-Click\n\n## Quick start\n1. Create/sign in to Hugging Face: https://huggingface.co/join\n2. Create a Read token: https://huggingface.co/settings/tokens\n3. While signed in to that account, open and accept access terms for each required repository: Lightricks/LTX-2.5, Comfy-Org/gemma-4, and Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients. Approval is separate for each model/LoRA.\n4. In RunPod Settings → Secrets, create `HUGGINGFACE_TOKEN` and paste the token as its value. The template supplies it automatically to model downloads. Keep the token private.\n5. Launch this template on an NVIDIA GPU (A100 80 GB recommended). Container disk defaults to 200 GB; use at least 150 GB if changing it. First launch downloads about 108 GiB of models.\n6. Wait for the logs to say ComfyUI is ready, then open Connect → HTTP 8188 / ComfyUI. Use RunPod's built-in Web terminal in the Connect tab for a shell.\n\nIf the logs report gated access, accept the terms for that exact repository using the same Hugging Face account as your token. This template exposes only HTTP 8188 for ComfyUI; the built-in Web terminal is provided by RunPod and needs no exposed application port. This template has no persistent volume; download videos before stopping or replacing the Pod, or configure S3 backup."
 }

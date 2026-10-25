@@ -23,11 +23,10 @@ The first launch downloads about **108 GiB** of models. If logs say a repository
 | Persistent volume | None |
 | Start command | Empty |
 | Registry credentials | None |
-| HTTP ports | 8188, 8888, 8675 |
-| TCP ports | 22, 8080 |
-| UDP ports | 22, 8080 |
+| Exposed application port | HTTP 8188 (ComfyUI) |
+| RunPod Web terminal | Available from the Pod Connect tab; no application port required |
 
-The template payload lists environment fields in alphabetical order. Hugging Face and optional S3 credentials are passed through RunPod Secrets. The template does not need a manual login, installation script, model download, workflow import, or ComfyUI restart.
+The template exposes only HTTP 8188 for ComfyUI. RunPod provides its browser-based Web terminal in the Pod Connect tab; it does not need an exposed container port. JupyterLab, SSH, and the legacy file/proxy ports are not exposed by this template. The template payload lists its environment fields in alphabetical order. Hugging Face and optional S3 credentials are passed through RunPod Secrets. No manual login, installation script, model download, workflow import, or ComfyUI restart is needed.
 
 ## Storage estimate
 
@@ -37,4 +36,4 @@ The original INT8 ConvRot filmmaker workflow uses about 43.18 GiB. Ingredients a
 
 The template defaults to DigitalOcean Spaces in SFO3. Create RunPod Secrets named `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, set `S3_BUCKET`, then set `REALTIME_BACKUP=true`. Backup is off by default and does not block generation. See [storage setup](../docs/storage.md) for AWS, DigitalOcean Spaces, and MinIO.
 
-Jupyter is disabled by default. Optional access variables include `ENABLE_JUPYTER`, `JUPYTER_TOKEN`, `PUBLIC_KEY`, and `AI_TOOLKIT_AUTH`. See [deployment](../docs/deployment.md) for release and template maintenance.
+This standard template does not expose Jupyter, SSH, or the legacy file-manager service. See [deployment](../docs/deployment.md) for release and template maintenance.

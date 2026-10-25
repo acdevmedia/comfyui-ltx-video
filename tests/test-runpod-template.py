@@ -10,7 +10,10 @@ assert template["category"] == "NVIDIA" and template["isPublic"] is True
 assert template["isServerless"] is False
 assert template["containerDiskInGb"] == 200
 assert "volumeMountPath" not in template and "volumeInGb" not in template
-assert {"8188/http", "8888/http", "8675/http", "22/tcp", "8080/tcp", "22/udp", "8080/udp"}.issubset(template["ports"])
+assert template["ports"] == ["8188/http"]
+assert template["portLabels"] == {"8188/http": "ComfyUI"}
+assert not {"AI_TOOLKIT_AUTH", "ENABLE_JUPYTER", "JUPYTER_TOKEN", "PUBLIC_KEY"} & set(template["env"])
+assert "Web terminal" in template["readme"]
 assert template["env"]["HF_TOKEN"] == "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}"
 assert template["env"]["TINI_SUBREAPER"] == "1"
 assert template["env"]["S3_ACCESS_KEY_ID"] == "{{ RUNPOD_SECRET_S3_ACCESS_KEY_ID }}"
