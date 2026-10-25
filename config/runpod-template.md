@@ -1,12 +1,25 @@
 # RunPod template: LTX 2.5 Distilled ComfyUI Video One-Click
 
+## Quick start
+
+1. Create a Hugging Face account at [huggingface.co/join](https://huggingface.co/join), or sign in to your existing account.
+2. Create a **Read** access token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens). Copy it and keep it private.
+3. While signed into that same Hugging Face account, open each required repository and accept its access terms: [Lightricks/LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5), [Comfy-Org/gemma-4](https://huggingface.co/Comfy-Org/gemma-4), and [Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients](https://huggingface.co/Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients). Access approval is separate for each repository.
+4. In RunPod, open **Settings → Secrets**, create a secret named exactly `HUGGINGFACE_TOKEN`, and paste the Hugging Face token as its value. The template passes it to the model downloader automatically. Do not put the token in a public template field.
+5. Create a Pod from **LTX 2.5 Distilled ComfyUI Video One-Click**. Keep the container disk at its **200 GB default**. If you change it, use **at least 150 GB**. Choose an NVIDIA GPU; A100 80 GB is recommended.
+6. On first launch, wait for model downloads to finish and for the Pod logs to say ComfyUI is ready. Then open **Connect → HTTP service 8188 / ComfyUI**.
+
+The first launch downloads about **108 GiB** of models. If logs say a repository is gated, accept access to that exact repository using the account associated with the token. If they say the token is missing, verify the RunPod Secret name is `HUGGINGFACE_TOKEN`.
+
+**Storage is temporary:** this template has no persistent volume. Download outputs before stopping or replacing the Pod, or set up optional S3 backup.
+
 ## Template settings
 
 | Setting | Value |
 |---|---|
 | Container image | `ghcr.io/acdevmedia/ltx-studio:2.5` |
 | GPU | NVIDIA; A100 80 GB recommended |
-| Container disk | 200 GB |
+| Container disk | 200 GB default; 150 GB minimum recommended |
 | Persistent volume | None |
 | Start command | Empty |
 | Registry credentials | None |
@@ -14,36 +27,14 @@
 | TCP ports | 22, 8080 |
 | UDP ports | 22, 8080 |
 
-These ports match the original ComfyUI template. HTTP 8188 serves ComfyUI. HTTP 8888 is available if Jupyter is enabled. No persistent storage is configured: container files, models, cache, logs, and generated outputs can be lost when the Pod is stopped or replaced. Download outputs or configure S3 backup for durable copies.
+The template payload lists environment fields in alphabetical order. Hugging Face and optional S3 credentials are passed through RunPod Secrets. The template does not need a manual login, installation script, model download, workflow import, or ComfyUI restart.
 
-**Storage requirement:** The original INT8 ConvRot filmmaker workflow totals about 43.18 GiB. Ingredients adds about 64.81 GiB, making the default model set about 107.99 GiB before the 2 GiB downloader headroom. The optional BF16 prompt-enhancement encoder adds 9.57 GiB. The 200 GB container disk leaves working room for temporary cache and generated files. No persistent volume is allocated. See the README for the per-file size table.
+## Storage estimate
 
-## Environment variables
+The original INT8 ConvRot filmmaker workflow uses about 43.18 GiB. Ingredients adds about 64.81 GiB, for a default download of about 107.99 GiB before temporary download/cache overhead. The optional BF16 prompt-enhancement encoder adds 9.57 GiB. The 200 GB default leaves room for downloads and generated files; do not reduce the container disk below 150 GB. The README has the per-file size table.
 
-The checked-in template payload in `config/runpod-template.json` lists all environment keys in ascending alphabetical order. Add sensitive values through RunPod Secrets. Do not use registry credentials or a template start-command override.
+## Optional S3 backup
 
-For gated model downloads, create a RunPod Secret named `HUGGINGFACE_TOKEN` with an account token that has accepted the LTX-2.5 model terms. The template references it as `{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}` for the `HF_TOKEN` variable. `HUGGING_FACE_HUB_TOKEN` is left empty as an optional alternate token name; `HF_TOKEN` takes precedence.
+The template defaults to DigitalOcean Spaces in SFO3. Create RunPod Secrets named `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, set `S3_BUCKET`, then set `REALTIME_BACKUP=true`. Backup is off by default and does not block generation. See [storage setup](../docs/storage.md) for AWS, DigitalOcean Spaces, and MinIO.
 
-The S3 fields default to DigitalOcean Spaces in SFO3:
-
-- `S3_ENDPOINT_URL=https://sfo3.digitaloceanspaces.com`
-- `S3_REGION=sfo3`
-- `S3_PREFIX=ltx25-studio`
-- `S3_STORAGE_CLASS=STANDARD`
-- `S3_SSE=none`
-- `REALTIME_BACKUP=false`
-
-Create RunPod Secrets named `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, set `S3_BUCKET`, then set `REALTIME_BACKUP=true` to enable real-time backup. The template references credential secrets with `{{ RUNPOD_SECRET_S3_ACCESS_KEY_ID }}` and `{{ RUNPOD_SECRET_S3_SECRET_ACCESS_KEY }}`. All exposed backup configuration uses `S3_*` names, including for AWS S3. See [storage setup](../docs/storage.md) for AWS, DigitalOcean Spaces, and MinIO examples.
-
-Jupyter is disabled by default. To enable it, set `ENABLE_JUPYTER=true` and create a RunPod Secret named `JUPYTER_TOKEN`. The optional SSH public key uses `PUBLIC_KEY`. `AI_TOOLKIT_AUTH` is also populated through a RunPod Secret.
-
-## Create or update the RunPod template
-
-Publish `ghcr.io/acdevmedia/ltx-studio:2.5` first and verify that it can be pulled anonymously. The script reads `RUNPOD_API_KEY` from the environment or ignored `.env`. It refuses to publish a template if the exact image tag is not publicly pullable, and avoids duplicates unless `--update-existing` is supplied.
-
-```bash
-python3 scripts/create-runpod-template.py --dry-run
-python3 scripts/create-runpod-template.py --image ghcr.io/acdevmedia/ltx-studio:2.5 --update-existing
-```
-
-The template payload and the RunPod API update use no persistent volume, an empty start command, the port lists above, and no registry credentials. Set HF and optional S3 secrets in the RunPod UI after updating the template. See [deployment](../docs/deployment.md) for release validation.
+Jupyter is disabled by default. Optional access variables include `ENABLE_JUPYTER`, `JUPYTER_TOKEN`, `PUBLIC_KEY`, and `AI_TOOLKIT_AUTH`. See [deployment](../docs/deployment.md) for release and template maintenance.

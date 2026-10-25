@@ -2,7 +2,26 @@
 
 ACDEV LTX Studio is a versioned ComfyUI filmmaking environment packaged for RunPod and NVIDIA CUDA GPUs. The first supported profile is **LTX-2.5 Distilled**. It adapts the existing ValyrianTech ComfyUI Docker foundation and keeps the existing advanced LTX filmmaker workflow as the Image to Video starting point.
 
-The project is designed so another model generation can be added as a new profile, for example `versions/ltx-2.6/`, without mixing its checkpoint names, graph files, adapter rules, or dependency pins with 2.5. Runtime code and the container layout are shared; the selected profile supplies version-specific assets and pinned component revisions.
+The project is designed so another model generation can be added as a new profile, for example `versions/ltx-2.6/`, without mixing its checkpoint names, graph files, adapter rules, or dependency pins with 2.5. Runtime code and the container layout are shared; the selected profile supplies version-specific assets and pinned component revisions. A short-clip text-to-video smoke test passed on an A100 80 GB RunPod. Other workflows and the 30-second default still need separate performance validation.
+
+## Quick start for RunPod
+
+Do these steps before starting your first Pod. The template defaults to a **200 GB container disk**. Keep that size if possible; **150 GB is the minimum recommended**. The first launch downloads about 108 GiB of required model files and needs extra space to complete safely.
+
+1. **Create or sign in to Hugging Face.** Go to [huggingface.co/join](https://huggingface.co/join). Use the account that will receive model access.
+2. **Create a read token.** Open [Hugging Face access tokens](https://huggingface.co/settings/tokens), choose **Create new token**, select **Read**, and copy the token. Keep it private.
+3. **Agree to the terms for each required model.** While signed in to the same account, open each repository and click **Agree and access**, **Request access**, or the button shown there:
+   - [Lightricks LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5)
+   - [Comfy-Org Gemma 4](https://huggingface.co/Comfy-Org/gemma-4)
+   - [Lightricks Ingredients IC-LoRA](https://huggingface.co/Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients)
+
+   Approvals are separate. Make sure you have access to each repository before launching.
+4. **Add the token to RunPod Secrets.** In RunPod, open **Settings → Secrets** and create a secret named exactly `HUGGINGFACE_TOKEN`. Paste the token as its value. The template connects this secret automatically; never put the token in a public field.
+5. **Launch the template.** Choose **LTX 2.5 Distilled ComfyUI Video One-Click**, select an NVIDIA GPU (A100 80 GB is recommended), and keep the container disk at its **200 GB default**. If you change it, select **at least 150 GB**. No persistent volume is used.
+6. **Wait for setup to finish.** First launch downloads about 108 GiB of models. Open the Pod's **Logs** tab and wait until it says ComfyUI is ready. Do not stop the Pod while files are downloading.
+7. **Open ComfyUI.** In the Pod's **Connect** tab, click the HTTP service for port **8188 / ComfyUI**. The workflows are installed automatically; Image to Video opens first.
+
+The container disk is temporary, so download videos you want to keep before stopping or replacing the Pod, or configure optional S3 backup. If startup says a repository is gated, approve that exact repository using the same Hugging Face account as your token. If the token is missing, check that the RunPod Secret is named `HUGGINGFACE_TOKEN`. See [the template guide](config/runpod-template.md) for settings and optional backup details.
 
 ## Repository guide
 
@@ -28,7 +47,7 @@ The ignored local `.env` is only for local tooling. Do not commit it, put it in 
 
 ## Current version profile
 
-`versions/ltx-2.5/profile.json` is the source of truth for this profile. It pins the ComfyUI core and node repositories, Python package versions, Torch/CUDA combination, workflow list, default graph, and generation defaults. The profile also marks GPU execution as unverified until tested on RunPod.
+`versions/ltx-2.5/profile.json` is the source of truth for this profile. It pins the ComfyUI core and node repositories, Python package versions, Torch/CUDA combination, workflow list, default graph, and generation defaults. The short-clip A100 smoke test is not a full performance or seven-workflow validation; see the compatibility notes in the profile before relying on long clips or other modes.
 
 To add a future model generation:
 
@@ -89,22 +108,9 @@ The first command fetches the Ingredients model group, the second fetches only f
 
 See [workflow details](docs/workflows.md), [adapter compatibility](docs/adapters.md), and [official graph sources](LICENSES/WORKFLOW_REFERENCES.md).
 
-## RunPod launch
+## RunPod template and advanced setup
 
-Recommended initial target: **NVIDIA A100 80 GB**. H100/H200 and RTX PRO GPUs may be suitable, but throughput, attention kernels, memory use, and compatibility must be checked for the chosen graph. This repository has not verified generation on any GPU yet.
-
-1. Sign in to Hugging Face and accept the gated LTX-2.5 model terms for the account used by your token.
-2. Select **LTX 2.5 Distilled ComfyUI Video One-Click**. Create a RunPod Secret named `HUGGINGFACE_TOKEN`; the template injects it into `HF_TOKEN` using `{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}`.
-3. The template uses a 200 GB container disk and no persistent volume. Container files, models, and outputs are temporary and may be lost when the Pod is stopped or replaced. Download valuable outputs or enable S3 backup.
-4. The alternate `HUGGING_FACE_HUB_TOKEN` name is accepted if you prefer that variable.
-5. For backup, create RunPod Secrets named `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY`, set the bucket and other S3 variables, then set `REALTIME_BACKUP=true`.
-6. The template exposes HTTP `8188`, `8888`, `8675`, TCP `22`, `8080`, and UDP `22`, `8080`, matching the source ComfyUI template. Jupyter remains disabled by default. Start the pod and open ComfyUI after provisioning reaches readiness.
-
-> **Important: approve every gated model repository separately.** Accepting the LTX-2.5 base-model terms does not automatically grant access to the Ingredients IC-LoRA or any other gated adapter repository. Before launching, open each gated repository page while signed into the same Hugging Face account used for `HUGGINGFACE_TOKEN` and click **Agree and Access**. The required [Ingredients repository](https://huggingface.co/Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients) has its own access agreement. If provisioning reports that a repository is gated, accept that repository's terms and restart the Pod; the exact repository is shown in `/workspace/logs/startup.log`.
-
-There is no manual login, script run, model download, workflow import, or restart. Startup initializes `/workspace`, checks CUDA, downloads missing models, verifies workflows, then starts ComfyUI. On this no-volume template, models and outputs are not persistent across Pod replacement. Provisioning errors are written to `/workspace/logs/startup.log`.
-
-RunPod settings, ports, and environment recommendations are listed in [the template guide](config/runpod-template.md). The full configuration example is [.env.example](.env.example); copy its values into RunPod's UI individually, and leave secrets out of local and committed files.
+The public template recommends an **NVIDIA A100 80 GB**, uses a 200 GB temporary container disk, and has no persistent volume. H100/H200 and RTX PRO GPUs may work, but performance and compatibility vary. Startup provisions models and workflows automatically; no terminal commands, manual downloads, workflow imports, or ComfyUI restarts are required. The template exposes HTTP `8188`, `8888`, `8675`, TCP `22`, `8080`, and UDP `22`, `8080`. Jupyter is disabled by default. See [the template guide](config/runpod-template.md) for the full settings and [.env.example](.env.example) for configuration names. Never commit or share secret values.
 
 ## Environment variables
 
