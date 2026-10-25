@@ -14,6 +14,10 @@ for name in sorted(p.name for p in (version/'workflows').glob('0*.json')):
         blob=json.dumps(d)
         assert 'LTXAddVideoICLoRAGuide' in blob or 'Ingredients' in blob
         assert 'ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors' in blob
+    if name in ('04_LTX25_Audio_to_Video.json','05_LTX25_Text_to_Audio.json'):
+        blob=json.dumps(d)
+        assert 'gemma4_e2b_it_int8_convrot.safetensors' in blob, f'{name}: must use the default-downloaded prompt enhancer'
+        assert 'gemma4_e2b_it_bf16.safetensors' not in blob, f'{name}: must not require the optional BF16 prompt enhancer'
 print('Workflow JSON and mode-specific assertions passed.')
 with tempfile.TemporaryDirectory() as temp:
     temp=Path(temp); app=temp/'app'; (app/'workflows').mkdir(parents=True)

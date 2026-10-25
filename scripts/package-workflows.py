@@ -30,6 +30,21 @@ def rename(data, title):
     data.setdefault('extra',{})['acdev_studio']={'product':PRODUCT,'version':VERSION,'workflow':title}
     data['extra'].setdefault('ds',{})
 
+def use_default_prompt_enhancer(data):
+    """Use the INT8 Gemma enhancer that startup already provisions by default."""
+    old='gemma4_e2b_it_bf16.safetensors'
+    new='gemma4_e2b_it_int8_convrot.safetensors'
+    def replace(value):
+        if isinstance(value,dict):
+            for key,item in value.items(): value[key]=replace(item)
+        elif isinstance(value,list):
+            for index,item in enumerate(value): value[index]=replace(item)
+        elif isinstance(value,str):
+            value=value.replace(old,new)
+            value=value.replace('Google Gemma 4 E2B IT]', 'Google Gemma 4 E2B IT INT8 ConvRot (included in the default download)]')
+        return value
+    replace(data)
+
 def main():
     master=read(WORK/'LTX25_Filmmaker_Workflow_v9_Advanced.json')
     i2v=copy.deepcopy(master); rename(i2v,'Image to Video — Filmmaker'); set_duration(i2v)
@@ -85,7 +100,7 @@ def main():
             if n.get('type')=='PrimitiveBoolean' and 'prompt enhance' in n.get('title','').lower(): n['widgets_values']=[False]
     write('03_LTX25_First_Last_Frame.json',flf)
 
-    a2v=read(REF/'LTX-2.5_A2V_Two_Stage_Distilled.json'); rename(a2v,'Audio to Video — Filmmaker'); set_duration(a2v)
+    a2v=read(REF/'LTX-2.5_A2V_Two_Stage_Distilled.json'); rename(a2v,'Audio to Video — Filmmaker'); set_duration(a2v); use_default_prompt_enhancer(a2v)
     for n in a2v['nodes']:
         if n.get('type')=='LoadImage': n['widgets_values']=['','image']; n['title']='Optional Opening Frame'
         if n.get('type')=='LoadAudio': n['title']='Source Audio — Preserved in Final Video'
@@ -93,7 +108,7 @@ def main():
         if n.get('id')==2004: n['title']='Optional Opening Frame'
     write('04_LTX25_Audio_to_Video.json',a2v)
 
-    t2a=read(REF/'LTX-2.5_T2A_Single_Stage_Distilled.json'); rename(t2a,'Text to Audio — Sound Designer'); set_duration(t2a)
+    t2a=read(REF/'LTX-2.5_T2A_Single_Stage_Distilled.json'); rename(t2a,'Text to Audio — Sound Designer'); set_duration(t2a); use_default_prompt_enhancer(t2a)
     for n in t2a['nodes']:
         if n.get('type')=='PrimitiveFloat' and 'duration' in (n.get('title') or '').lower() and n.get('widgets_values'): n['widgets_values'][0]=30
     write('05_LTX25_Text_to_Audio.json',t2a)
