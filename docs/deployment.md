@@ -2,7 +2,7 @@
 
 ## Build and publish with GitHub Actions
 
-`.github/workflows/build-ghcr.yml` runs CPU-only checks, reads `versions/<id>/profile.json`, builds a `linux/amd64` image, and pushes it with the encrypted repository Actions secret `GHCR_PACKAGES_PAT`. This GHCR package has granular access settings that do not grant the repository's `GITHUB_TOKEN` package access. The PAT is used only for `docker login` and is never passed to Docker build or stored in image layers. Hugging Face, AWS, and RunPod credentials are not used by image builds.
+`.github/workflows/build-ghcr.yml` runs CPU-only checks, reads `versions/<id>/profile.json`, builds a `linux/amd64` image, and pushes it with the short-lived repository `GITHUB_TOKEN`. In the `ltx-studio` package settings, set visibility to **Public** and grant repository `acdevmedia/comfyui-ltx-video` **Write** access under **Manage Actions access**. This one-time package permission is required because GHCR package permissions are granular. Hugging Face, AWS, and RunPod credentials are not used by image builds.
 
 Commit and push the project changes, then choose **Actions → Build and publish LTX Studio image → Run workflow**. Use the profile ID `ltx-2.5` for this project. A manual run creates `ghcr.io/acdevmedia/ltx-studio:2.5` and an immutable `sha-<12 chars>` image. A pushed `v*` Git tag creates that release tag, the SHA tag, and `latest`; only tag releases that have passed the required release checks should be used for production. Check the build logs and package digest in GHCR. Set package visibility to **Public** if RunPod should pull anonymously.
 
