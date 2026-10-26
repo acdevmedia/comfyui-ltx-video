@@ -65,9 +65,11 @@ GPU testing showed that the sheet must be a real reference sheet, as the Ingredi
 
 Limits: five seconds (121 frames at 24 fps, 768x448) is the trained bucket; the performance is newly generated rather than copied from the clip; and it needs the BF16 Ingredients stack (`AUTO_DOWNLOAD_ADAPTERS=true`).
 
-## Regenerating 08-10
+## One-panel layout (07-10)
 
-`scripts/v2v_graphs.py` defines these three graphs in ComfyUI API format and can print a prompt for direct testing. The editable UI files in `archive/v2v-workflow-sources/` were produced from those definitions by the installed ComfyUI frontend (`app.loadApiJson`, then grouped and serialized), and each was checked to convert back to exactly the tested prompt. After changing a graph, repeat that conversion on a running Pod and re-run `scripts/package-workflows.py`.
+Ingredients, Extend After, Extend Before and New Angle use the same layout as Image to Video: the canvas shows only the inputs (your clip and/or image), one controls panel with plain-English fields, the Save node and the notes. Everything else (40-50 nodes) lives inside the panel, which is a ComfyUI subgraph; open it from its corner icon to edit the wiring.
+
+The editable files in `archive/v2v-workflow-sources/` are generator sources. For 08-10, `scripts/v2v_graphs.py` defines the graphs in API format: `g.control()` creates each panel field, with a pass-through inside the panel so that controls feeding arithmetic sockets still become fields and appear in a fixed order. On a running Pod, the ComfyUI frontend loads that prompt (`app.loadApiJson`), folds every node except the inputs, controls and Save into one subgraph (`rootGraph.convertToSubgraph`), turns each control into a labelled panel field, and serializes the result. Ingredients was folded the same way from its previous official-graph adaptation, with a Seed field added. Each panel was checked to produce exactly the prompt of the graph it replaced and was render-tested from the UI. After changing a graph, repeat that conversion and re-run `scripts/package-workflows.py`; `tests/test-workflows.py` fails if 07-10 show more than four non-note nodes on the canvas.
 
 ## Video decoding
 

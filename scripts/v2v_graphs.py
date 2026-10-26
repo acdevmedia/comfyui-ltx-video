@@ -2,7 +2,8 @@
 """Video-in, video-out LTX-2.5 graphs in ComfyUI API format.
 
 Each builder returns (prompt, layout): the API prompt ComfyUI executes, and a layout hint
-(node id -> group) used when the graph is converted into an editable UI workflow.
+(node id -> 'Panel' or 'Inside'). When the graph becomes a UI workflow, everything 'Inside' is folded
+into one subgraph and each 'Panel' control becomes a labelled field on it, in the order created.
 
   python3 scripts/v2v_graphs.py extend_after --video clip.mp4 > prompt.json
 """
@@ -21,7 +22,7 @@ NEGATIVE = ('blurry, out of focus, oversharpened, waxy skin, deformed faces, inc
             'identity drift, changing clothing, flicker, frame jitter, unwanted cuts, exposure pumping, inconsistent lighting, '
             'color shifts, CGI appearance, distorted voices, robotic speech, watermarks')
 
-GROUPS = ('Your Clip & Controls', 'Timing', 'Models', 'Prompt & Sound', 'Generate', 'Assemble & Save')
+PANEL, INSIDE = 'Panel', 'Inside'
 
 
 class Graph:
@@ -38,8 +39,17 @@ class Graph:
         self.layout[node_id] = group
         return Ref(node_id)
 
-    def math(self, expression, title, group='Timing', **values):
-        return self.add('ComfyMathExpression', group, title, expression=expression, **{f'values__{k}': v for k, v in values.items()})
+    def control(self, class_type, title, value):
+        """A labelled field on the workflow's panel; returns the pass-through node inside the panel.
+
+        The pass-through gives every control a typed field input, so it becomes a panel field even when it
+        only feeds a math socket, and fixes the order the fields appear in.
+        """
+        field = self.add(class_type, PANEL, title, value=value)
+        return self.add(class_type, INSIDE, title, value=field[0])
+
+    def math(self, expression, title, group=None, **values):
+        return self.add('ComfyMathExpression', group or INSIDE, title, expression=expression, **{f'values__{k}': v for k, v in values.items()})
 
 
 class Ref(str):
@@ -47,22 +57,18 @@ class Ref(str):
         return (str(self), slot)
 
 
-def _common(g, video_file, width, height, fit_clip=True):
-    c = 'Your Clip & Controls'
-    video = g.add('LoadVideo', c, 'Your Clip', file=video_file)
-    parts = g.add('GetVideoComponents', c, 'Split Clip into Frames, Sound and FPS', video=video[0])
-    w = g.add('PrimitiveInt', c, 'Width (multiple of 32)', value=width)
-    h = g.add('PrimitiveInt', c, 'Height (multiple of 32)', value=height)
-    frames = g.add('ImageScale', c, 'Fit Clip to Working Size', image=parts[0], upscale_method='lanczos', width=w[0], height=h[0], crop='center') if fit_clip else None
-    count = g.add('GetImageSize', 'Timing', 'Count Clip Frames', image=parts[0])
+def _clip_parts(g, video):
+    i = INSIDE
+    parts = g.add('GetVideoComponents', i, 'Split Clip into Frames, Sound and FPS', video=video[0])
+    count = g.add('GetImageSize', i, 'Count Clip Frames', image=parts[0])
     seconds = g.math('a / b', 'Clip Length (seconds)', a=count[2], b=parts[2])
-    silence = g.add('EmptyAudio', 'Prompt & Sound', 'Silence (if the clip has no sound)', duration=seconds[0], sample_rate=44100, channels=2)
-    sound = g.add('AudioMerge', 'Prompt & Sound', 'Clip Sound (or silence)', audio1=parts[1], audio2=silence[0], merge_method='add')
-    return parts, w, h, frames, sound
+    silence = g.add('EmptyAudio', i, 'Silence (if the clip has no sound)', duration=seconds[0], sample_rate=44100, channels=2)
+    sound = g.add('AudioMerge', i, 'Clip Sound (or silence)', audio1=parts[1], audio2=silence[0], merge_method='add')
+    return parts, sound
 
 
 def _sampler(g, model, positive, negative, latent, seed):
-    s = 'Generate'
+    s = INSIDE
     noise = g.add('RandomNoise', s, 'Noise', noise_seed=seed[0])
     sampler = g.add('KSamplerSelect', s, 'Sampler', sampler_name='euler_ancestral')
     sigmas = g.add('ManualSigmas', s, 'Distilled 8-Step Schedule', sigmas=DISTILLED_SIGMAS)
@@ -74,37 +80,41 @@ def _sampler(g, model, positive, negative, latent, seed):
 def extend(direction, video_file='', prompt=None, seconds=5.0, context_frames=25, width=1280, height=704, seed=42):
     """Continue a clip forwards ('after') or lead into it ('before'), conditioned on real frames from the clip."""
     assert direction in ('after', 'before')
-    g = Graph(); c = 'Your Clip & Controls'
-    parts, w, h, frames, sound = _common(g, video_file, width, height)
+    g = Graph()
+    video = g.add('LoadVideo', PANEL, 'Your Clip', file=video_file)
     default_prompt = (
         'Continue the shot naturally. [Describe what happens next: action, dialogue, camera.] Keep the same people, wardrobe, '
         'location, lighting and lens.' if direction == 'after' else
         '[Describe what happens just before the clip starts.] It leads straight into the opening of the original shot. Keep the '
         'same people, wardrobe, location, lighting and lens.')
-    text = g.add('PrimitiveStringMultiline', c, 'What Happens Next' if direction == 'after' else 'What Happens Before', value=prompt or default_prompt)
-    negative = g.add('PrimitiveStringMultiline', c, 'Negative Prompt (CFG 1.0: little/no effect)', value=NEGATIVE)
-    extra = g.add('PrimitiveFloat', c, 'Seconds to Add', value=seconds)
-    context = g.add('PrimitiveInt', c, 'Frames of Your Clip to Match (9, 17, 25, 33...)', value=context_frames)
-    seed_node = g.add('PrimitiveInt', c, 'Seed', value=seed)
+    text = g.control('PrimitiveStringMultiline', 'What Happens Next' if direction == 'after' else 'What Happens Before', prompt or default_prompt)
+    extra = g.control('PrimitiveFloat', 'Seconds to Add', seconds)
+    context = g.control('PrimitiveInt', 'Frames of Your Clip to Match (9, 17, 25, 33...)', context_frames)
+    w = g.control('PrimitiveInt', 'Width (multiple of 32)', width)
+    h = g.control('PrimitiveInt', 'Height (multiple of 32)', height)
+    seed_node = g.control('PrimitiveInt', 'Seed', seed)
+    negative = g.control('PrimitiveStringMultiline', 'Negative Prompt (CFG 1.0: little/no effect)', NEGATIVE)
+    parts, sound = _clip_parts(g, video)
+    frames = g.add('ImageScale', INSIDE, 'Fit Clip to Working Size', image=parts[0], upscale_method='lanczos', width=w[0], height=h[0], crop='center')
 
     n_context = g.math('max(9, 1 + floor((a - 1) / 8) * 8)', 'Context Frames (8n+1)', a=context[0])
     n_new = g.math('max(8, floor(a * b / 8) * 8)', 'New Frames (multiple of 8)', a=extra[0], b=parts[2])
     n_total = g.math('a + b', 'Frames to Generate', a=n_context[1], b=n_new[1])
     if direction == 'after':
-        context_frames_node = g.add('ImageFromBatch', 'Timing', 'Last Frames of Your Clip', image=frames[0],
+        context_frames_node = g.add('ImageFromBatch', INSIDE, 'Last Frames of Your Clip', image=frames[0],
                                     batch_index=g.math('-a', 'From the End', a=n_context[1])[1], length=n_context[1])
         guide_index, voice_start = 0, -5.0
     else:
-        context_frames_node = g.add('ImageFromBatch', 'Timing', 'First Frames of Your Clip', image=frames[0], batch_index=0, length=n_context[1])
+        context_frames_node = g.add('ImageFromBatch', INSIDE, 'First Frames of Your Clip', image=frames[0], batch_index=0, length=n_context[1])
         guide_index, voice_start = n_new[1], 0.0
 
-    m = 'Models'
+    m = INSIDE
     model = g.add('UNETLoader', m, 'LTX-2.5 Distilled (INT8)', unet_name=INT8_TRANSFORMER, weight_dtype='default')
     clip = g.add('CLIPLoader', m, 'Text Encoder (INT8)', clip_name=INT8_TEXT_ENCODER, type='ltxv', device='default')
     vae = g.add('VAELoader', m, 'Video Decoder (conv)', vae_name=CONV_VIDEO_VAE)
     audio_vae = g.add('VAELoader', m, 'Audio VAE', vae_name=AUDIO_VAE)
 
-    p = 'Prompt & Sound'
+    p = INSIDE
     pos = g.add('CLIPTextEncode', p, 'Encode Prompt', text=text[0], clip=clip[0])
     neg = g.add('CLIPTextEncode', p, 'Encode Negative Prompt', text=negative[0], clip=clip[0])
     cond = g.add('LTXVConditioning', p, 'Match Clip Frame Rate', positive=pos[0], negative=neg[0], frame_rate=parts[2])
@@ -113,7 +123,7 @@ def extend(direction, video_file='', prompt=None, seconds=5.0, context_frames=25
     voice_latent = g.add('VAEEncodeAudio', p, 'Encode Voice Reference', audio=voice[0], vae=audio_vae[0])
     voiced = g.add('LTXVSetAudioRefTokens', p, 'Keep the Same Voices', positive=cond[0], negative=cond[1], audio_latent=voice_latent[0])
 
-    s = 'Generate'
+    s = INSIDE
     empty = g.add('EmptyLTXVLatentVideo', s, 'Empty Video', width=w[0], height=h[0], length=n_total[1], batch_size=1)
     guided = g.add('LTXVAddGuide', s, 'Pin Your Clip\'s Frames in Place', positive=voiced[0], negative=voiced[1], vae=vae[0],
                    latent=empty[0], image=context_frames_node[0], frame_idx=guide_index, strength=1.0)
@@ -122,8 +132,9 @@ def extend(direction, video_file='', prompt=None, seconds=5.0, context_frames=25
     sep = _sampler(g, model[0], guided[0], guided[1], av[0], seed_node)
     cropped = g.add('LTXVCropGuides', s, 'Remove Guide Frames', positive=guided[0], negative=guided[1], latent=sep[0])
 
-    a = 'Assemble & Save'
-    decoded = g.add('VAEDecodeTiled', a, 'Decode Picture', samples=cropped[2], vae=vae[0], tile_size=512, overlap=64, temporal_size=64, temporal_overlap=16)
+    a = INSIDE
+    decoded = g.add('LTXVSpatioTemporalTiledVAEDecode', a, 'Decode Picture', vae=vae[0], latents=cropped[2], spatial_tiles=2, spatial_overlap=1,
+                    temporal_tile_length=16, temporal_overlap=1, last_frame_fix=False, working_device='auto', working_dtype='auto')
     new_audio = g.add('LTXVAudioVAEDecode', a, 'Decode Sound', samples=sep[1], audio_vae=audio_vae[0])
     new_seconds = g.math('a / b', 'New Section Length (s)', group=a, a=n_new[1], b=parts[2])
     if direction == 'after':
@@ -147,34 +158,37 @@ def new_angle(video_file='', sheet_file='', prompt=None, start=0.0, seconds=5.0,
     The Ingredients IC-LoRA needs a real reference sheet (clean panels on a plain background). Stills cut
     from the clip itself are reproduced as layout rather than used as reference, so the sheet is an input.
     """
-    g = Graph(); c = 'Your Clip & Controls'
-    parts, w, h, _, sound = _common(g, video_file, width, height, fit_clip=False)
-    sheet_image = g.add('LoadImage', c, 'Reference Sheet (cast, props, location)', image=sheet_file)
+    g = Graph()
+    video = g.add('LoadVideo', PANEL, 'Your Clip', file=video_file)
+    sheet_image = g.add('LoadImage', PANEL, 'Reference Sheet (cast, props, location)', image=sheet_file)
     default_prompt = (
         'Reference sheet: Top Left (Character): [name and describe the first person]. Top Right (Character): [the second person]. '
         'Bottom (Setting): [the location].\n\n'
         'Generated video: [new camera position], for example an over-the-shoulder shot from behind [person A], their shoulder soft in '
         'the foreground, looking at [person B] as they speak. Same place, same lighting, same moment. [Camera movement, e.g. locked off.]')
-    text = g.add('PrimitiveStringMultiline', c, 'Describe the Sheet and the New Angle', value=prompt or default_prompt)
-    negative = g.add('PrimitiveStringMultiline', c, 'Negative Prompt (CFG 1.0: little/no effect)', value=NEGATIVE)
-    start_node = g.add('PrimitiveFloat', c, 'Start Time in Your Clip (s)', value=start)
-    length_node = g.add('PrimitiveFloat', c, 'Shot Length (s, 5 recommended)', value=seconds)
-    seed_node = g.add('PrimitiveInt', c, 'Seed', value=seed)
+    text = g.control('PrimitiveStringMultiline', 'Describe the Sheet and the New Angle', prompt or default_prompt)
+    start_node = g.control('PrimitiveFloat', 'Start Time in Your Clip (s)', start)
+    length_node = g.control('PrimitiveFloat', 'Shot Length (s, 5 recommended)', seconds)
+    w = g.control('PrimitiveInt', 'Width (multiple of 32)', width)
+    h = g.control('PrimitiveInt', 'Height (multiple of 32)', height)
+    seed_node = g.control('PrimitiveInt', 'Seed', seed)
+    negative = g.control('PrimitiveStringMultiline', 'Negative Prompt (CFG 1.0: little/no effect)', NEGATIVE)
+    parts, sound = _clip_parts(g, video)
 
-    t = 'Timing'
+    t = INSIDE
     n_frames = g.math('1 + floor(a * b / 8) * 8', 'Frames to Generate (8n+1)', a=length_node[0], b=parts[2])
     shot_seconds = g.math('a / b', 'Exact Shot Length (s)', a=n_frames[1], b=parts[2])
     sheet = g.add('ImageScale', t, 'Fit Sheet to Working Size', image=sheet_image[0], upscale_method='lanczos', width=w[0], height=h[0], crop='disabled')
     guide = g.add('RepeatImageBatch', t, 'Hold Sheet for the Whole Shot', image=sheet[0], amount=n_frames[1])
 
-    m = 'Models'
+    m = INSIDE
     model = g.add('UNETLoader', m, 'LTX-2.5 Distilled (BF16, for Ingredients)', unet_name=BF16_TRANSFORMER, weight_dtype='default')
     lora = g.add('LTXICLoRALoaderModelOnly', m, 'Ingredients IC-LoRA (keeps cast & set)', model=model[0], lora_name=INGREDIENTS_LORA, strength_model=1.0)
     clip = g.add('CLIPLoader', m, 'Text Encoder (BF16)', clip_name=BF16_TEXT_ENCODER, type='ltxv', device='default')
     vae = g.add('VAELoader', m, 'Video Decoder (best quality)', vae_name=QUALITY_VIDEO_VAE)
     audio_vae = g.add('VAELoader', m, 'Audio VAE', vae_name=AUDIO_VAE)
 
-    p = 'Prompt & Sound'
+    p = INSIDE
     pos = g.add('CLIPTextEncode', p, 'Encode Prompt', text=text[0], clip=clip[0])
     neg = g.add('CLIPTextEncode', p, 'Encode Negative Prompt', text=negative[0], clip=clip[0])
     cond = g.add('LTXVConditioning', p, 'Match Clip Frame Rate', positive=pos[0], negative=neg[0], frame_rate=parts[2])
@@ -183,7 +197,7 @@ def new_angle(video_file='', sheet_file='', prompt=None, start=0.0, seconds=5.0,
     # frozen_audio has a zero noise mask: the soundtrack is held exactly while the picture is generated to fit it.
     frozen = g.add('LTXVSetAudioRefTokens', p, 'Lock the Original Sound', positive=cond[0], negative=cond[1], audio_latent=sound_latent[0])
 
-    s = 'Generate'
+    s = INSIDE
     empty = g.add('EmptyLTXVLatentVideo', s, 'Empty Video', width=w[0], height=h[0], length=n_frames[1], batch_size=1)
     guided = g.add('LTXAddVideoICLoRAGuide', s, 'Show the Model Your Reference Sheet', positive=cond[0], negative=cond[1], vae=vae[0], latent=empty[0],
                    image=guide[0], frame_idx=0, strength=1.0, latent_downscale_factor=lora[1], crop='disabled', use_tiled_encode=False,
@@ -192,7 +206,7 @@ def new_angle(video_file='', sheet_file='', prompt=None, start=0.0, seconds=5.0,
     sep = _sampler(g, lora[0], guided[0], guided[1], av[0], seed_node)
     cropped = g.add('LTXVCropGuides', s, 'Remove Reference Frames', positive=guided[0], negative=guided[1], latent=sep[0])
 
-    a = 'Assemble & Save'
+    a = INSIDE
     decoded = g.add('VAEDecodeTiled', a, 'Decode Picture', samples=cropped[2], vae=vae[0], tile_size=512, overlap=64, temporal_size=64, temporal_overlap=16)
     # Mux the untouched original waveform so the new angle lines up sample-for-sample in the edit.
     video = g.add('CreateVideo', a, 'Build Video with Original Sound', images=decoded[0], fps=parts[2], audio=shot_sound[0], bit_depth='auto', color_space='sRGB', codec='none')

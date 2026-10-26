@@ -199,6 +199,7 @@ def add_note(data, title, text):
 def add_negative_prompt_note(data):
     """Explain in plain English, next to the controls, why the negative prompt is inert at CFG 1.0."""
     nodes=data['nodes']
+    if any(n.get('title')=='About the Negative Prompt' for n in nodes): return
     anchor=max(nodes,key=lambda n:len(n['widgets_values']) if isinstance(n.get('widgets_values'),list) else 0)
     state=data.get('state') or {}
     node_id=max([n['id'] for n in nodes]+[data.get('last_node_id') or 0,state.get('lastNodeId',0)])+1
@@ -298,37 +299,9 @@ def main():
         if n.get('type')=='ResolutionSelector' and len(n.get('widgets_values',[]))>1: n['widgets_values'][1]=0.5
     use_conv_video_vae(advanced); use_ltxv_tiled_decode(advanced); write('06_LTX25_Two_Stage_Advanced.json',advanced)
 
-    ing=read(REF/'LTX-2.5_ICLoRA_Ingredients_Single_Stage_Distilled.json'); rename(ing,'Ingredients — Character and Scene Continuity')
-    for n in ing['nodes']:
-        if n.get('type')=='LoadImage': n['widgets_values']=['','image']; n['title']='Reference Characters and Objects'
-        if n.get('id')==9008 and n.get('widgets_values'): n['widgets_values'][0]=5
-        if n.get('id')==5004 and len(n.get('widgets_values',[]))>5:
-            n['widgets_values'][4]='ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors'; n['widgets_values'][5]=1.0
-        if n.get('id')==5508:
-            n['title']='Who Is in This Scene? / What Happens in This Shot?'
-            n['widgets_values'][0]='Reference sheet: [describe the characters, props, wardrobe, and setting by their positions in the sheet.]\n\nGenerated video: [describe the action, camera movement, and sound.]'
-        if n.get('id')==5529 and n.get('widgets_values'):
-            n['widgets_values'][0]="## Rendering Quality\n\nIngredients is a single-stage distilled workflow. The published training bucket is 768 × 448 at 121 frames and 24 fps (about five seconds). Longer clips are out of distribution; keep this control explicit and test shorter segments for production continuity."
-        if n.get('id')==2004: n['title']='Reference Characters and Objects'
-        if n.get('id')==5527 and n.get('widgets_values'):
-            n['widgets_values'][0] = "## Ingredients — Character and Scene Continuity\n\nUpload one reference sheet containing characters, props, wardrobe or locations. Describe the visible elements by position in the sheet. The reference sheet is repeated as an IC-LoRA guide through the full clip; it is not automatically the first frame.\n\n**Who Is in This Scene?** Describe the cast and identify each person by their position on the reference sheet.\n\n**What Happens in This Shot?** Describe the action, camera movement, and sound. Keep the same character and costume descriptions across separate clips.\n\nThe Ingredients IC-LoRA uses the dedicated guide-conditioning graph. This is a single-stage workflow."
-        if n.get('id')==5526 and n.get('widgets_values'):
-            n['widgets_values'][0]="## Ingredients model limits\n\nThe adapter was trained around 768 × 448, 121 frames, and 24 fps. It expects a reference sheet repeated through the clip and the two-part prompt format: `Reference sheet: ...` followed by `Generated video: ...`. Longer durations or other sizes are out of distribution. The node graph here supplies the guide frames, crops them after sampling, and loads the dedicated adapter."
-    # Keep the official training bucket as the visible default for this specialized adapter.
-    for sub in ing.get('definitions',{}).get('subgraphs',[]):
-        for n in sub.get('nodes',[]):
-            if n.get('id')==9008 and n.get('widgets_values'): n['widgets_values'][0]=5
-            if n.get('id')==4988 and n.get('type')=='PrimitiveInt': n['widgets_values'][0]=121
-            if n.get('id')==5605 and n.get('widgets_values'): n['widgets_values'][0]='gemma4-12b-with-proj-ltx-2.5-bf16.safetensors'
-            if n.get('type')=='LTXVLoader' and n.get('widgets_values'):
-                n['widgets_values']=[('ltx-2.5-22b-distilled-transformer-bf16.safetensors' if isinstance(v,str) and 'ltx-2.5' in v and 'transformer' in v else v) for v in n['widgets_values']]
-            if n.get('type')=='LTXICLoRALoaderModelOnly' and len(n.get('widgets_values',[]))>1:
-                n['widgets_values'][0]='ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors'; n['widgets_values'][1]=1.0
-            if n.get('id')==5602 and n.get('type')=='UNETLoader' and n.get('widgets_values'):
-                n['widgets_values'][0]='ltx-2.5-22b-distilled-transformer-bf16.safetensors'
-            if n.get('type')=='PrimitiveFloat' and 'duration' in (n.get('title') or '').lower() and n.get('widgets_values'): n['widgets_values'][0]=5
-            if n.get('type')=='PrimitiveInt' and (n.get('title') or '').lower()=='width' and n.get('widgets_values'): n['widgets_values'][0]=768
-            if n.get('type')=='PrimitiveInt' and (n.get('title') or '').lower()=='height' and n.get('widgets_values'): n['widgets_values'][0]=448
+    # One-panel layout built in ComfyUI's frontend from the earlier official-graph adaptation (reference sheet,
+    # 121-frame bucket, BF16 stack and notes are baked in); see docs/workflows.md.
+    ing=read(V2V/'ingredients.json'); rename(ing,'Ingredients — Character and Scene Continuity')
     write('07_LTX25_Ingredients.json',ing)
 
     for direction,name,title,prompt_title,edge,result in (

@@ -33,18 +33,22 @@ for name in profile_names:
         encoder=next(n for n in sub['nodes'] if n['id']==link['target_id'])
         assert encoder['type']=='CLIPTextEncode' and encoder['inputs'][link['target_slot']]['name']=='text', f'{name}: negative prompt is not wired to an encoder'
         assert d['last_link_id']>=max(l['id'] for l in sub['links']), f'{name}: root link counter is behind subgraph link ids'
+    every_node=d['nodes']+[n for sub in d.get('definitions',{}).get('subgraphs',[]) for n in sub.get('nodes',[])]
+    types={n['type'] for n in every_node}
+    if name[:3] in ('07_','08_','09_','10_'):
+        # One-panel layout: only the inputs, the controls panel and the save node sit on the canvas.
+        visible=[n.get('title') or n['type'] for n in d['nodes'] if n['type']!='MarkdownNote']
+        assert len(visible)<=4, f'{name}: canvas should stay a single controls panel, found {visible}'
     if name[:3] in ('08_','09_','10_'):
         # Video in, video out: each graph loads a clip and saves an MP4, and keeps the clip's sound path.
-        types={n['type'] for n in d['nodes']}
         assert {'LoadVideo','GetVideoComponents','CreateVideo','SaveVideo','AudioMerge'} <= types, f'{name}: missing video-in/video-out nodes'
     if name[:3] in ('08_','09_'):
-        guide=next(n for n in d['nodes'] if n['type']=='LTXVAddGuide')
-        assert {'BatchImagesNode','AudioConcat','LTXVSetAudioRefTokens','LTXVCropGuides'} <= {n['type'] for n in d['nodes']}, f'{name}: extension must stitch picture and sound'
+        assert {'LTXVAddGuide','BatchImagesNode','AudioConcat','LTXVSetAudioRefTokens','LTXVCropGuides'} <= types, f'{name}: extension must stitch picture and sound'
         assert ('ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors' in json.dumps(d)), f'{name}: extension uses the default INT8 stack'
     if name=='10_LTX25_New_Angle.json':
         blob=json.dumps(d)
         assert 'LTXAddVideoICLoRAGuide' in blob and 'ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors' in blob
-        assert any(n['type']=='LoadImage' for n in d['nodes']), 'New Angle needs an uploaded reference sheet'
+        assert 'LoadImage' in types, 'New Angle needs an uploaded reference sheet'
         assert 'LTXVSetAudioRefTokens' in blob and 'VAEEncodeAudio' in blob, 'New Angle must lock the source sound'
     if name == '05_LTX25_Text_to_Audio.json':
         # Keep the Load Models outputs connected to the matching exposed

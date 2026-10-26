@@ -33,7 +33,7 @@ The container disk is temporary, so download videos you want to keep before stop
 | `versions/<ltx-version>/config/adapters.json` | Compatible adapters, activation state, and specialist conditioning details for that version. |
 | `versions/<ltx-version>/workflows/` | The ten packaged filmmaker graphs plus the preserved v9 master source for LTX-2.5. |
 | `archive/official-workflow-references/` | Official graph references used to validate LTX conditioning behavior; these are engineering references, not the user-facing interface. |
-| `archive/v2v-workflow-sources/` | Editable UI graphs for workflows 08-10, converted by the installed ComfyUI frontend from `scripts/v2v_graphs.py`. |
+| `archive/v2v-workflow-sources/` | One-panel UI sources for workflows 07-10, built with the installed ComfyUI frontend (08-10 from `scripts/v2v_graphs.py`). |
 | `docker/` | Startup orchestration, persistent workspace setup, ComfyUI launch, and health checks. |
 | `scripts/` | Workflow generation/installation, model provisioning and checks, profile build arguments, diagnostics, GHCR publishing, and benchmarks. |
 | `backup/` | Optional real-time, one-shot, and verification tools for S3-compatible output backup. |
