@@ -18,6 +18,16 @@ def dimensions(megapixels, aspect):
     pixels=max(0.2,min(2.0,float(megapixels)))*1_000_000
     return max(320,round(math.sqrt(pixels*ratio)/32)*32),max(320,round(math.sqrt(pixels/ratio)/32)*32)
 
+def set_panel_field(data, label, value):
+    """Set a labelled field on a workflow's controls panel (a subgraph node on the canvas)."""
+    for n in data.get('nodes',[]):
+        fields=[i for i in n.get('inputs',[]) if i.get('widget')]
+        for index,field in enumerate(fields):
+            if field.get('label')==label and len(n.get('widgets_values') or [])==len(fields):
+                n['widgets_values'][index]=value
+                return True
+    return False
+
 def customize(name, data):
     duration=float(os.getenv('LTX_DEFAULT_DURATION','30')); fps=int(os.getenv('LTX_DEFAULT_FPS','24'))
     mp=float(os.getenv('LTX_DEFAULT_MEGAPIXELS','0.5')); aspect=os.getenv('LTX_DEFAULT_ASPECT_RATIO','16:9')
@@ -32,13 +42,12 @@ def customize(name, data):
             if len(values)>2: values[2]=duration
             if len(values)>4: values[3:5]=[width,height]
             if nid in (405,251) and len(values)>6: values[6]=fps
-        if prefix=='04_':
-            if nid==5511 and values: values[0]=fps
-            if nid==5512 and values: values[0]=duration
-            if nid==5514 and len(values)>3: values[2:4]=[width,height]
-        if prefix=='05_':
-            if nid==11 and values: values[0]=duration
-            if nid==10 and values: values[0]=fps
+    if prefix in ('04_','05_'):
+        set_panel_field(data,'Frames per Second',fps)
+        set_panel_field(data,'Clip Length (seconds)',duration)
+    if prefix=='04_':
+        set_panel_field(data,'Width',width)
+        set_panel_field(data,'Height',height)
     if name.startswith('07_'):
         print('[workflows] Ingredients keeps its five-second / 121-frame training-bucket default despite generic duration settings.')
     return data

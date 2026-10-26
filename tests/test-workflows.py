@@ -35,7 +35,7 @@ for name in profile_names:
         assert d['last_link_id']>=max(l['id'] for l in sub['links']), f'{name}: root link counter is behind subgraph link ids'
     every_node=d['nodes']+[n for sub in d.get('definitions',{}).get('subgraphs',[]) for n in sub.get('nodes',[])]
     types={n['type'] for n in every_node}
-    if name[:3] in ('07_','08_','09_','10_'):
+    if name[:3] in ('04_','05_','07_','08_','09_','10_'):
         # One-panel layout: only the inputs, the controls panel and the save node sit on the canvas.
         visible=[n.get('title') or n['type'] for n in d['nodes'] if n['type']!='MarkdownNote']
         assert len(visible)<=4, f'{name}: canvas should stay a single controls panel, found {visible}'
@@ -53,7 +53,9 @@ for name in profile_names:
     if name == '05_LTX25_Text_to_Audio.json':
         # Keep the Load Models outputs connected to the matching exposed
         # Input Parameters slots: ckpt_path=7, text_encoder=8, enhancer=9.
-        root_links={link[0]:link[4] for link in d['links']}
+        # The panel keeps these link ids, so look in every graph, not just the canvas.
+        all_links=d['links']+[l for sub in d.get('definitions',{}).get('subgraphs',[]) for l in sub.get('links',[])]
+        root_links={(l['id'] if isinstance(l,dict) else l[0]):(l['target_slot'] if isinstance(l,dict) else l[4]) for l in all_links}
         assert root_links.get(13812)==7, 'T2A checkpoint path must target ckpt_path'
         assert root_links.get(13811)==8, 'T2A text encoder must target text_encoder'
         assert root_links.get(4)==9, 'T2A prompt enhancer must target text_enhancer'
@@ -72,6 +74,10 @@ with tempfile.TemporaryDirectory() as temp:
     assert default['extra']['acdev_studio']['workflow']=='Text to Video — Filmmaker'
     graph=json.loads((installed/'02_LTX25_Text_to_Video.json').read_text())
     assert next(n for n in graph['nodes'] if n['id']==405)['widgets_values'][2]==12
+    for audio in ('04_LTX25_Audio_to_Video.json','05_LTX25_Text_to_Audio.json'):
+        panel=next(n for n in json.loads((installed/audio).read_text())['nodes'] if any(i.get('label')=='Clip Length (seconds)' for i in n.get('inputs',[])))
+        fields=[i['label'] for i in panel['inputs'] if i.get('widget')]
+        assert panel['widgets_values'][fields.index('Clip Length (seconds)')]==12, f'{audio}: default duration not applied to the panel'
     custom=installed/'user-made.json'; custom.write_text('{"user":true}')
     before=custom.read_text()
     subprocess.run([sys.executable,str(root/'scripts/install-workflows.py')],env=env,check=True,capture_output=True,text=True)

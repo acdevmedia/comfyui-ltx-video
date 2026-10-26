@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build filmmaker-named workflow assets from the preserved master and official graph refs."""
 import copy, json, uuid
+from workflow_panels import fold_into_panel
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -185,6 +186,60 @@ This re-stages a moment of your clip from a different camera position while keep
 
 **Do not use a frame grabbed straight from your clip as the sheet.** The model copies its framing instead of moving the camera. This is a re-staged shot rather than a true camera move: the people, set and light stay close to the sheet, but the performance is newly generated. It needs the Ingredients models (start the Pod with AUTO_DOWNLOAD_ADAPTERS=true, or run scripts/download-ingredients-models.sh).'''
 
+A2V_NOTE='''## How to make video from audio
+
+1. Load your soundtrack in **Source Audio**. It is kept exactly as it is in the final video.
+2. Optionally load an **Optional Opening Frame** and switch **Use the Opening Frame** on. Without the switch the image is ignored.
+3. In **Describe the Video**, say what we see and what happens, timed to the sound.
+4. Use **Audio Start** and **Clip Length** to choose the part of the soundtrack to animate.
+5. Run. The video is generated to fit the sound and saved with the original audio.
+
+**Rewrite My Prompt with AI** expands a short prompt before generating; it is off by default and adds time. **Width** and **Height** set the first-pass picture size; the second pass upscales it.'''
+
+T2A_NOTE='''## How to make sound from text
+
+1. In **Describe the Sound**, write what should be heard: dialogue, voices, ambience, effects or music.
+2. Set **Clip Length** in seconds.
+3. Run. Listen in the audio player; the file is saved by **Save Audio** (MP3).
+
+**Rewrite My Prompt with AI** expands a short prompt before generating; it is off by default and adds time. Change **Seed** for a different take of the same prompt.'''
+
+def fold_audio_to_video(data):
+    """One controls panel for Audio to Video: soundtrack and opening frame in, video out."""
+    note=next(n for n in data['nodes'] if n['id']==5527); note['widgets_values']=[A2V_NOTE]
+    next(n for n in data['nodes'] if n['id']==4852)['title']='Save Video'
+    fold_into_panel(data,'Audio to Video — Filmmaker Controls',keep=[5600,2004,4852],
+        drop_notes=[5528,5529,5530,5531,5532],note_titles={5527:'How to Use Audio to Video'},
+        fields=[{'label':'Describe the Video','source':5508},
+                {'label':'Negative Prompt (CFG 1.0: little/no effect)','source':5509},
+                {'label':'Clip Length (seconds)','source':5512},
+                {'label':'Audio Start (seconds)','source':5601},
+                {'label':'Frames per Second','source':5511},
+                {'label':'Width','kind':'PrimitiveInt','targets':[(5514,'width')]},
+                {'label':'Height','kind':'PrimitiveInt','targets':[(5514,'height')]},
+                {'label':'Use the Opening Frame','kind':'PrimitiveBoolean','targets':[(5014,'value_3')]},
+                {'label':'Rewrite My Prompt with AI','kind':'PrimitiveBoolean','targets':[(5014,'cond')],'value':False},
+                {'label':'Seed','kind':'PrimitiveInt','targets':[(5516,'noise_seed'),(5517,'noise_seed')]}])
+
+def fold_text_to_audio(data):
+    """One controls panel for Text to Audio: prompt in, audio out plus a player."""
+    params=next(n for n in data['nodes'] if n['id']==2)
+    # The upstream rewiring left a model filename in enhance_prompt's slot; give the panel clean values.
+    widgets=[i['name'] for i in params['inputs'] if i.get('widget')]
+    params['widgets_values']=params['widgets_values'][:len(widgets)]
+    params['widgets_values'][widgets.index('enhance_prompt')]=False
+    note=next(n for n in data['nodes'] if n['id']==15); note['widgets_values']=[T2A_NOTE]
+    next(n for n in data['nodes'] if n['id']==5574)['title']='Save Audio (MP3)'
+    next(n for n in data['nodes'] if n['id']==12)['title']='Listen'
+    fold_into_panel(data,'Text to Audio — Sound Designer Controls',keep=[5574,12],
+        drop_notes=[16,17,18,19,20],note_titles={15:'How to Use Text to Audio'},
+        fields=[{'label':'Describe the Sound','source':6},
+                {'label':'Negative Prompt (CFG 1.0: little/no effect)','source':7},
+                {'label':'Clip Length (seconds)','source':11},
+                {'label':'Frames per Second','source':10},
+                {'label':'Rewrite My Prompt with AI','kind':'PrimitiveBoolean','targets':[(2,'enhance_prompt')]},
+                {'label':'Seed','kind':'PrimitiveInt','targets':[(4,'noise_seed')]}])
+
 def add_note(data, title, text):
     """Place a note to the left of everything already in the graph."""
     nodes=data['nodes']
@@ -276,7 +331,7 @@ def main():
         if n.get('type')=='LoadAudio': n['title']='Source Audio — Preserved in Final Video'
         if n.get('id')==5512 and n.get('widgets_values'): n['widgets_values'][0]=30
         if n.get('id')==2004: n['title']='Optional Opening Frame'
-    use_conv_video_vae(a2v); use_ltxv_tiled_decode(a2v); write('04_LTX25_Audio_to_Video.json',a2v)
+    use_conv_video_vae(a2v); use_ltxv_tiled_decode(a2v); fold_audio_to_video(a2v); write('04_LTX25_Audio_to_Video.json',a2v)
 
     t2a=read(REF/'LTX-2.5_T2A_Single_Stage_Distilled.json'); rename(t2a,'Text to Audio — Sound Designer'); set_duration(t2a); use_default_prompt_enhancer(t2a); use_int8_stack(t2a)
     # The upstream nested graph has two root links aimed at the wrong input
@@ -290,7 +345,7 @@ def main():
             link[4]=9
     for n in t2a['nodes']:
         if n.get('type')=='PrimitiveFloat' and 'duration' in (n.get('title') or '').lower() and n.get('widgets_values'): n['widgets_values'][0]=30
-    write('05_LTX25_Text_to_Audio.json',t2a)
+    fold_text_to_audio(t2a); write('05_LTX25_Text_to_Audio.json',t2a)
 
     advanced=copy.deepcopy(master); rename(advanced,'Two Stage Generation — Advanced Filmmaker'); set_duration(advanced)
     for n in advanced['nodes']:

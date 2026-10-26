@@ -1,135 +1,87 @@
 {
   "id": "394ed254-7306-42a2-9ae6-aa880ce4456d",
   "revision": 0,
-  "last_node_id": 5575,
-  "last_link_id": 13820,
+  "last_node_id": 5582,
+  "last_link_id": 13831,
   "nodes": [
     {
-      "id": 16,
-      "type": "MarkdownNote",
+      "id": 5574,
+      "type": "SaveAudioAdvanced",
       "pos": [
-        -3100,
-        2899
+        1060,
+        0
+      ],
+      "size": [
+        424.25079058166807,
+        160
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 13830
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": []
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "audio/ltx_t2a",
+        "mp3",
+        "320k"
+      ],
+      "title": "Save Audio (MP3)"
+    },
+    {
+      "id": 12,
+      "type": "PreviewAudio",
+      "pos": [
+        1060,
+        260
       ],
       "size": [
         430,
-        226
+        150
       ],
       "flags": {},
-      "order": 0,
+      "order": 17,
       "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Input Parameters",
-      "properties": {},
-      "widgets_values": [
-        "## Input Parameters\n\nEncodes both prompts and derives fps + frame count.\n\nThe positive prompt optionally goes through the enhancer first; the effective prompt actually used is previewed below.\n\nIf an LTX API key is present the API text encoder is used instead of the local one."
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 13829
+        }
       ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 17,
-      "type": "MarkdownNote",
-      "pos": [
-        -2560,
-        2960
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": []
+        }
       ],
-      "size": [
-        330,
-        165
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Preprocess",
-      "properties": {},
-      "widgets_values": [
-        "## Preprocess\n\nBuilds an empty audio latent at the requested length and concatenates it with the audio-only video latent stub the model expects."
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 18,
-      "type": "MarkdownNote",
-      "pos": [
-        -2130,
-        2910
-      ],
-      "size": [
-        330,
-        215
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Generate",
-      "properties": {},
-      "widgets_values": [
-        "## Generate\n\nRuns the diffusion over the sigma schedule, then splits the A/V latent and keeps the audio track.\n\nAudio is more sensitive to the schedule than video - explore samplers and sigmas here."
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 19,
-      "type": "MarkdownNote",
-      "pos": [
-        -1700,
-        2998
-      ],
-      "size": [
-        330,
-        127
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Decode",
-      "properties": {},
-      "widgets_values": [
-        "## Decode\n\nDecodes the audio latent through the audio VAE."
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 20,
-      "type": "MarkdownNote",
-      "pos": [
-        -1270,
-        2998
-      ],
-      "size": [
-        430,
-        127
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Preview",
-      "properties": {},
-      "widgets_values": [
-        "## Preview audio\n\nPlay the result, or swap in a Save Audio node to write it to disk."
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      "properties": {
+        "Node name for S&R": "PreviewAudio",
+        "cnr_id": "comfy-core",
+        "ver": "0.24.0"
+      },
+      "widgets_values": [],
+      "title": "Listen"
     },
     {
       "id": 14,
       "type": "MarkdownNote",
       "pos": [
-        -4279.886326593281,
-        2664.2911573119663
+        -560,
+        0
       ],
       "size": [
         583.3709400493758,
@@ -152,8 +104,8 @@
       "id": 15,
       "type": "MarkdownNote",
       "pos": [
-        -3619.8407741114015,
-        2817.3419501003004
+        -560,
+        480
       ],
       "size": [
         400,
@@ -164,716 +116,137 @@
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "title": "Inputs",
+      "title": "How to Use Text to Audio",
       "properties": {},
       "widgets_values": [
-        "## Inputs\n\nText-to-audio takes **no image and no video** - only text and a length.\n\n### Prompt\n\nEnter a positive prompt. To rewrite it into a fuller description first, enable\n**enhance positive prompt** on the Input Parameters node below. The negative\nprompt is used as written and is never enhanced.\n\nSupplying an **LTX API key** encodes and enhances the prompt through the API\ninstead of locally, which saves memory. The workflow switches over on its own\nwhenever a key is present - there is nothing to un-bypass.\n\nSee the [prompting guide](https://docs.ltx.io/open-source-model/usage-guides/prompting-guide).\n### Frame rate and duration\n\nSet both below. The frame count has to be 1 + a multiple of 8, so the duration\nactually used is worked out from the fps and the duration you ask for, and may\ncome out slightly different."
+        "## How to make sound from text\n\n1. In **Describe the Sound**, write what should be heard: dialogue, voices, ambience, effects or music.\n2. Set **Clip Length** in seconds.\n3. Run. Listen in the audio player; the file is saved by **Save Audio** (MP3).\n\n**Rewrite My Prompt with AI** expands a short prompt before generating; it is off by default and adds time. Change **Seed** for a different take of the same prompt."
       ],
       "color": "#432",
       "bgcolor": "#653"
     },
     {
-      "id": 11,
-      "type": "PrimitiveFloat",
+      "id": 5581,
+      "type": "fb2bc448-7ea0-5a42-9e19-118cd5bcfe40",
       "pos": [
-        -3600.317029679543,
-        3819.745807417305
+        420,
+        0
       ],
       "size": [
-        400,
-        58
+        560,
+        300
       ],
       "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "FLOAT",
-          "type": "FLOAT",
-          "links": [
-            11
-          ]
-        }
-      ],
-      "title": "duration in seconds",
-      "properties": {
-        "Node name for S&R": "PrimitiveFloat",
-        "cnr_id": "comfy-core",
-        "ver": "0.16.0"
-      },
-      "widgets_values": [
-        30
-      ],
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
-    },
-    {
-      "id": 13,
-      "type": "PreviewAny",
-      "pos": [
-        -3101.4953233218444,
-        3675.3274005708886
-      ],
-      "size": [
-        430,
-        200
-      ],
-      "flags": {},
-      "order": 13,
+      "order": 0,
       "mode": 0,
       "inputs": [
         {
-          "name": "source",
-          "type": "*",
-          "link": 13
-        }
-      ],
-      "outputs": [
-        {
-          "name": "STRING",
+          "label": "Describe the Sound",
+          "localized_name": "describe_the_sound",
+          "name": "describe_the_sound",
           "type": "STRING",
-          "links": []
-        }
-      ],
-      "title": "Effective positive prompt",
-      "properties": {
-        "Node name for S&R": "PreviewAny"
-      },
-      "widgets_values": [],
-      "color": "#232",
-      "bgcolor": "#353"
-    },
-    {
-      "id": 7,
-      "type": "PrimitiveStringMultiline",
-      "pos": [
-        -3600,
-        3527.3706666631842
-      ],
-      "size": [
-        400,
-        120
-      ],
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
+          "widget": {
+            "name": "describe_the_sound"
+          },
+          "link": null
+        },
         {
-          "name": "STRING",
+          "label": "Negative Prompt (CFG 1.0: little/no effect)",
+          "localized_name": "negative_prompt_cfg_1_0_little_no_effect",
+          "name": "negative_prompt_cfg_1_0_little_no_effect",
           "type": "STRING",
-          "links": [
-            9
-          ]
-        }
-      ],
-      "title": "Prompt (negative)",
-      "properties": {
-        "Node name for S&R": "PrimitiveStringMultiline",
-        "cnr_id": "comfy-core",
-        "ver": "0.5.1"
-      },
-      "widgets_values": [
-        ""
-      ],
-      "color": "#322",
-      "bgcolor": "#533"
-    },
-    {
-      "id": 10,
-      "type": "PrimitiveFloat",
-      "pos": [
-        -3597.173152024075,
-        3705.0576188570685
-      ],
-      "size": [
-        400,
-        58
-      ],
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
+          "widget": {
+            "name": "negative_prompt_cfg_1_0_little_no_effect"
+          },
+          "link": null
+        },
         {
-          "name": "FLOAT",
+          "label": "Clip Length (seconds)",
+          "localized_name": "clip_length_seconds",
+          "name": "clip_length_seconds",
           "type": "FLOAT",
-          "links": [
-            10
-          ]
-        }
-      ],
-      "title": "fps (frames per second)",
-      "properties": {
-        "Node name for S&R": "PrimitiveFloat",
-        "cnr_id": "comfy-core",
-        "ver": "0.16.0"
-      },
-      "widgets_values": [
-        24
-      ],
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
-    },
-    {
-      "id": 5574,
-      "type": "SaveAudioAdvanced",
-      "pos": [
-        -1270.7303714640689,
-        3431.136261371553
-      ],
-      "size": [
-        424.25079058166807,
-        160
-      ],
-      "flags": {},
-      "order": 18,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "audio",
-          "type": "AUDIO",
-          "link": 13809
-        }
-      ],
-      "outputs": [
-        {
-          "name": "audio",
-          "type": "AUDIO",
-          "links": null
-        }
-      ],
-      "properties": {},
-      "widgets_values": [
-        "audio/ltx_t2a",
-        "mp3",
-        "320k"
-      ]
-    },
-    {
-      "id": 1,
-      "type": "ff7e0338-cf55-4a2c-a455-34bec1cf3d1e",
-      "pos": [
-        -4278,
-        3230
-      ],
-      "size": [
-        576,
-        210
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "audio VAE",
-          "name": "audio_vae_name",
-          "type": "COMBO",
           "widget": {
-            "name": "audio_vae_name"
+            "name": "clip_length_seconds"
           },
           "link": null
         },
         {
-          "label": "diffusion model",
-          "name": "unet_name",
-          "type": "COMBO",
+          "label": "Frames per Second",
+          "localized_name": "frames_per_second",
+          "name": "frames_per_second",
+          "type": "FLOAT",
           "widget": {
-            "name": "unet_name"
+            "name": "frames_per_second"
           },
           "link": null
         },
         {
-          "name": "lora_name",
-          "type": "COMBO",
-          "link": null
-        },
-        {
-          "label": "text enhancer",
-          "name": "enhancer_name",
-          "type": "COMBO",
+          "label": "Rewrite My Prompt with AI",
+          "localized_name": "rewrite_my_prompt_with_ai",
+          "name": "rewrite_my_prompt_with_ai",
+          "type": "BOOLEAN",
           "widget": {
-            "name": "enhancer_name"
+            "name": "rewrite_my_prompt_with_ai"
           },
           "link": null
         },
         {
-          "label": "text encoder",
-          "name": "encoder_name",
-          "type": "COMBO",
-          "widget": {
-            "name": "encoder_name"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "audio_vae",
-          "type": "VAE",
-          "links": [
-            1,
-            2
-          ]
-        },
-        {
-          "name": "model",
-          "type": "MODEL",
-          "links": [
-            3
-          ]
-        },
-        {
-          "name": "text_enhancer",
-          "type": "CLIP",
-          "links": [
-            4
-          ]
-        },
-        {
-          "name": "text_encoder",
-          "type": "CLIP",
-          "links": [
-            13811
-          ]
-        },
-        {
-          "name": "ckpt_path",
-          "type": "*",
-          "links": [
-            13812
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "ff7e0338-cf55-4a2c-a455-34bec1cf3d1e",
-        "previewExposures": [],
-        "models": [
-          {
-            "name": "ltx-2.5-audio-vae-bf16.safetensors",
-            "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/vae/ltx-2.5-audio-vae-bf16.safetensors",
-            "directory": "vae"
-          },
-          {
-            "name": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
-            "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
-            "directory": "diffusion_models"
-          },
-          {
-            "name": "gemma4_e2b_it_int8_convrot.safetensors",
-            "url": "https://huggingface.co/Comfy-Org/gemma-4/resolve/main/text_encoders/gemma4_e2b_it_int8_convrot.safetensors",
-            "directory": "text_encoders"
-          },
-          {
-            "name": "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
-            "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
-            "directory": "text_encoders"
-          }
-        ]
-      },
-      "widgets_values": [
-        "ltx-2.5-audio-vae-bf16.safetensors",
-        "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
-        "gemma4_e2b_it_int8_convrot.safetensors",
-        "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors"
-      ]
-    },
-    {
-      "id": 3,
-      "type": "db21d6f9-e1ba-4784-ad2d-3f8cd2b6ff99",
-      "pos": [
-        -2559.651267352503,
-        3244.5622299470106
-      ],
-      "size": [
-        330,
-        134
-      ],
-      "flags": {},
-      "order": 14,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "audio_vae",
-          "type": "VAE",
-          "link": 1
-        },
-        {
-          "name": "frames",
+          "label": "Seed",
+          "localized_name": "seed",
+          "name": "seed",
           "type": "INT",
           "widget": {
-            "name": "frames"
+            "name": "seed"
           },
-          "link": 17
-        },
-        {
-          "name": "fps",
-          "type": "FLOAT",
-          "widget": {
-            "name": "fps"
-          },
-          "link": 16
+          "link": null
         }
       ],
       "outputs": [
         {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            18
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "db21d6f9-e1ba-4784-ad2d-3f8cd2b6ff99",
-        "previewExposures": []
-      },
-      "widgets_values": [
-        97,
-        0
-      ]
-    },
-    {
-      "id": 5,
-      "type": "5a1450e7-a125-42e5-9610-ed2b3a1d156f",
-      "pos": [
-        -1706.8267057661599,
-        3253.100895982703
-      ],
-      "size": [
-        330,
-        112
-      ],
-      "flags": {},
-      "order": 16,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "audio_vae",
-          "type": "VAE",
-          "link": 2
-        },
-        {
-          "name": "audio_latent",
-          "type": "LATENT",
-          "link": 19
-        }
-      ],
-      "outputs": [
-        {
+          "label": "audio",
+          "localized_name": "audio",
           "name": "audio",
           "type": "AUDIO",
           "links": [
-            20,
-            13809
+            13829,
+            13830
           ]
         }
       ],
+      "title": "Text to Audio — Sound Designer Controls",
       "properties": {
-        "Node name for S&R": "5a1450e7-a125-42e5-9610-ed2b3a1d156f",
-        "previewExposures": []
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0"
+      },
+      "widgets_values": [
+        "",
+        "",
+        30,
+        24,
+        false,
+        50
+      ],
+      "widgets_values_named": {
+        "describe_the_sound": "",
+        "negative_prompt_cfg_1_0_little_no_effect": "",
+        "clip_length_seconds": 30,
+        "frames_per_second": 24,
+        "rewrite_my_prompt_with_ai": false,
+        "seed": 50
       }
     },
     {
-      "id": 2,
-      "type": "89037276-a2fe-4f40-beb4-d07bcf50adea",
-      "pos": [
-        -3100,
-        3230
-      ],
-      "size": [
-        430,
-        366
-      ],
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive_prompt",
-          "type": "STRING",
-          "widget": {
-            "name": "positive_prompt"
-          },
-          "link": 7
-        },
-        {
-          "label": "enhance positive prompt",
-          "name": "enhance_prompt",
-          "type": "BOOLEAN",
-          "widget": {
-            "name": "enhance_prompt"
-          },
-          "link": null
-        },
-        {
-          "name": "negative_prompt",
-          "type": "STRING",
-          "widget": {
-            "name": "negative_prompt"
-          },
-          "link": 9
-        },
-        {
-          "name": "fps",
-          "type": "FLOAT",
-          "widget": {
-            "name": "fps"
-          },
-          "link": 10
-        },
-        {
-          "name": "duration_seconds",
-          "type": "FLOAT",
-          "widget": {
-            "name": "duration_seconds"
-          },
-          "link": 11
-        },
-        {
-          "label": "enhancer seed",
-          "name": "enhancer_seed",
-          "type": "INT",
-          "widget": {
-            "name": "enhancer_seed"
-          },
-          "link": null
-        },
-        {
-          "label": "LTX API key",
-          "name": "ltx_api_key",
-          "type": "STRING",
-          "widget": {
-            "name": "ltx_api_key"
-          },
-          "link": null
-        },
-        {
-          "name": "ckpt_path",
-          "type": "*",
-          "link": 13812,
-          "localized_name": "ltx model ckpt path"
-        },
-        {
-          "name": "text_encoder",
-          "type": "CLIP",
-          "link": 13811
-        },
-        {
-          "name": "text_enhancer",
-          "type": "CLIP",
-          "link": 4
-        }
-      ],
-      "outputs": [
-        {
-          "name": "effective_prompt",
-          "type": "STRING",
-          "links": [
-            13
-          ]
-        },
-        {
-          "name": "positive_encoded",
-          "type": "CONDITIONING",
-          "links": [
-            14
-          ]
-        },
-        {
-          "name": "negative_encoded",
-          "type": "CONDITIONING",
-          "links": [
-            15
-          ]
-        },
-        {
-          "name": "fps",
-          "type": "FLOAT",
-          "links": [
-            16
-          ]
-        },
-        {
-          "name": "num_frames",
-          "type": "INT",
-          "links": [
-            17
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "89037276-a2fe-4f40-beb4-d07bcf50adea",
-        "previewExposures": []
-      },
-      "widgets_values": [
-        "",
-        "ltx-2.3-22b-dev.safetensors",
-        "",
-        24,
-        5,
-        0,
-        "",
-        "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors"
-      ]
-    },
-    {
-      "id": 4,
-      "type": "18dc39dc-3fdc-462d-adc1-4d687878dbf7",
-      "pos": [
-        -2131.3949305899896,
-        3243.1567317010367
-      ],
-      "size": [
-        330,
-        200
-      ],
-      "flags": {},
-      "order": 15,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 3
-        },
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 14
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 15
-        },
-        {
-          "name": "latent_image",
-          "type": "LATENT",
-          "link": 18
-        },
-        {
-          "label": "noise seed",
-          "name": "noise_seed",
-          "type": "INT",
-          "widget": {
-            "name": "noise_seed"
-          },
-          "link": null
-        },
-        {
-          "label": "guider cfg",
-          "name": "cfg",
-          "type": "FLOAT",
-          "widget": {
-            "name": "cfg"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "audio_latent",
-          "type": "LATENT",
-          "links": [
-            19
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "18dc39dc-3fdc-462d-adc1-4d687878dbf7",
-        "previewExposures": []
-      },
-      "widgets_values": [
-        50,
-        1
-      ]
-    },
-    {
-      "id": 12,
-      "type": "PreviewAudio",
-      "pos": [
-        -1270,
-        3230
-      ],
-      "size": [
-        430,
-        150
-      ],
-      "flags": {},
-      "order": 17,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "audio",
-          "type": "AUDIO",
-          "link": 20
-        }
-      ],
-      "outputs": [
-        {
-          "name": "audio",
-          "type": "AUDIO",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PreviewAudio",
-        "cnr_id": "comfy-core",
-        "ver": "0.24.0"
-      },
-      "widgets_values": []
-    },
-    {
-      "id": 6,
-      "type": "PrimitiveStringMultiline",
-      "pos": [
-        -3604.3697257497033,
-        3246.564800756124
-      ],
-      "size": [
-        400,
-        190
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            7
-          ]
-        }
-      ],
-      "title": "Prompt (positive)",
-      "properties": {
-        "Node name for S&R": "PrimitiveStringMultiline",
-        "cnr_id": "comfy-core",
-        "ver": "0.5.1"
-      },
-      "widgets_values": [
-        ""
-      ],
-      "color": "#232",
-      "bgcolor": "#353"
-    },
-    {
-      "id": 5575,
+      "id": 5582,
       "type": "MarkdownNote",
       "pos": [
-        -4839.886326593281,
-        3230
+        -1120,
+        0
       ],
       "size": [
         500,
         420
       ],
       "flags": {},
-      "order": 19,
+      "order": 5,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -888,169 +261,23 @@
   ],
   "links": [
     [
-      1,
-      1,
-      0,
-      3,
-      0,
-      "VAE"
-    ],
-    [
-      2,
-      1,
-      0,
-      5,
-      0,
-      "VAE"
-    ],
-    [
-      3,
-      1,
-      1,
-      4,
-      0,
-      "MODEL"
-    ],
-    [
-      4,
-      1,
-      2,
-      2,
-      9,
-      "CLIP"
-    ],
-    [
-      7,
-      6,
-      0,
-      2,
-      0,
-      "STRING"
-    ],
-    [
-      9,
-      7,
-      0,
-      2,
-      2,
-      "STRING"
-    ],
-    [
-      10,
-      10,
-      0,
-      2,
-      3,
-      "FLOAT"
-    ],
-    [
-      11,
-      11,
-      0,
-      2,
-      4,
-      "FLOAT"
-    ],
-    [
-      13,
-      2,
-      0,
-      13,
-      0,
-      "*"
-    ],
-    [
-      14,
-      2,
-      1,
-      4,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      15,
-      2,
-      2,
-      4,
-      2,
-      "CONDITIONING"
-    ],
-    [
-      16,
-      2,
-      3,
-      3,
-      2,
-      "FLOAT"
-    ],
-    [
-      17,
-      2,
-      4,
-      3,
-      1,
-      "INT"
-    ],
-    [
-      18,
-      3,
-      0,
-      4,
-      3,
-      "LATENT"
-    ],
-    [
-      19,
-      4,
-      0,
-      5,
-      1,
-      "LATENT"
-    ],
-    [
-      20,
-      5,
+      13829,
+      5581,
       0,
       12,
       0,
       "AUDIO"
     ],
     [
-      13809,
-      5,
+      13830,
+      5581,
       0,
       5574,
       0,
       "AUDIO"
-    ],
-    [
-      13811,
-      1,
-      3,
-      2,
-      8,
-      "CLIP"
-    ],
-    [
-      13812,
-      1,
-      4,
-      2,
-      7,
-      "*"
     ]
   ],
-  "floatingLinks": [
-    {
-      "id": 1,
-      "origin_id": 1,
-      "origin_slot": 4,
-      "target_id": -1,
-      "target_slot": -1,
-      "type": "*",
-      "parentId": 9011
-    }
-  ],
+  "floatingLinks": [],
   "groups": [
     {
       "id": 6,
@@ -4243,6 +3470,1104 @@
         "extra": {
           "reroutes": []
         }
+      },
+      {
+        "id": "fb2bc448-7ea0-5a42-9e19-118cd5bcfe40",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 5581,
+          "lastLinkId": 13831,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Text to Audio — Sound Designer Controls",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -4678,
+            0,
+            160,
+            160
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            600,
+            0,
+            140,
+            60
+          ]
+        },
+        "inputs": [
+          {
+            "id": "f5907133-5d17-558c-8176-3b3373246d4c",
+            "name": "describe_the_sound",
+            "type": "STRING",
+            "linkIds": [
+              13821
+            ],
+            "localized_name": "describe_the_sound",
+            "label": "Describe the Sound",
+            "pos": [
+              0,
+              0
+            ]
+          },
+          {
+            "id": "5a2d6b93-3cad-55fb-a261-565b01cabc0e",
+            "name": "negative_prompt_cfg_1_0_little_no_effect",
+            "type": "STRING",
+            "linkIds": [
+              13822
+            ],
+            "localized_name": "negative_prompt_cfg_1_0_little_no_effect",
+            "label": "Negative Prompt (CFG 1.0: little/no effect)",
+            "pos": [
+              0,
+              20
+            ]
+          },
+          {
+            "id": "477f1eba-4bd3-5523-8f89-9ff1c769568b",
+            "name": "clip_length_seconds",
+            "type": "FLOAT",
+            "linkIds": [
+              13823
+            ],
+            "localized_name": "clip_length_seconds",
+            "label": "Clip Length (seconds)",
+            "pos": [
+              0,
+              40
+            ]
+          },
+          {
+            "id": "1a440415-1b8e-5b15-a1ff-e3fee8502dea",
+            "name": "frames_per_second",
+            "type": "FLOAT",
+            "linkIds": [
+              13824
+            ],
+            "localized_name": "frames_per_second",
+            "label": "Frames per Second",
+            "pos": [
+              0,
+              60
+            ]
+          },
+          {
+            "id": "27556104-191f-5021-a5be-6cf8198d9cc8",
+            "name": "rewrite_my_prompt_with_ai",
+            "type": "BOOLEAN",
+            "linkIds": [
+              13826
+            ],
+            "localized_name": "rewrite_my_prompt_with_ai",
+            "label": "Rewrite My Prompt with AI",
+            "pos": [
+              0,
+              80
+            ]
+          },
+          {
+            "id": "bbfebb73-ecb8-5a26-adee-2eec3cafe534",
+            "name": "seed",
+            "type": "INT",
+            "linkIds": [
+              13828
+            ],
+            "localized_name": "seed",
+            "label": "Seed",
+            "pos": [
+              0,
+              100
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "13eb7c79-f34f-5f0f-a177-b5c02d40f825",
+            "name": "audio",
+            "type": "AUDIO",
+            "linkIds": [
+              20
+            ],
+            "localized_name": "audio",
+            "label": "audio",
+            "pos": [
+              0,
+              0
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 13,
+            "type": "PreviewAny",
+            "pos": [
+              -3101.4953233218444,
+              3675.3274005708886
+            ],
+            "size": [
+              430,
+              200
+            ],
+            "flags": {},
+            "order": 13,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "source",
+                "type": "*",
+                "link": 13
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": []
+              }
+            ],
+            "title": "Effective positive prompt",
+            "properties": {
+              "Node name for S&R": "PreviewAny"
+            },
+            "widgets_values": [],
+            "color": "#232",
+            "bgcolor": "#353"
+          },
+          {
+            "id": 1,
+            "type": "ff7e0338-cf55-4a2c-a455-34bec1cf3d1e",
+            "pos": [
+              -4278,
+              3230
+            ],
+            "size": [
+              576,
+              210
+            ],
+            "flags": {},
+            "order": 10,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "audio VAE",
+                "name": "audio_vae_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "audio_vae_name"
+                },
+                "link": null
+              },
+              {
+                "label": "diffusion model",
+                "name": "unet_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "unet_name"
+                },
+                "link": null
+              },
+              {
+                "name": "lora_name",
+                "type": "COMBO",
+                "link": null
+              },
+              {
+                "label": "text enhancer",
+                "name": "enhancer_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "enhancer_name"
+                },
+                "link": null
+              },
+              {
+                "label": "text encoder",
+                "name": "encoder_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "encoder_name"
+                },
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "name": "audio_vae",
+                "type": "VAE",
+                "links": [
+                  1,
+                  2
+                ]
+              },
+              {
+                "name": "model",
+                "type": "MODEL",
+                "links": [
+                  3
+                ]
+              },
+              {
+                "name": "text_enhancer",
+                "type": "CLIP",
+                "links": [
+                  4
+                ]
+              },
+              {
+                "name": "text_encoder",
+                "type": "CLIP",
+                "links": [
+                  13811
+                ]
+              },
+              {
+                "name": "ckpt_path",
+                "type": "*",
+                "links": [
+                  13812
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ff7e0338-cf55-4a2c-a455-34bec1cf3d1e",
+              "previewExposures": [],
+              "models": [
+                {
+                  "name": "ltx-2.5-audio-vae-bf16.safetensors",
+                  "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/vae/ltx-2.5-audio-vae-bf16.safetensors",
+                  "directory": "vae"
+                },
+                {
+                  "name": "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+                  "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+                  "directory": "diffusion_models"
+                },
+                {
+                  "name": "gemma4_e2b_it_int8_convrot.safetensors",
+                  "url": "https://huggingface.co/Comfy-Org/gemma-4/resolve/main/text_encoders/gemma4_e2b_it_int8_convrot.safetensors",
+                  "directory": "text_encoders"
+                },
+                {
+                  "name": "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+                  "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/main/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+                  "directory": "text_encoders"
+                }
+              ]
+            },
+            "widgets_values": [
+              "ltx-2.5-audio-vae-bf16.safetensors",
+              "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+              "gemma4_e2b_it_int8_convrot.safetensors",
+              "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors"
+            ]
+          },
+          {
+            "id": 3,
+            "type": "db21d6f9-e1ba-4784-ad2d-3f8cd2b6ff99",
+            "pos": [
+              -2559.651267352503,
+              3244.5622299470106
+            ],
+            "size": [
+              330,
+              134
+            ],
+            "flags": {},
+            "order": 14,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "audio_vae",
+                "type": "VAE",
+                "link": 1
+              },
+              {
+                "name": "frames",
+                "type": "INT",
+                "widget": {
+                  "name": "frames"
+                },
+                "link": 17
+              },
+              {
+                "name": "fps",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "fps"
+                },
+                "link": 16
+              }
+            ],
+            "outputs": [
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "links": [
+                  18
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "db21d6f9-e1ba-4784-ad2d-3f8cd2b6ff99",
+              "previewExposures": []
+            },
+            "widgets_values": [
+              97,
+              0
+            ]
+          },
+          {
+            "id": 5,
+            "type": "5a1450e7-a125-42e5-9610-ed2b3a1d156f",
+            "pos": [
+              -1706.8267057661599,
+              3253.100895982703
+            ],
+            "size": [
+              330,
+              112
+            ],
+            "flags": {},
+            "order": 16,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "audio_vae",
+                "type": "VAE",
+                "link": 2
+              },
+              {
+                "name": "audio_latent",
+                "type": "LATENT",
+                "link": 19
+              }
+            ],
+            "outputs": [
+              {
+                "name": "audio",
+                "type": "AUDIO",
+                "links": [
+                  20,
+                  13809
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "5a1450e7-a125-42e5-9610-ed2b3a1d156f",
+              "previewExposures": []
+            }
+          },
+          {
+            "id": 2,
+            "type": "89037276-a2fe-4f40-beb4-d07bcf50adea",
+            "pos": [
+              -3100,
+              3230
+            ],
+            "size": [
+              430,
+              366
+            ],
+            "flags": {},
+            "order": 12,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "positive_prompt",
+                "type": "STRING",
+                "widget": {
+                  "name": "positive_prompt"
+                },
+                "link": 7
+              },
+              {
+                "label": "enhance positive prompt",
+                "name": "enhance_prompt",
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "enhance_prompt"
+                },
+                "link": 13825
+              },
+              {
+                "name": "negative_prompt",
+                "type": "STRING",
+                "widget": {
+                  "name": "negative_prompt"
+                },
+                "link": 9
+              },
+              {
+                "name": "fps",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "fps"
+                },
+                "link": 10
+              },
+              {
+                "name": "duration_seconds",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "duration_seconds"
+                },
+                "link": 11
+              },
+              {
+                "label": "enhancer seed",
+                "name": "enhancer_seed",
+                "type": "INT",
+                "widget": {
+                  "name": "enhancer_seed"
+                },
+                "link": null
+              },
+              {
+                "label": "LTX API key",
+                "name": "ltx_api_key",
+                "type": "STRING",
+                "widget": {
+                  "name": "ltx_api_key"
+                },
+                "link": null
+              },
+              {
+                "name": "ckpt_path",
+                "type": "*",
+                "link": 13812,
+                "localized_name": "ltx model ckpt path"
+              },
+              {
+                "name": "text_encoder",
+                "type": "CLIP",
+                "link": 13811
+              },
+              {
+                "name": "text_enhancer",
+                "type": "CLIP",
+                "link": 4
+              }
+            ],
+            "outputs": [
+              {
+                "name": "effective_prompt",
+                "type": "STRING",
+                "links": [
+                  13
+                ]
+              },
+              {
+                "name": "positive_encoded",
+                "type": "CONDITIONING",
+                "links": [
+                  14
+                ]
+              },
+              {
+                "name": "negative_encoded",
+                "type": "CONDITIONING",
+                "links": [
+                  15
+                ]
+              },
+              {
+                "name": "fps",
+                "type": "FLOAT",
+                "links": [
+                  16
+                ]
+              },
+              {
+                "name": "num_frames",
+                "type": "INT",
+                "links": [
+                  17
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "89037276-a2fe-4f40-beb4-d07bcf50adea",
+              "previewExposures": []
+            },
+            "widgets_values": [
+              "",
+              false,
+              "",
+              24,
+              5,
+              0,
+              ""
+            ]
+          },
+          {
+            "id": 4,
+            "type": "18dc39dc-3fdc-462d-adc1-4d687878dbf7",
+            "pos": [
+              -2131.3949305899896,
+              3243.1567317010367
+            ],
+            "size": [
+              330,
+              200
+            ],
+            "flags": {},
+            "order": 15,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "MODEL",
+                "link": 3
+              },
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "link": 14
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "link": 15
+              },
+              {
+                "name": "latent_image",
+                "type": "LATENT",
+                "link": 18
+              },
+              {
+                "label": "noise seed",
+                "name": "noise_seed",
+                "type": "INT",
+                "widget": {
+                  "name": "noise_seed"
+                },
+                "link": 13827
+              },
+              {
+                "label": "guider cfg",
+                "name": "cfg",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "cfg"
+                },
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "name": "audio_latent",
+                "type": "LATENT",
+                "links": [
+                  19
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "18dc39dc-3fdc-462d-adc1-4d687878dbf7",
+              "previewExposures": []
+            },
+            "widgets_values": [
+              50,
+              1
+            ]
+          },
+          {
+            "id": 5575,
+            "type": "PrimitiveStringMultiline",
+            "pos": [
+              -4658,
+              200
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "STRING",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 13821
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "STRING",
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  7
+                ]
+              }
+            ],
+            "title": "Describe the Sound",
+            "properties": {
+              "Node name for S&R": "PrimitiveStringMultiline"
+            },
+            "widgets_values": [
+              ""
+            ],
+            "widgets_values_named": {
+              "value": ""
+            }
+          },
+          {
+            "id": 5576,
+            "type": "PrimitiveStringMultiline",
+            "pos": [
+              -4658,
+              300
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "STRING",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 13822
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "STRING",
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  9
+                ]
+              }
+            ],
+            "title": "Negative Prompt (CFG 1.0: little/no effect)",
+            "properties": {
+              "Node name for S&R": "PrimitiveStringMultiline"
+            },
+            "widgets_values": [
+              ""
+            ],
+            "widgets_values_named": {
+              "value": ""
+            }
+          },
+          {
+            "id": 5577,
+            "type": "PrimitiveFloat",
+            "pos": [
+              -4658,
+              400
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 13823
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  11
+                ]
+              }
+            ],
+            "title": "Clip Length (seconds)",
+            "properties": {
+              "Node name for S&R": "PrimitiveFloat"
+            },
+            "widgets_values": [
+              30
+            ],
+            "widgets_values_named": {
+              "value": 30
+            }
+          },
+          {
+            "id": 5578,
+            "type": "PrimitiveFloat",
+            "pos": [
+              -4658,
+              500
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 13824
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  10
+                ]
+              }
+            ],
+            "title": "Frames per Second",
+            "properties": {
+              "Node name for S&R": "PrimitiveFloat"
+            },
+            "widgets_values": [
+              24
+            ],
+            "widgets_values_named": {
+              "value": 24
+            }
+          },
+          {
+            "id": 5579,
+            "type": "PrimitiveBoolean",
+            "pos": [
+              -4658,
+              600
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 13826
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "BOOLEAN",
+                "name": "BOOLEAN",
+                "type": "BOOLEAN",
+                "links": [
+                  13825
+                ]
+              }
+            ],
+            "title": "Rewrite My Prompt with AI",
+            "properties": {
+              "Node name for S&R": "PrimitiveBoolean"
+            },
+            "widgets_values": [
+              false
+            ],
+            "widgets_values_named": {
+              "value": false
+            }
+          },
+          {
+            "id": 5580,
+            "type": "PrimitiveInt",
+            "pos": [
+              -4658,
+              700
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 13828
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  13827
+                ]
+              }
+            ],
+            "title": "Seed",
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              50
+            ],
+            "widgets_values_named": {
+              "value": 50
+            }
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": 1,
+            "origin_slot": 0,
+            "target_id": 3,
+            "target_slot": 0,
+            "type": "VAE"
+          },
+          {
+            "id": 2,
+            "origin_id": 1,
+            "origin_slot": 0,
+            "target_id": 5,
+            "target_slot": 0,
+            "type": "VAE"
+          },
+          {
+            "id": 3,
+            "origin_id": 1,
+            "origin_slot": 1,
+            "target_id": 4,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 4,
+            "origin_id": 1,
+            "origin_slot": 2,
+            "target_id": 2,
+            "target_slot": 9,
+            "type": "CLIP"
+          },
+          {
+            "id": 13,
+            "origin_id": 2,
+            "origin_slot": 0,
+            "target_id": 13,
+            "target_slot": 0,
+            "type": "*"
+          },
+          {
+            "id": 14,
+            "origin_id": 2,
+            "origin_slot": 1,
+            "target_id": 4,
+            "target_slot": 1,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 15,
+            "origin_id": 2,
+            "origin_slot": 2,
+            "target_id": 4,
+            "target_slot": 2,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 16,
+            "origin_id": 2,
+            "origin_slot": 3,
+            "target_id": 3,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 17,
+            "origin_id": 2,
+            "origin_slot": 4,
+            "target_id": 3,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 18,
+            "origin_id": 3,
+            "origin_slot": 0,
+            "target_id": 4,
+            "target_slot": 3,
+            "type": "LATENT"
+          },
+          {
+            "id": 19,
+            "origin_id": 4,
+            "origin_slot": 0,
+            "target_id": 5,
+            "target_slot": 1,
+            "type": "LATENT"
+          },
+          {
+            "id": 13811,
+            "origin_id": 1,
+            "origin_slot": 3,
+            "target_id": 2,
+            "target_slot": 8,
+            "type": "CLIP"
+          },
+          {
+            "id": 13812,
+            "origin_id": 1,
+            "origin_slot": 4,
+            "target_id": 2,
+            "target_slot": 7,
+            "type": "*"
+          },
+          {
+            "id": 7,
+            "origin_id": 5575,
+            "origin_slot": 0,
+            "target_id": 2,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 9,
+            "origin_id": 5576,
+            "origin_slot": 0,
+            "target_id": 2,
+            "target_slot": 2,
+            "type": "STRING"
+          },
+          {
+            "id": 11,
+            "origin_id": 5577,
+            "origin_slot": 0,
+            "target_id": 2,
+            "target_slot": 4,
+            "type": "FLOAT"
+          },
+          {
+            "id": 10,
+            "origin_id": 5578,
+            "origin_slot": 0,
+            "target_id": 2,
+            "target_slot": 3,
+            "type": "FLOAT"
+          },
+          {
+            "id": 13825,
+            "origin_id": 5579,
+            "origin_slot": 0,
+            "target_id": 2,
+            "target_slot": 1,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 13827,
+            "origin_id": 5580,
+            "origin_slot": 0,
+            "target_id": 4,
+            "target_slot": 4,
+            "type": "INT"
+          },
+          {
+            "id": 13821,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 5575,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 13822,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 5576,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 13823,
+            "origin_id": -10,
+            "origin_slot": 2,
+            "target_id": 5577,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 13824,
+            "origin_id": -10,
+            "origin_slot": 3,
+            "target_id": 5578,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 13826,
+            "origin_id": -10,
+            "origin_slot": 4,
+            "target_id": 5579,
+            "target_slot": 0,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 13828,
+            "origin_id": -10,
+            "origin_slot": 5,
+            "target_id": 5580,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 20,
+            "origin_id": 5,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "AUDIO"
+          }
+        ],
+        "extra": {}
       }
     ]
   },
