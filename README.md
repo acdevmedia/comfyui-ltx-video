@@ -1,5 +1,7 @@
 # ACDEV LTX Studio
 
+[![Runpod](https://api.runpod.io/badge/acdevmedia/comfyui-ltx-video)](https://console.runpod.io/hub/listing/acdevmedia/comfyui-ltx-video)
+
 ACDEV LTX Studio is a versioned ComfyUI filmmaking environment packaged for RunPod and NVIDIA CUDA GPUs. The first supported profile is **LTX-2.5 Distilled**. It adapts the existing ValyrianTech ComfyUI Docker foundation and keeps the existing advanced LTX filmmaker workflow as the Image to Video starting point.
 
 The project is designed so another model generation can be added as a new profile, for example `versions/ltx-2.6/`, without mixing its checkpoint names, graph files, adapter rules, or dependency pins with 2.5. Runtime code and the container layout are shared; the selected profile supplies version-specific assets and pinned component revisions. A short-clip text-to-video smoke test passed on an A100 80 GB RunPod. Other workflows and the 30-second default still need separate performance validation.

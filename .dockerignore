@@ -20,3 +20,6 @@ tests
 docs
 README.md
 LICENSES
+
+!.runpod/
+!.runpod/handler.py

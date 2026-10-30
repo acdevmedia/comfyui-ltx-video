@@ -1,0 +1,67 @@
+{
+  "title": "ACDEV LTX-2.5 Studio",
+  "description": "ACDEV LTX-2.5 Studio: ComfyUI browser workflows for generating video with audio from text, images and soundtracks.",
+  "type": "serverless",
+  "category": "video",
+  "config": {
+    "runsOn": "GPU",
+    "endpointType": "LB",
+    "containerDiskInGb": 200,
+    "gpuCount": 1,
+    "gpuIds": "AMPERE_80",
+    "allowedCudaVersions": [
+      "12.8",
+      "12.9",
+      "13.0"
+    ],
+    "env": [
+      {
+        "key": "PORT",
+        "value": "8000"
+      },
+      {
+        "key": "PORT_HEALTH",
+        "value": "8001"
+      },
+      {
+        "key": "HF_TOKEN",
+        "input": {
+          "name": "Hugging Face read token",
+          "type": "string",
+          "description": "Use a Runpod Secret. Accept the model terms before deploying; never commit a token.",
+          "required": true
+        }
+      },
+      {
+        "key": "COMFYUI_ATTENTION",
+        "input": {
+          "name": "Attention backend",
+          "type": "string",
+          "options": [
+            {
+              "label": "SageAttention",
+              "value": "sage"
+            },
+            {
+              "label": "PyTorch",
+              "value": "pytorch"
+            }
+          ],
+          "default": "sage"
+        }
+      },
+      {
+        "key": "AUTO_DOWNLOAD_MODELS",
+        "value": "true"
+      },
+      {
+        "key": "AUTO_DOWNLOAD_ADAPTERS",
+        "value": "false"
+      },
+      {
+        "key": "ENABLE_JUPYTER",
+        "value": "false"
+      }
+    ]
+  }
+}
