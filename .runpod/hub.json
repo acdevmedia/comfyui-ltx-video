@@ -16,6 +16,278 @@
     ],
     "env": [
       {
+        "key": "AUTO_DOWNLOAD_ADAPTERS",
+        "input": {
+          "name": "Auto Download Adapters",
+          "type": "boolean",
+          "description": "Download the optional Ingredients BF16 models and IC-LoRA at startup; adds about 65 GiB.",
+          "default": false,
+          "advanced": false,
+          "trueValue": "true",
+          "falseValue": "false"
+        }
+      },
+      {
+        "key": "AUTO_DOWNLOAD_MODELS",
+        "input": {
+          "name": "Auto Download Models",
+          "type": "boolean",
+          "description": "Download missing required model files at startup. If disabled, all required weights must already exist on disk.",
+          "default": true,
+          "advanced": true,
+          "trueValue": "true",
+          "falseValue": "false"
+        }
+      },
+      {
+        "key": "BACKUP_RECHECK_SECONDS",
+        "input": {
+          "name": "Backup Recheck Seconds",
+          "type": "number",
+          "description": "Seconds between backup reconciliation scans; runtime enforces a minimum of 10.",
+          "default": 120,
+          "advanced": true
+        }
+      },
+      {
+        "key": "BACKUP_SETTLE_SECONDS",
+        "input": {
+          "name": "Backup Settle Seconds",
+          "type": "number",
+          "description": "Seconds to wait for output files to settle before upload.",
+          "default": 8,
+          "advanced": true
+        }
+      },
+      {
+        "key": "BACKUP_SOURCE_DIR",
+        "input": {
+          "name": "Backup Source Dir",
+          "type": "string",
+          "description": "Local output directory watched by S3 backup.",
+          "default": "/workspace/ComfyUI/output",
+          "advanced": true
+        }
+      },
+      {
+        "key": "COMFYUI_PORT",
+        "value": "8188"
+      },
+      {
+        "key": "HF_HOME",
+        "input": {
+          "name": "Hf Home",
+          "type": "string",
+          "description": "Hugging Face cache directory on container storage.",
+          "default": "/workspace/.cache/huggingface",
+          "advanced": true
+        }
+      },
+      {
+        "key": "HF_TOKEN",
+        "value": "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}"
+      },
+      {
+        "key": "HUGGING_FACE_HUB_TOKEN",
+        "value": "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}"
+      },
+      {
+        "key": "LOG_LEVEL",
+        "input": {
+          "name": "Log Level",
+          "type": "string",
+          "description": "Template log-level setting. Current startup scripts do not read it; retained for template parity.",
+          "default": "INFO",
+          "advanced": true
+        }
+      },
+      {
+        "key": "LTX_DEFAULT_ASPECT_RATIO",
+        "input": {
+          "name": "Ltx Default Aspect Ratio",
+          "type": "string",
+          "description": "Aspect ratio seeded into newly installed workflows: 16:9, 9:16, 4:3, 1:1, or 21:9.",
+          "default": "16:9",
+          "advanced": true,
+          "options": [
+            {
+              "label": "16:9",
+              "value": "16:9"
+            },
+            {
+              "label": "9:16",
+              "value": "9:16"
+            },
+            {
+              "label": "4:3",
+              "value": "4:3"
+            },
+            {
+              "label": "1:1",
+              "value": "1:1"
+            },
+            {
+              "label": "21:9",
+              "value": "21:9"
+            }
+          ]
+        }
+      },
+      {
+        "key": "LTX_DEFAULT_DURATION",
+        "input": {
+          "name": "Ltx Default Duration",
+          "type": "number",
+          "description": "Requested duration in seconds for newly installed workflows; long clips require sufficient GPU memory.",
+          "default": 30,
+          "advanced": true
+        }
+      },
+      {
+        "key": "LTX_DEFAULT_FPS",
+        "input": {
+          "name": "Ltx Default Fps",
+          "type": "number",
+          "description": "Frames per second seeded into newly installed workflows.",
+          "default": 24,
+          "advanced": true
+        }
+      },
+      {
+        "key": "LTX_DEFAULT_MEGAPIXELS",
+        "input": {
+          "name": "Ltx Default Megapixels",
+          "type": "number",
+          "description": "Resolution target for newly installed workflows; the installer clamps dimensions to a 0.2\u20132.0 megapixel range.",
+          "default": 0.5,
+          "advanced": true
+        }
+      },
+      {
+        "key": "LTX_DEFAULT_WORKFLOW",
+        "input": {
+          "name": "Ltx Default Workflow",
+          "type": "string",
+          "description": "Packaged workflow filename without .json to open by default. Existing workflow files are preserved.",
+          "default": "01_LTX25_Image_to_Video",
+          "advanced": true
+        }
+      },
+      {
+        "key": "LTX_MODEL_VARIANT",
+        "value": "int8-convrot"
+      },
+      {
+        "key": "LTX_VERSION",
+        "value": "ltx-2.5"
+      },
+      {
+        "key": "REALTIME_BACKUP",
+        "input": {
+          "name": "Realtime Backup",
+          "type": "boolean",
+          "description": "Enable automatic S3-compatible output backup. Configure a bucket and both credentials before enabling.",
+          "default": false,
+          "advanced": true,
+          "trueValue": "true",
+          "falseValue": "false"
+        }
+      },
+      {
+        "key": "S3_ACCESS_KEY_ID",
+        "value": "{{ RUNPOD_SECRET_S3_ACCESS_KEY_ID }}"
+      },
+      {
+        "key": "S3_BUCKET",
+        "input": {
+          "name": "S3 Bucket",
+          "type": "string",
+          "description": "Destination bucket name. Replace YOUR_BUCKET before enabling backup.",
+          "default": "YOUR_BUCKET",
+          "advanced": true
+        }
+      },
+      {
+        "key": "S3_ENDPOINT_URL",
+        "input": {
+          "name": "S3 Endpoint Url",
+          "type": "string",
+          "description": "S3 API endpoint. Template defaults to DigitalOcean Spaces SFO3; use the endpoint for your storage provider.",
+          "default": "https://sfo3.digitaloceanspaces.com",
+          "advanced": true
+        }
+      },
+      {
+        "key": "S3_FORCE_PATH_STYLE",
+        "input": {
+          "name": "S3 Force Path Style",
+          "type": "boolean",
+          "description": "Use path-style S3 bucket addressing when required by the storage provider.",
+          "default": false,
+          "advanced": true,
+          "trueValue": "true",
+          "falseValue": "false"
+        }
+      },
+      {
+        "key": "S3_PREFIX",
+        "input": {
+          "name": "S3 Prefix",
+          "type": "string",
+          "description": "Object-key prefix under the destination bucket.",
+          "default": "ltx25-studio",
+          "advanced": true
+        }
+      },
+      {
+        "key": "S3_REGION",
+        "input": {
+          "name": "S3 Region",
+          "type": "string",
+          "description": "S3 region used to sign requests.",
+          "default": "sfo3",
+          "advanced": true
+        }
+      },
+      {
+        "key": "S3_SECRET_ACCESS_KEY",
+        "value": "{{ RUNPOD_SECRET_S3_SECRET_ACCESS_KEY }}"
+      },
+      {
+        "key": "S3_SESSION_TOKEN",
+        "input": {
+          "name": "S3 Session Token",
+          "type": "string",
+          "description": "Optional temporary S3 session token. Replace OPTIONAL_TEMPORARY_TOKEN with a Runpod Secret reference when using temporary credentials; placeholder means no token.",
+          "default": "OPTIONAL_TEMPORARY_TOKEN",
+          "advanced": true
+        }
+      },
+      {
+        "key": "S3_SSE",
+        "input": {
+          "name": "S3 Sse",
+          "type": "string",
+          "description": "Server-side encryption setting: none disables it; use AES256 or aws:kms:<key-id> as supported by your provider.",
+          "default": "none",
+          "advanced": true
+        }
+      },
+      {
+        "key": "S3_STORAGE_CLASS",
+        "input": {
+          "name": "S3 Storage Class",
+          "type": "string",
+          "description": "Storage class passed to S3 uploads; STANDARD is the template default.",
+          "default": "STANDARD",
+          "advanced": true
+        }
+      },
+      {
+        "key": "TINI_SUBREAPER",
+        "value": "1"
+      },
+      {
         "key": "PORT",
         "value": "8000"
       },
@@ -24,19 +296,12 @@
         "value": "8001"
       },
       {
-        "key": "HF_TOKEN",
-        "input": {
-          "name": "Hugging Face read token",
-          "type": "string",
-          "description": "Use a Runpod Secret. Accept the model terms before deploying; never commit a token.",
-          "required": true
-        }
-      },
-      {
         "key": "COMFYUI_ATTENTION",
         "input": {
           "name": "Attention backend",
           "type": "string",
+          "description": "Attention backend used when the launch settings are first created. Existing user launch settings are preserved.",
+          "default": "sage",
           "options": [
             {
               "label": "SageAttention",
@@ -46,21 +311,8 @@
               "label": "PyTorch",
               "value": "pytorch"
             }
-          ],
-          "default": "sage"
+          ]
         }
-      },
-      {
-        "key": "AUTO_DOWNLOAD_MODELS",
-        "value": "true"
-      },
-      {
-        "key": "AUTO_DOWNLOAD_ADAPTERS",
-        "value": "false"
-      },
-      {
-        "key": "ENABLE_JUPYTER",
-        "value": "false"
       }
     ]
   }

@@ -18,8 +18,128 @@
     ],
     "env": [
       {
+        "key": "AUTO_DOWNLOAD_ADAPTERS",
+        "value": "false"
+      },
+      {
+        "key": "AUTO_DOWNLOAD_MODELS",
+        "value": "true"
+      },
+      {
+        "key": "BACKUP_RECHECK_SECONDS",
+        "value": "120"
+      },
+      {
+        "key": "BACKUP_SETTLE_SECONDS",
+        "value": "8"
+      },
+      {
+        "key": "BACKUP_SOURCE_DIR",
+        "value": "/workspace/ComfyUI/output"
+      },
+      {
+        "key": "COMFYUI_PORT",
+        "value": "8188"
+      },
+      {
+        "key": "HF_HOME",
+        "value": "/workspace/.cache/huggingface"
+      },
+      {
         "key": "HF_TOKEN",
         "value": "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}"
+      },
+      {
+        "key": "HUGGING_FACE_HUB_TOKEN",
+        "value": "{{ RUNPOD_SECRET_HUGGINGFACE_TOKEN }}"
+      },
+      {
+        "key": "LOG_LEVEL",
+        "value": "INFO"
+      },
+      {
+        "key": "LTX_DEFAULT_ASPECT_RATIO",
+        "value": "16:9"
+      },
+      {
+        "key": "LTX_DEFAULT_DURATION",
+        "value": "30"
+      },
+      {
+        "key": "LTX_DEFAULT_FPS",
+        "value": "24"
+      },
+      {
+        "key": "LTX_DEFAULT_MEGAPIXELS",
+        "value": "0.5"
+      },
+      {
+        "key": "LTX_DEFAULT_WORKFLOW",
+        "value": "01_LTX25_Image_to_Video"
+      },
+      {
+        "key": "LTX_MODEL_VARIANT",
+        "value": "int8-convrot"
+      },
+      {
+        "key": "LTX_VERSION",
+        "value": "ltx-2.5"
+      },
+      {
+        "key": "REALTIME_BACKUP",
+        "value": "false"
+      },
+      {
+        "key": "S3_ACCESS_KEY_ID",
+        "value": "{{ RUNPOD_SECRET_S3_ACCESS_KEY_ID }}"
+      },
+      {
+        "key": "S3_BUCKET",
+        "value": "YOUR_BUCKET"
+      },
+      {
+        "key": "S3_ENDPOINT_URL",
+        "value": "https://sfo3.digitaloceanspaces.com"
+      },
+      {
+        "key": "S3_FORCE_PATH_STYLE",
+        "value": "false"
+      },
+      {
+        "key": "S3_PREFIX",
+        "value": "ltx25-studio"
+      },
+      {
+        "key": "S3_REGION",
+        "value": "sfo3"
+      },
+      {
+        "key": "S3_SECRET_ACCESS_KEY",
+        "value": "{{ RUNPOD_SECRET_S3_SECRET_ACCESS_KEY }}"
+      },
+      {
+        "key": "S3_SESSION_TOKEN",
+        "value": "OPTIONAL_TEMPORARY_TOKEN"
+      },
+      {
+        "key": "S3_SSE",
+        "value": "none"
+      },
+      {
+        "key": "S3_STORAGE_CLASS",
+        "value": "STANDARD"
+      },
+      {
+        "key": "TINI_SUBREAPER",
+        "value": "1"
+      },
+      {
+        "key": "PORT",
+        "value": "8000"
+      },
+      {
+        "key": "PORT_HEALTH",
+        "value": "8001"
       }
     ]
   }

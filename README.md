@@ -232,3 +232,7 @@ The Docker and RunPod service layout is adapted from [ValyrianTech/ComfyUI_with_
 ## Verification record
 
 The repository includes CPU-only tests and GPU/cloud acceptance instructions. A local NVIDIA card is unavailable, so container startup with CUDA, RunPod generation, HF gated downloads, actual S3 upload, and browser playback of generated output remain unverified until their respective environments are used. Never infer success for those steps from a successful static test or image build.
+
+## Runpod environment reference
+
+See the [complete template environment reference](docs/runpod-environment.md) for every variable, its default, secret mapping, and Hub-specific differences. Defaults are synchronized from account template `abmsxu1p5j`.
