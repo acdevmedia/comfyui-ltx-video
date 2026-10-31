@@ -890,7 +890,7 @@
             },
             "widgets_values": [
               0,
-              "fixed"
+              "randomize"
             ],
             "widgets_values_named": {
               "value": 0,
