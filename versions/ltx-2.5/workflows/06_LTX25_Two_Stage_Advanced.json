@@ -176,7 +176,7 @@
           "widget": {
             "name": "value_3"
           },
-          "link": 783
+          "link": null
         },
         {
           "label": "Frame Height",
@@ -185,7 +185,7 @@
           "widget": {
             "name": "value_4"
           },
-          "link": 784
+          "link": null
         },
         {
           "label": "Frame Rate (fps)",
@@ -468,60 +468,6 @@
       "title": "Two Stage Generation — Advanced Filmmaker Controls"
     },
     {
-      "id": 403,
-      "type": "ResolutionSelector",
-      "pos": [
-        760,
-        1490
-      ],
-      "size": [
-        340,
-        200
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "showAdvanced": false,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "width",
-          "type": "INT",
-          "links": [
-            783
-          ]
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "links": [
-            784
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
-        "Node name for S&R": "ResolutionSelector",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "16:9 (Widescreen)",
-        0.5,
-        32
-      ],
-      "widgets_values_named": {
-        "aspect_ratio": "16:9 (Widescreen)",
-        "megapixels": 0.9,
-        "multiple": 32
-      },
-      "title": "Picture Size & Aspect Ratio"
-    },
-    {
       "id": 407,
       "type": "PrimitiveStringMultiline",
       "pos": [
@@ -628,7 +574,7 @@
         420
       ],
       "flags": {},
-      "order": 6,
+      "order": 5,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -649,22 +595,6 @@
       398,
       0,
       "IMAGE"
-    ],
-    [
-      783,
-      403,
-      0,
-      398,
-      4,
-      "INT"
-    ],
-    [
-      784,
-      403,
-      1,
-      398,
-      5,
-      "INT"
     ],
     [
       759,

@@ -238,3 +238,7 @@ The repository includes CPU-only tests and GPU/cloud acceptance instructions. A 
 ## Runpod environment reference
 
 See the [complete template environment reference](docs/runpod-environment.md) for every variable, its default, secret mapping, and Hub-specific differences. Defaults are synchronized from account template `abmsxu1p5j`.
+
+## Editable render size
+
+Set **Render Width** and **Render Height** on the canvas, or **Width** and **Height** in the main controls panel. These fields drive generation directly; resolution presets no longer override them. The added image-resize controls use a center crop to the selected dimensions; change the resize node’s crop setting if needed. Use dimensions supported by the model (multiples of 32 for LTX video, 16 for image workflows). LTX’s two-stage workflows retain their internal half-resolution first pass and upscale to the selected output size. Existing installed workflows and user edits are preserved; open a newly packaged workflow to get these controls.

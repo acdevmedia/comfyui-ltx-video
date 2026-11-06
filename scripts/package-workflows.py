@@ -2,6 +2,7 @@
 """Build filmmaker-named workflow assets from the preserved master and official graph refs."""
 import copy, json, uuid
 from workflow_panels import fold_into_panel
+from workflow_dimensions import apply_dimensions
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -265,6 +266,7 @@ def add_negative_prompt_note(data):
     if 'lastNodeId' in state: state['lastNodeId']=node_id
 
 def write(name, data):
+    apply_dimensions(data,(768,448) if 'Ingredients' in name else None)
     add_negative_prompt_note(data)
     # Preserve the packaged workflows' random-seed default when rebuilding from
     # older upstream references (including nodes inside controls subgraphs).

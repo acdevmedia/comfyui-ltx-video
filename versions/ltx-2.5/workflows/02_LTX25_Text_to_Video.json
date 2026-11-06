@@ -106,7 +106,7 @@
           "widget": {
             "name": "value_2"
           },
-          "link": 792
+          "link": null
         },
         {
           "label": "height",
@@ -115,7 +115,7 @@
           "widget": {
             "name": "value_3"
           },
-          "link": 793
+          "link": null
         },
         {
           "label": "seed",
@@ -262,49 +262,6 @@
       "bgcolor": "#000"
     },
     {
-      "id": 409,
-      "type": "ResolutionSelector",
-      "pos": [
-        2140,
-        6810
-      ],
-      "size": [
-        270,
-        170
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "showAdvanced": false,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "width",
-          "type": "INT",
-          "links": [
-            792
-          ]
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "links": [
-            793
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
-        "Node name for S&R": "ResolutionSelector"
-      },
-      "widgets_values": [
-        "16:9 (Widescreen)",
-        0.5,
-        32
-      ]
-    },
-    {
       "id": 411,
       "type": "MarkdownNote",
       "pos": [
@@ -364,7 +321,7 @@
         420
       ],
       "flags": {},
-      "order": 7,
+      "order": 6,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -385,22 +342,6 @@
       75,
       0,
       "VIDEO"
-    ],
-    [
-      792,
-      409,
-      0,
-      405,
-      3,
-      "INT"
-    ],
-    [
-      793,
-      409,
-      1,
-      405,
-      4,
-      "INT"
     ]
   ],
   "groups": [],

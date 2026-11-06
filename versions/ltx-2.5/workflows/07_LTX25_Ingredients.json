@@ -1,8 +1,8 @@
 {
   "id": "3f8c25d1-9a47-4be0-8d63-71c4ea9b5028",
   "revision": 0,
-  "last_node_id": 9022,
-  "last_link_id": 13854,
+  "last_node_id": 9024,
+  "last_link_id": 13864,
   "nodes": [
     {
       "id": 5527,
@@ -279,7 +279,7 @@
       ],
       "size": [
         520,
-        214
+        360
       ],
       "flags": {},
       "order": 5,
@@ -338,6 +338,24 @@
             "name": "value_1"
           },
           "link": null
+        },
+        {
+          "name": "render_width",
+          "label": "Render Width",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "render_width"
+          }
+        },
+        {
+          "name": "render_height",
+          "label": "Render Height",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "render_height"
+          }
         }
       ],
       "outputs": [
@@ -362,14 +380,18 @@
         "Reference sheet: [describe the characters, props, wardrobe, and setting by their positions in the sheet.]\n\nGenerated video: [describe the action, camera movement, and sound.]",
         "",
         5,
-        24
+        24,
+        768,
+        448
       ],
       "widgets_values_named": {
         "noise_seed": 42,
         "value_2": "Reference sheet: [describe the characters, props, wardrobe, and setting by their positions in the sheet.]\n\nGenerated video: [describe the action, camera movement, and sound.]",
         "text": "",
         "value": 5,
-        "value_1": 24
+        "value_1": 24,
+        "render_width": 768,
+        "render_height": 448
       }
     }
   ],
@@ -1116,7 +1138,7 @@
         "state": {
           "lastGroupId": 158,
           "lastNodeId": 9022,
-          "lastLinkId": 13854,
+          "lastLinkId": 13863,
           "lastRerouteId": 9025
         },
         "revision": 0,
@@ -1264,6 +1286,32 @@
             "pos": [
               -4194.357539930894,
               3915.8063836028455
+            ]
+          },
+          {
+            "id": "9b48fdc5-1258-5b4c-93c2-cfe2cb33d627",
+            "name": "render_width",
+            "label": "Render Width",
+            "type": "INT",
+            "linkIds": [
+              13861
+            ],
+            "pos": [
+              0,
+              180
+            ]
+          },
+          {
+            "id": "b660c0e0-9177-5e9e-938e-ff2c7dc42e9b",
+            "name": "render_height",
+            "label": "Render Height",
+            "type": "INT",
+            "linkIds": [
+              13863
+            ],
+            "pos": [
+              0,
+              200
             ]
           }
         ],
@@ -2147,7 +2195,7 @@
           },
           {
             "id": 4990,
-            "type": "ResizeImageMaskNode",
+            "type": "ImageScale",
             "pos": [
               -3595.4252283862115,
               3290.251482249038
@@ -2162,36 +2210,25 @@
             "inputs": [
               {
                 "localized_name": "input",
-                "name": "input",
+                "name": "image",
                 "type": "IMAGE,MASK",
                 "link": 13812
               },
               {
-                "localized_name": "resize_type",
-                "name": "resize_type",
-                "type": "COMFY_DYNAMICCOMBO_V3",
-                "widget": {
-                  "name": "resize_type"
-                },
-                "link": null
-              },
-              {
-                "localized_name": "shorter_size",
-                "name": "resize_type.shorter_size",
+                "name": "width",
                 "type": "INT",
                 "widget": {
-                  "name": "resize_type.shorter_size"
+                  "name": "width"
                 },
-                "link": null
+                "link": 13861
               },
               {
-                "localized_name": "scale_method",
-                "name": "scale_method",
-                "type": "COMBO",
+                "name": "height",
+                "type": "INT",
                 "widget": {
-                  "name": "scale_method"
+                  "name": "height"
                 },
-                "link": null
+                "link": 13863
               }
             ],
             "outputs": [
@@ -2207,20 +2244,17 @@
             "properties": {
               "cnr_id": "comfy-core",
               "ver": "0.16.0",
-              "Node name for S&R": "ResizeImageMaskNode"
+              "Node name for S&R": "ImageScale"
             },
             "widgets_values": [
-              "scale shorter dimension",
-              544,
-              "lanczos"
+              "lanczos",
+              768,
+              448,
+              "center"
             ],
-            "widgets_values_named": {
-              "resize_type": "scale shorter dimension",
-              "resize_type.shorter_size": 544,
-              "scale_method": "lanczos"
-            },
             "color": "#432",
-            "bgcolor": "#653"
+            "bgcolor": "#653",
+            "title": "Resize reference to render width and height"
           },
           {
             "id": 9016,
@@ -2601,6 +2635,22 @@
             "target_id": 5504,
             "target_slot": 3,
             "type": "COMBO"
+          },
+          {
+            "id": 13861,
+            "origin_id": -10,
+            "origin_slot": 9,
+            "target_id": 4990,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 13863,
+            "origin_id": -10,
+            "origin_slot": 10,
+            "target_id": 4990,
+            "target_slot": 2,
+            "type": "INT"
           }
         ],
         "reroutes": [
@@ -4162,7 +4212,7 @@
         "state": {
           "lastGroupId": 158,
           "lastNodeId": 9022,
-          "lastLinkId": 13854,
+          "lastLinkId": 13858,
           "lastRerouteId": 9025
         },
         "revision": 0,
@@ -4307,6 +4357,32 @@
               -2739.037109375,
               4273
             ]
+          },
+          {
+            "id": "789a9276-23ec-5f59-9bfd-babf01c50ce0",
+            "name": "render_width",
+            "label": "Render Width",
+            "type": "INT",
+            "linkIds": [
+              13855
+            ],
+            "pos": [
+              0,
+              200
+            ]
+          },
+          {
+            "id": "45a31a93-c5ba-5236-8d4e-5700f5bd4466",
+            "name": "render_height",
+            "label": "Render Height",
+            "type": "INT",
+            "linkIds": [
+              13858
+            ],
+            "pos": [
+              0,
+              220
+            ]
           }
         ],
         "outputs": [
@@ -4415,7 +4491,7 @@
                 "widget": {
                   "name": "width"
                 },
-                "link": 32
+                "link": 13855
               },
               {
                 "localized_name": "height",
@@ -4424,7 +4500,7 @@
                 "widget": {
                   "name": "height"
                 },
-                "link": 33
+                "link": 13858
               },
               {
                 "localized_name": "length",
@@ -4752,17 +4828,13 @@
                 "localized_name": "width",
                 "name": "width",
                 "type": "INT",
-                "links": [
-                  32
-                ]
+                "links": []
               },
               {
                 "localized_name": "height",
                 "name": "height",
                 "type": "INT",
-                "links": [
-                  33
-                ]
+                "links": []
               },
               {
                 "localized_name": "batch_size",
@@ -5012,22 +5084,6 @@
             "type": "IMAGE"
           },
           {
-            "id": 32,
-            "origin_id": 9011,
-            "origin_slot": 0,
-            "target_id": 3059,
-            "target_slot": 0,
-            "type": "INT"
-          },
-          {
-            "id": 33,
-            "origin_id": 9011,
-            "origin_slot": 1,
-            "target_id": 3059,
-            "target_slot": 1,
-            "type": "INT"
-          },
-          {
             "id": 34,
             "origin_id": -10,
             "origin_slot": 3,
@@ -5101,6 +5157,22 @@
             "target_slot": 7,
             "type": "FLOAT",
             "parentId": 705
+          },
+          {
+            "id": 13855,
+            "origin_id": -10,
+            "origin_slot": 10,
+            "target_id": 3059,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 13858,
+            "origin_id": -10,
+            "origin_slot": 11,
+            "target_id": 3059,
+            "target_slot": 1,
+            "type": "INT"
           }
         ],
         "reroutes": [
@@ -5313,7 +5385,7 @@
         "state": {
           "lastGroupId": 158,
           "lastNodeId": 9022,
-          "lastLinkId": 13854,
+          "lastLinkId": 13864,
           "lastRerouteId": 9025
         },
         "revision": 0,
@@ -5417,6 +5489,34 @@
             "pos": [
               51,
               124
+            ]
+          },
+          {
+            "id": "f7c0bee1-2ab8-5b85-ad86-dc28f8c6998f",
+            "name": "render_width",
+            "label": "Render Width",
+            "type": "INT",
+            "linkIds": [
+              13856,
+              13862
+            ],
+            "pos": [
+              0,
+              120
+            ]
+          },
+          {
+            "id": "ab74af38-6f03-5a1b-bdda-6833dfd1e3d1",
+            "name": "render_height",
+            "label": "Render Height",
+            "type": "INT",
+            "linkIds": [
+              13859,
+              13864
+            ],
+            "pos": [
+              0,
+              140
             ]
           }
         ],
@@ -5547,7 +5647,7 @@
             ],
             "size": [
               300,
-              360
+              480
             ],
             "flags": {},
             "order": 4,
@@ -5621,6 +5721,18 @@
                 "name": "img_compression",
                 "type": "INT",
                 "link": null
+              },
+              {
+                "name": "render_width",
+                "label": "Render Width",
+                "type": "INT",
+                "link": 13856
+              },
+              {
+                "name": "render_height",
+                "label": "Render Height",
+                "type": "INT",
+                "link": 13859
               }
             ],
             "outputs": [
@@ -5799,7 +5911,7 @@
             ],
             "size": [
               344.79395701431804,
-              314
+              450
             ],
             "flags": {},
             "order": 1,
@@ -5876,6 +5988,18 @@
                 "name": "value_6",
                 "type": "FLOAT",
                 "link": 13791
+              },
+              {
+                "name": "render_width",
+                "label": "Render Width",
+                "type": "INT",
+                "link": 13862
+              },
+              {
+                "name": "render_height",
+                "label": "Render Height",
+                "type": "INT",
+                "link": 13864
               }
             ],
             "outputs": [
@@ -6464,6 +6588,38 @@
             "target_id": -20,
             "target_slot": 0,
             "type": "VIDEO"
+          },
+          {
+            "id": 13856,
+            "origin_id": -10,
+            "origin_slot": 6,
+            "target_id": 9002,
+            "target_slot": 10,
+            "type": "INT"
+          },
+          {
+            "id": 13859,
+            "origin_id": -10,
+            "origin_slot": 7,
+            "target_id": 9002,
+            "target_slot": 11,
+            "type": "INT"
+          },
+          {
+            "id": 13862,
+            "origin_id": -10,
+            "origin_slot": 6,
+            "target_id": 5014,
+            "target_slot": 9,
+            "type": "INT"
+          },
+          {
+            "id": 13864,
+            "origin_id": -10,
+            "origin_slot": 7,
+            "target_id": 5014,
+            "target_slot": 10,
+            "type": "INT"
           }
         ],
         "extra": {}
@@ -6498,5 +6654,9 @@
       "workflow": "Ingredients — Character and Scene Continuity"
     }
   },
-  "version": 0.4
+  "version": 0.4,
+  "state": {
+    "lastLinkId": 13860,
+    "lastNodeId": 9024
+  }
 }
