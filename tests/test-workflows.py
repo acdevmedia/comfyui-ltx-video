@@ -107,7 +107,8 @@ for name in profile_names:
         out=next(l for l in sub['links'] if l['origin_id']==lora['id'])
         assert next(n for n in sub['nodes'] if n['id']==into['origin_id'])['type']=='UNETLoader'
         assert next(n for n in sub['nodes'] if n['id']==out['target_id'])['type']=='LTXVDualCFGGuider'
-        assert control['widgets_values'][-1]==0.0 and control['inputs'][-1]['label']=='Transition LoRA strength'
+        assert [i.get('label') for i in control['inputs'] if i.get('widget')][-2:]==['Transition LoRA strength','Exact Frame']
+        assert control['widgets_values'][-2:]==[0.0,False]
         assert lora['inputs'][0]['link']==into['id'] and next(n for n in sub['nodes'] if n['id']==out['target_id'])['inputs'][out['target_slot']]['link']==out['id']
     if name == '05_LTX25_Text_to_Audio.json':
         # Keep the Load Models outputs connected to the matching exposed

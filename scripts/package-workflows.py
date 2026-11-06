@@ -387,8 +387,6 @@ def fit_to_opening_image(name, data):
     elif name[:3]=='03_':
         graph,resize=nested(213)
         fit_frame_to_image(data,graph,215,216,image_of(resize))
-        # The opening frame now matches the frame exactly; the closing one still crops if it differs.
-        resize['widgets_values'][3]='disabled'
     elif name[:3]=='04_':
         graph=nested(6012)[0];slot=next(i for i,x in enumerate(graph['inputs']) if x['name']=='input')
         fit_frame_to_image(data,graph,6012,6013,(-10,slot),(6014,0,False))

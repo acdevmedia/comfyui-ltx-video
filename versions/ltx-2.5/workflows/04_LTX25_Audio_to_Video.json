@@ -6,7 +6,7 @@
   "state": {
     "lastGroupId": 158,
     "lastNodeId": 6021,
-    "lastLinkId": 14070,
+    "lastLinkId": 14072,
     "lastRerouteId": 5039
   },
   "groups": [
@@ -414,6 +414,15 @@
           "name": "audio",
           "type": "AUDIO",
           "link": 14058
+        },
+        {
+          "name": "exact_frame",
+          "label": "Exact Frame",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "exact_frame"
+          }
         }
       ],
       "outputs": [
@@ -442,7 +451,8 @@
         544,
         false,
         false,
-        42
+        42,
+        false
       ],
       "widgets_values_named": {
         "describe_the_video": "",
@@ -454,7 +464,8 @@
         "height": 544,
         "use_the_opening_frame": false,
         "rewrite_my_prompt_with_ai": false,
-        "seed": 42
+        "seed": 42,
+        "exact_frame": false
       }
     },
     {
@@ -7431,6 +7442,20 @@
               0,
               220
             ]
+          },
+          {
+            "id": "8ac91efd-83b6-50e3-a82b-95ebd99f9aa2",
+            "name": "exact_frame",
+            "label": "Exact Frame",
+            "type": "BOOLEAN",
+            "linkIds": [
+              14066,
+              14072
+            ],
+            "pos": [
+              0,
+              0
+            ]
           }
         ],
         "outputs": [
@@ -8604,7 +8629,7 @@
                 "type": "INT",
                 "links": [
                   14061,
-                  14066
+                  14067
                 ]
               }
             ],
@@ -8651,7 +8676,7 @@
                 "type": "INT",
                 "links": [
                   14062,
-                  14067
+                  14068
                 ]
               }
             ],
@@ -8699,7 +8724,7 @@
                 "links": [
                   14050,
                   14065,
-                  14070
+                  14071
                 ]
               }
             ],
@@ -8832,7 +8857,7 @@
                 "type": "INT",
                 "links": [
                   14063,
-                  14068
+                  14069
                 ]
               },
               {
@@ -8840,7 +8865,7 @@
                 "type": "INT",
                 "links": [
                   14064,
-                  14069
+                  14070
                 ]
               },
               {
@@ -8869,7 +8894,7 @@
               180
             ],
             "widgets_values": [
-              "a if not e else max(64,round(sqrt(a*b*c/d)/32)*32)"
+              "a if not e or f else max(64,round(sqrt(a*b*c/d)/32)*32)"
             ],
             "inputs": [
               {
@@ -8904,6 +8929,11 @@
                 "name": "values.e",
                 "type": "FLOAT,INT,BOOLEAN",
                 "link": 14065
+              },
+              {
+                "name": "values.f",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 14066
               }
             ],
             "outputs": [
@@ -8945,7 +8975,7 @@
               180
             ],
             "widgets_values": [
-              "b if not e else max(64,round(sqrt(a*b*d/c)/32)*32)"
+              "b if not e or f else max(64,round(sqrt(a*b*d/c)/32)*32)"
             ],
             "inputs": [
               {
@@ -8959,27 +8989,32 @@
               {
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 14066
+                "link": 14067
               },
               {
                 "name": "values.b",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 14067
+                "link": 14068
               },
               {
                 "name": "values.c",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 14068
+                "link": 14069
               },
               {
                 "name": "values.d",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 14069
+                "link": 14070
               },
               {
                 "name": "values.e",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 14070
+                "link": 14071
+              },
+              {
+                "name": "values.f",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 14072
               }
             ],
             "outputs": [
@@ -9470,6 +9505,14 @@
           },
           {
             "id": 14066,
+            "origin_id": -10,
+            "origin_slot": 12,
+            "target_id": 6019,
+            "target_slot": 6,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 14067,
             "origin_id": 6012,
             "origin_slot": 0,
             "target_id": 6020,
@@ -9477,7 +9520,7 @@
             "type": "INT"
           },
           {
-            "id": 14067,
+            "id": 14068,
             "origin_id": 6013,
             "origin_slot": 0,
             "target_id": 6020,
@@ -9485,7 +9528,7 @@
             "type": "INT"
           },
           {
-            "id": 14068,
+            "id": 14069,
             "origin_id": 6018,
             "origin_slot": 0,
             "target_id": 6020,
@@ -9493,7 +9536,7 @@
             "type": "INT"
           },
           {
-            "id": 14069,
+            "id": 14070,
             "origin_id": 6018,
             "origin_slot": 1,
             "target_id": 6020,
@@ -9501,11 +9544,19 @@
             "type": "INT"
           },
           {
-            "id": 14070,
+            "id": 14071,
             "origin_id": 6014,
             "origin_slot": 0,
             "target_id": 6020,
             "target_slot": 5,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 14072,
+            "origin_id": -10,
+            "origin_slot": 12,
+            "target_id": 6020,
+            "target_slot": 6,
             "type": "BOOLEAN"
           }
         ],
@@ -9514,5 +9565,5 @@
     ]
   },
   "last_node_id": 6021,
-  "last_link_id": 14070
+  "last_link_id": 14072
 }

@@ -189,6 +189,8 @@ def fit_frame_to_image(data, graph, width, height, image, toggle=None, step=32):
     `width` and `height` are the panel's primitives, which keep setting the frame's area while the image
     sets its proportions. `image` is the (node id, slot) supplying the picture. `toggle` is a (node id,
     slot, value) boolean that, when it holds `value`, means no image is in use: the typed size then stands.
+    Exact Frame joins the panel as a new switch, off by default, that keeps the typed size too; the image
+    is then centre-cropped to it, by the resize or by LTXVImgToVideoInplace.
     """
     groups = [data] + data.get('definitions', {}).get('subgraphs', [])
     next_node = max(n['id'] for g in groups for n in g['nodes'])
@@ -211,17 +213,28 @@ def fit_frame_to_image(data, graph, width, height, image, toggle=None, step=32):
         else:
             output = nodes[origin]['outputs'][origin_slot]
             output['links'] = (output.get('links') or []) + [next_link]
+    instance = next(n for n in data['nodes'] if n['type'] == graph['id'])
+    exact_slot = len(graph['inputs'])
+    graph['inputs'].append({'id': str(uuid.uuid5(uuid.NAMESPACE_URL, graph['id'] + '/exact_frame')), 'name': 'exact_frame', 'label': 'Exact Frame',
+                            'type': 'BOOLEAN', 'linkIds': [], 'pos': [0, 0]})
+    instance['inputs'].append({'name': 'exact_frame', 'label': 'Exact Frame', 'type': 'BOOLEAN', 'link': None, 'widget': {'name': 'exact_frame'}})
+    assert isinstance(instance.get('widgets_values'), list), instance['id']
+    instance['widgets_values'].append(False)
+    if 'widgets_values_named' in instance:
+        instance['widgets_values_named']['exact_frame'] = False
     x, y = nodes[width]['pos']
     getter = add({'type': 'GetImageSize', 'title': 'Size of your image', 'pos': [x, y + 900], 'size': [300, 120], 'widgets_values': [],
                   'inputs': [{'name': 'image', 'type': 'IMAGE', 'link': None}],
                   'outputs': [{'name': name, 'type': 'INT', 'links': []} for name in ('width', 'height', 'batch_size')]})
     def fit(title, expression, row):
+        typed = 'a' if row == 0 else 'b'
         if toggle:
-            typed = 'a' if row == 0 else 'b'
-            expression = '%s if %se else %s' % (typed, '' if toggle[2] else 'not ', expression)
+            expression = '%s if %se or f else %s' % (typed, '' if toggle[2] else 'not ', expression)
+        else:
+            expression = '%s if e else %s' % (typed, expression)
         return add({'type': 'ComfyMathExpression', 'title': title, 'pos': [x, y + 1040 + row * 200], 'size': [300, 180], 'widgets_values': [expression],
                     'inputs': [{'name': 'expression', 'type': 'STRING', 'link': None, 'widget': {'name': 'expression'}}] +
-                              [{'name': 'values.' + letter, 'type': 'FLOAT,INT,BOOLEAN', 'link': None} for letter in ('abcde' if toggle else 'abcd')],
+                              [{'name': 'values.' + letter, 'type': 'FLOAT,INT,BOOLEAN', 'link': None} for letter in ('abcdef' if toggle else 'abcde')],
                     'outputs': [{'name': 'FLOAT', 'type': 'FLOAT', 'links': []}, {'name': 'INT', 'type': 'INT', 'links': []}, {'name': 'BOOL', 'type': 'BOOLEAN', 'links': []}]})
     fit_w = fit('Fit Frame Width', fit_expression('c', 'd', step), 0)
     fit_h = fit('Fit Frame Height', fit_expression('d', 'c', step), 1)
@@ -241,6 +254,7 @@ def fit_frame_to_image(data, graph, width, height, image, toggle=None, step=32):
         connect(getter['id'], 1, node, 4, 'INT')
         if toggle:
             connect(toggle[0], toggle[1], node, 5, 'BOOLEAN')
+        connect(-10, exact_slot, node, 6 if toggle else 5, 'BOOLEAN')
     data['last_node_id'], data['last_link_id'] = next_node, next_link
     state = data.get('state')
     if state:

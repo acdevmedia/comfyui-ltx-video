@@ -2,7 +2,7 @@
   "id": "0112e9af-5129-48ba-af78-92c40ac40b40",
   "revision": 0,
   "last_node_id": 263,
-  "last_link_id": 398,
+  "last_link_id": 400,
   "nodes": [
     {
       "id": 39,
@@ -232,6 +232,15 @@
             "name": "transition_strength"
           },
           "link": null
+        },
+        {
+          "name": "exact_frame",
+          "label": "Exact Frame",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "exact_frame"
+          }
         }
       ],
       "outputs": [
@@ -262,7 +271,8 @@
         "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
         "gemma4_e2b_it_int8_convrot.safetensors",
         "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping",
-        0.0
+        0.0,
+        false
       ],
       "title": "First and Last Frame — Filmmaker Controls"
     },
@@ -681,6 +691,20 @@
             "pos": [
               -120.185546875,
               2494
+            ]
+          },
+          {
+            "id": "539deb4a-23a2-5eb0-8538-311309f028a4",
+            "name": "exact_frame",
+            "label": "Exact Frame",
+            "type": "BOOLEAN",
+            "linkIds": [
+              395,
+              400
+            ],
+            "pos": [
+              0,
+              0
             ]
           }
         ],
@@ -2348,7 +2372,7 @@
               "scale dimensions",
               640,
               360,
-              "disabled",
+              "center",
               "nearest-exact"
             ]
           },
@@ -2822,7 +2846,7 @@
                 "type": "INT",
                 "links": [
                   391,
-                  395
+                  396
                 ]
               }
             ],
@@ -2881,7 +2905,7 @@
                 "type": "INT",
                 "links": [
                   392,
-                  396
+                  397
                 ]
               }
             ],
@@ -3311,7 +3335,7 @@
                 "type": "INT",
                 "links": [
                   393,
-                  397
+                  398
                 ]
               },
               {
@@ -3319,7 +3343,7 @@
                 "type": "INT",
                 "links": [
                   394,
-                  398
+                  399
                 ]
               },
               {
@@ -3348,7 +3372,7 @@
               180
             ],
             "widgets_values": [
-              "max(64,round(sqrt(a*b*c/d)/32)*32)"
+              "a if e else max(64,round(sqrt(a*b*c/d)/32)*32)"
             ],
             "inputs": [
               {
@@ -3378,6 +3402,11 @@
                 "name": "values.d",
                 "type": "FLOAT,INT,BOOLEAN",
                 "link": 394
+              },
+              {
+                "name": "values.e",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 395
               }
             ],
             "outputs": [
@@ -3420,7 +3449,7 @@
               180
             ],
             "widgets_values": [
-              "max(64,round(sqrt(a*b*d/c)/32)*32)"
+              "b if e else max(64,round(sqrt(a*b*d/c)/32)*32)"
             ],
             "inputs": [
               {
@@ -3434,22 +3463,27 @@
               {
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 395
+                "link": 396
               },
               {
                 "name": "values.b",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 396
+                "link": 397
               },
               {
                 "name": "values.c",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 397
+                "link": 398
               },
               {
                 "name": "values.d",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 398
+                "link": 399
+              },
+              {
+                "name": "values.e",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 400
               }
             ],
             "outputs": [
@@ -4257,6 +4291,14 @@
           },
           {
             "id": 395,
+            "origin_id": -10,
+            "origin_slot": 16,
+            "target_id": 261,
+            "target_slot": 5,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 396,
             "origin_id": 215,
             "origin_slot": 0,
             "target_id": 262,
@@ -4264,7 +4306,7 @@
             "type": "INT"
           },
           {
-            "id": 396,
+            "id": 397,
             "origin_id": 216,
             "origin_slot": 0,
             "target_id": 262,
@@ -4272,7 +4314,7 @@
             "type": "INT"
           },
           {
-            "id": 397,
+            "id": 398,
             "origin_id": 260,
             "origin_slot": 0,
             "target_id": 262,
@@ -4280,12 +4322,20 @@
             "type": "INT"
           },
           {
-            "id": 398,
+            "id": 399,
             "origin_id": 260,
             "origin_slot": 1,
             "target_id": 262,
             "target_slot": 4,
             "type": "INT"
+          },
+          {
+            "id": 400,
+            "origin_id": -10,
+            "origin_slot": 16,
+            "target_id": 262,
+            "target_slot": 5,
+            "type": "BOOLEAN"
           }
         ],
         "extra": {}

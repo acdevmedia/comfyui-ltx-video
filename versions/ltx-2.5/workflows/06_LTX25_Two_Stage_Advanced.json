@@ -2,7 +2,7 @@
   "id": "07824bbb-6672-4bb0-ac36-4313a519e35b",
   "revision": 5,
   "last_node_id": 412,
-  "last_link_id": 806,
+  "last_link_id": 808,
   "nodes": [
     {
       "id": 395,
@@ -372,6 +372,15 @@
             "name": "filmmaker_350_crf"
           },
           "label": "Opening Image — Compression Quality (CRF)"
+        },
+        {
+          "name": "exact_frame",
+          "label": "Exact Frame",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "exact_frame"
+          }
         }
       ],
       "outputs": [
@@ -435,7 +444,8 @@
         "scale longer dimension",
         1536,
         "lanczos",
-        18
+        18,
+        false
       ],
       "widgets_values_named": {
         "value": "Use the provided start image as the first frame. The cybernetic figure slowly turns his head to the right, his glowing blue eyes scanning the horizon, mechanical joints in his neck whirring faintly. The camera follows his gaze, panning across the rooftop to reveal the city beyond: a river of light winding between dark towers, a flying vehicle gliding past between the buildings, its lights streaking. He watches it pass, then his eyes narrow slightly. The camera settles on his profile against the city glow, distant hover traffic humming, wind gusting across the rooftop. No text, no black frames.",
@@ -463,7 +473,8 @@
         "filmmaker_351_mode": "scale longer dimension",
         "filmmaker_351_size": 1536,
         "filmmaker_351_resampling": "lanczos",
-        "filmmaker_350_crf": 18
+        "filmmaker_350_crf": 18,
+        "exact_frame": false
       },
       "title": "Two Stage Generation — Advanced Filmmaker Controls"
     },
@@ -997,6 +1008,20 @@
             "pos": [
               -480,
               7680
+            ]
+          },
+          {
+            "id": "066d4108-f71f-5ab6-a7c5-1dadba8011c6",
+            "name": "exact_frame",
+            "label": "Exact Frame",
+            "type": "BOOLEAN",
+            "linkIds": [
+              802,
+              808
+            ],
+            "pos": [
+              0,
+              0
             ]
           }
         ],
@@ -1666,7 +1691,7 @@
                   683,
                   693,
                   801,
-                  806
+                  807
                 ]
               }
             ],
@@ -1930,7 +1955,7 @@
                 "type": "INT",
                 "links": [
                   797,
-                  802
+                  803
                 ]
               }
             ],
@@ -2124,7 +2149,7 @@
                 "type": "INT",
                 "links": [
                   798,
-                  803
+                  804
                 ]
               }
             ],
@@ -4279,7 +4304,7 @@
                 "type": "INT",
                 "links": [
                   799,
-                  804
+                  805
                 ]
               },
               {
@@ -4287,7 +4312,7 @@
                 "type": "INT",
                 "links": [
                   800,
-                  805
+                  806
                 ]
               },
               {
@@ -4316,7 +4341,7 @@
               180
             ],
             "widgets_values": [
-              "a if e else max(64,round(sqrt(a*b*c/d)/32)*32)"
+              "a if e or f else max(64,round(sqrt(a*b*c/d)/32)*32)"
             ],
             "inputs": [
               {
@@ -4351,6 +4376,11 @@
                 "name": "values.e",
                 "type": "FLOAT,INT,BOOLEAN",
                 "link": 801
+              },
+              {
+                "name": "values.f",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 802
               }
             ],
             "outputs": [
@@ -4392,7 +4422,7 @@
               180
             ],
             "widgets_values": [
-              "b if e else max(64,round(sqrt(a*b*d/c)/32)*32)"
+              "b if e or f else max(64,round(sqrt(a*b*d/c)/32)*32)"
             ],
             "inputs": [
               {
@@ -4406,27 +4436,32 @@
               {
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 802
+                "link": 803
               },
               {
                 "name": "values.b",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 803
+                "link": 804
               },
               {
                 "name": "values.c",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 804
+                "link": 805
               },
               {
                 "name": "values.d",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 805
+                "link": 806
               },
               {
                 "name": "values.e",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 806
+                "link": 807
+              },
+              {
+                "name": "values.f",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 808
               }
             ],
             "outputs": [
@@ -5374,6 +5409,14 @@
           },
           {
             "id": 802,
+            "origin_id": -10,
+            "origin_slot": 27,
+            "target_id": 410,
+            "target_slot": 6,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 803,
             "origin_id": 372,
             "origin_slot": 0,
             "target_id": 411,
@@ -5381,7 +5424,7 @@
             "type": "INT"
           },
           {
-            "id": 803,
+            "id": 804,
             "origin_id": 360,
             "origin_slot": 0,
             "target_id": 411,
@@ -5389,7 +5432,7 @@
             "type": "INT"
           },
           {
-            "id": 804,
+            "id": 805,
             "origin_id": 409,
             "origin_slot": 0,
             "target_id": 411,
@@ -5397,7 +5440,7 @@
             "type": "INT"
           },
           {
-            "id": 805,
+            "id": 806,
             "origin_id": 409,
             "origin_slot": 1,
             "target_id": 411,
@@ -5405,11 +5448,19 @@
             "type": "INT"
           },
           {
-            "id": 806,
+            "id": 807,
             "origin_id": 363,
             "origin_slot": 0,
             "target_id": 411,
             "target_slot": 5,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 808,
+            "origin_id": -10,
+            "origin_slot": 27,
+            "target_id": 411,
+            "target_slot": 6,
             "type": "BOOLEAN"
           }
         ],

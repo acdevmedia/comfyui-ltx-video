@@ -92,14 +92,16 @@ assert fitted(1280,720,1024,1536)==(768,1184)
 assert fitted(960,544,3000,3000)==(736,736)
 
 # Every workflow that starts from a picture fits to it, and honours its off switch.
-for name,expression in (('01_LTX25_Image_to_Video.json','a if e else '),('03_LTX25_First_Last_Frame.json',''),
-                        ('04_LTX25_Audio_to_Video.json','a if not e else '),('06_LTX25_Two_Stage_Advanced.json','a if e else ')):
+for name,expression in (('01_LTX25_Image_to_Video.json','a if e or f else '),('03_LTX25_First_Last_Frame.json','a if e else '),
+                        ('04_LTX25_Audio_to_Video.json','a if not e or f else '),('06_LTX25_Two_Stage_Advanced.json','a if e or f else ')):
     data=json.loads((ROOT/'versions/ltx-2.5/workflows'/name).read_text())
     found=[n['widgets_values'][0] for g in data['definitions']['subgraphs'] for n in g['nodes'] if n.get('title')=='Fit Frame Width']
     assert found==[expression+fit_expression('c','d',32)],(name,found)
+    panel=[n for n in data['nodes'] if n.get('inputs') and any(i['name']=='exact_frame' for i in n['inputs'])]
+    assert len(panel)==1 and panel[0]['widgets_values'][-1] is False,(name,'Exact Frame must be off by default')
     if name.startswith('03_'):
         crops=[n['widgets_values'][3] for g in data['definitions']['subgraphs'] for n in g['nodes'] if n['type']=='ResizeImageMaskNode' and n['id']==213]
-        assert crops==['disabled'],crops
+        assert crops==['center'],crops
 
 count=0
 for path in sorted(ROOT.glob('versions/*/workflows/*.json')):
