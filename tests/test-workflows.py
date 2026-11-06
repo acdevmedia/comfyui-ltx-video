@@ -29,14 +29,25 @@ def check_ic_lora(name,d):
             assert want is None or isinstance(want,list) or got in want.split(',') or (got,want)==('INT','FLOAT'),(name,typ,field,got,want)
     def source_type(path,field):
         return flat[flat[path][2][field][1]][0]
-    ic,_=one('LTXICLoRALoaderModelOnly');guide,_=one('LTXAddVideoICLoRAGuide');guider,_=one('CFGGuider');crop,_=one('LTXVCropGuides');decode,_=one('VAEDecodeTiled');video,_=one('CreateVideo');tokens,_=one('LTXVSetAudioRefTokens');concat,_=one('LTXVConcatAVLatent')
+    ic,_=one('LTXICLoRALoaderModelOnly');guide,_=one('LTXAddVideoICLoRAGuide');guider,_=one('CFGGuider');crop,_=one('LTXVCropGuides');decode,_=one('VAEDecodeTiled');video,_=one('CreateVideo');concat,_=one('LTXVConcatAVLatent')
     assert source_type(ic,'model')=='UNETLoader' and source_type(guider,'model')=='LTXICLoRALoaderModelOnly'
     assert source_type(guider,'positive')=='LTXAddVideoICLoRAGuide' and source_type(crop,'positive')=='LTXAddVideoICLoRAGuide'
-    assert source_type(decode,'samples')=='LTXVCropGuides' and flat[concat][2]['audio_latent'][1]==tokens
+    assert source_type(decode,'samples')=='LTXVCropGuides'
+    relighting=name.startswith('12_')
+    # Relight follows Lightricks' workflow, which lets the audio latent run free; the others hold the clip's sound.
+    if relighting:assert source_type(concat,'audio_latent')=='LTXVEmptyLatentAudio' and not any(n[0]=='LTXVSetAudioRefTokens' for n in flat.values())
+    else:assert flat[concat][2]['audio_latent'][1]==one('LTXVSetAudioRefTokens')[0]
     # Same take: the clip's own waveform is muxed back, and the guide is the clip (with the ball, for Relight, last).
     assert source_type(video,'audio')=='TrimAudioDuration'
     painted=source_type(guide,'image')
-    assert painted==('ImageCompositeMasked' if name.startswith('12_') else 'ImageScale'),name
+    assert painted==('ImageCompositeMasked' if relighting else 'ImageScale'),name
+    if relighting:
+        # The default ball follows Lightricks' example and must agree with the default words.
+        sphere=one('SphereLightManualNode')[1][1]
+        assert sphere[:3]==[90.0,15.0,2.0],sphere
+        sized=flat[flat[one('ImageCompositeMasked')[0]][2]['source'][1]]
+        assert sized[1][0]=='area',sized[1]
+        assert 'low-angle sunlight from the right' in json.dumps(d)
 subprocess.run([sys.executable,str(root/'scripts/verify-workflows.py')],check=True)
 profile_names=json.loads((version/'profile.json').read_text())['assets']['workflow_files']
 for name in profile_names:

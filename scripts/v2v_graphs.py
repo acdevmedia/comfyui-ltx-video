@@ -31,6 +31,7 @@ CONTROL_NEGATIVE = 'worst quality, inconsistent motion, blurry, jittery, distort
 FIT_WIDTH = 'max(64, round(sqrt(a * b * c / d) / 32) * 32)'
 FIT_HEIGHT = 'max(64, round(sqrt(a * b * d / c) / 32) * 32)'
 # Relight's training geometry at 1280 x 704: a 143 px patch, 22 px from the top and right edges.
+# Lightricks' graph at the pinned revision uses the same, and lets the audio latent run free.
 BALL_SCALE = 'sqrt(a * b / 901120)'
 
 PANEL, INSIDE = 'Panel', 'Inside'
@@ -226,8 +227,8 @@ def new_angle(video_file='', sheet_file='', prompt=None, start=0.0, seconds=5.0,
 
 
 def _through_ic_lora(prompt, prompt_title, lora, lora_title, strength, width, height, frames, save_as, negative=CONTROL_NEGATIVE,
-                     video_file='', seed=42, paint=None):
-    """Re-render a clip through an IC-LoRA: the clip guides every frame, and its own sound is held and kept."""
+                     video_file='', seed=42, paint=None, hold_sound=True):
+    """Re-render a clip through an IC-LoRA: the clip guides every frame, and its own sound is kept."""
     g = Graph()
     video = g.add('LoadVideo', PANEL, 'Your Clip', file=video_file)
     text = g.control('PrimitiveStringMultiline', prompt_title, prompt)
@@ -262,15 +263,19 @@ def _through_ic_lora(prompt, prompt_title, lora, lora_title, strength, width, he
     neg = g.add('CLIPTextEncode', p, 'Encode Negative Prompt', text=negative_node[0], clip=clip[0])
     cond = g.add('LTXVConditioning', p, 'Match Clip Frame Rate', positive=pos[0], negative=neg[0], frame_rate=parts[2])
     shot_sound = g.add('TrimAudioDuration', p, 'Original Sound for This Shot', audio=sound[0], start_index=0.0, duration=shot_seconds[0])
-    sound_latent = g.add('VAEEncodeAudio', p, 'Encode Original Sound', audio=shot_sound[0], vae=audio_vae[0])
-    frozen = g.add('LTXVSetAudioRefTokens', p, 'Lock the Original Sound', positive=cond[0], negative=cond[1], audio_latent=sound_latent[0])
+    if hold_sound:
+        sound_latent = g.add('VAEEncodeAudio', p, 'Encode Original Sound', audio=shot_sound[0], vae=audio_vae[0])
+        frozen = g.add('LTXVSetAudioRefTokens', p, 'Lock the Original Sound', positive=cond[0], negative=cond[1], audio_latent=sound_latent[0])
+        audio_latent = frozen[2]
+    else:
+        audio_latent = g.add('LTXVEmptyLatentAudio', p, 'Empty Sound', frames_number=n_frames[1], frame_rate=parts[2], batch_size=1, audio_vae=audio_vae[0])[0]
 
     s = INSIDE
     empty = g.add('EmptyLTXVLatentVideo', s, 'Empty Video', width=fit_w[1], height=fit_h[1], length=n_frames[1], batch_size=1)
     guided = g.add('LTXAddVideoICLoRAGuide', s, 'Show the Model Your Clip', positive=cond[0], negative=cond[1], vae=vae[0], latent=empty[0],
                    image=guide[0], frame_idx=0, strength=1.0, latent_downscale_factor=lora_node[1], crop='disabled', use_tiled_encode=False,
                    tile_size=256, tile_overlap=64, use_streaming=False, tile_frames=97)
-    av = g.add('LTXVConcatAVLatent', s, 'Join Picture and Locked Sound', video_latent=guided[2], audio_latent=frozen[2])
+    av = g.add('LTXVConcatAVLatent', s, 'Join Picture and Locked Sound' if hold_sound else 'Join Picture and Sound', video_latent=guided[2], audio_latent=audio_latent)
     sep = _sampler(g, lora_node[0], guided[0], guided[1], av[0], seed_node)
     cropped = g.add('LTXVCropGuides', s, 'Remove Reference Frames', positive=guided[0], negative=guided[1], latent=sep[0])
 
@@ -290,19 +295,19 @@ def new_camera_angle(video_file='', prompt='crossview. new camera angle: to the 
 
 def _light_ball(g, guide, fit_w, fit_h):
     """Add the direction ball to every frame of the guide, last, at Relight's training geometry."""
-    ball = g.add('SphereLightManualNode', PANEL, 'Light Direction', rotation=0.0, elevation=45.0, intensity=1.5, render_b64='')
+    ball = g.add('SphereLightManualNode', PANEL, 'Light Direction', rotation=90.0, elevation=15.0, intensity=2.0, render_b64='')
     t = INSIDE
     patch = g.math(f'round(143 * {BALL_SCALE})', 'Ball Patch Size', a=fit_w[1], b=fit_h[1])
     margin = g.math(f'round(22 * {BALL_SCALE})', 'Ball Margin', a=fit_w[1], b=fit_h[1])
     left = g.math('a - b - c', 'Ball Patch Left Edge', a=fit_w[1], b=patch[1], c=margin[1])
-    sized = g.add('ImageScale', t, 'Fit Ball to Patch', image=ball[0], upscale_method='lanczos', width=patch[1], height=patch[1], crop='disabled')
+    sized = g.add('ImageScale', t, 'Fit Ball to Patch', image=ball[0], upscale_method='area', width=patch[1], height=patch[1], crop='disabled')
     return g.add('ImageCompositeMasked', t, 'Ball in the Top-Right Corner', destination=guide[0], source=sized[0], x=left[1], y=margin[1], resize_source=False)
 
 
-def relight(video_file='', prompt='relight the video to match the light-direction ball. hard directional sunlight from the right', width=1280, height=704, frames=121, strength=1.0, seed=42):
+def relight(video_file='', prompt='relight the video to match the light-direction ball. hard low-angle sunlight from the right', width=1280, height=704, frames=121, strength=1.0, seed=42):
     """Move the sun in an exterior clip with the Relight IC-LoRA. It is an LTX-2.3 LoRA, so this is unverified on 2.5."""
     return _through_ic_lora(prompt, 'The Light', RELIGHT_LORA, 'Relight IC-LoRA (LTX-2.3)', strength, width, height, frames, 'LTX25_relight',
-                            video_file=video_file, seed=seed, paint=_light_ball)
+                            video_file=video_file, seed=seed, paint=_light_ball, hold_sound=False)
 
 
 def day_to_night(video_file='', prompt=None, width=768, height=448, frames=97, strength=1.0, seed=42):

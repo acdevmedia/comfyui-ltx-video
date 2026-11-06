@@ -1,7 +1,7 @@
 {
   "id": "Relight",
-  "last_node_id": 67,
-  "last_link_id": 103,
+  "last_node_id": 66,
+  "last_link_id": 101,
   "nodes": [
     {
       "id": 1,
@@ -32,7 +32,7 @@
           "name": "VIDEO",
           "type": "VIDEO",
           "links": [
-            100
+            98
           ]
         }
       ],
@@ -97,7 +97,7 @@
           "name": "render",
           "type": "IMAGE",
           "links": [
-            101
+            99
           ]
         }
       ],
@@ -105,15 +105,15 @@
         "Node name for S&R": "SphereLightManualNode"
       },
       "widgets_values": [
-        0.0,
-        45.0,
-        1.5,
+        90.0,
+        15.0,
+        2.0,
         ""
       ],
       "title": "Light Direction"
     },
     {
-      "id": 57,
+      "id": 56,
       "type": "SaveVideo",
       "pos": [
         1060,
@@ -124,13 +124,13 @@
         160
       ],
       "flags": {},
-      "order": 56,
+      "order": 55,
       "mode": 0,
       "inputs": [
         {
           "name": "video",
           "type": "VIDEO",
-          "link": 102
+          "link": 100
         },
         {
           "name": "filename_prefix",
@@ -184,7 +184,7 @@
       "title": "Save Video"
     },
     {
-      "id": 58,
+      "id": 57,
       "type": "MarkdownNote",
       "pos": [
         -560,
@@ -195,20 +195,20 @@
         520
       ],
       "flags": {},
-      "order": 57,
+      "order": 56,
       "mode": 0,
       "inputs": [],
       "outputs": [],
       "title": "How to Relight a Shot",
       "properties": {},
       "widgets_values": [
-        "## How to relight a shot\n\n1. Upload an exterior clip in **Your Clip**. This model is for sunlight.\n2. Set **Light Direction**. The ball is added to the corner of the frame the model reads, and is not in the result.\n3. In **The Light**, keep the first sentence and match its end to the ball:\n\n`relight the video to match the light-direction ball. hard directional sunlight from the right`\n\n- **From:** front · front-right · right · back-right · behind · back-left · left · front-left\n- **Looks:** hard directional sunlight · hard high-angle sunlight · hard low-angle sunlight · soft diffused daylight · soft warm afternoon light · cool soft daylight · dim overcast light · strong backlight with rim light · soft hazy backlight · warm golden low front sun · warm golden low side sun · frontal sunlight\n\nDescribe the light only, not the scene. If the words and the ball disagree, the ball wins. 1280 x 704, 121 frames at 24 fps is what it was trained on, in a single pass.\n\n**Width** and **Height** set the frame's area, and your clip sets its shape. **Frames** sets the length, and the shot stops at the end of your clip. Your clip's own sound is kept, so the new shot lines up on the same audio track.\n\n**Not yet proven on LTX-2.5.** This LoRA was trained on LTX-2.3 and no 2.5 build exists, so check a short clip first.\n\n**This one needs a licence first.** Accept the terms at [Lightricks/LTX-2.3-22b-IC-LoRA-Relight](https://huggingface.co/Lightricks/LTX-2.3-22b-IC-LoRA-Relight) with the Hugging Face account behind `HF_TOKEN`. It needs the BF16 stack and this LoRA, which are not in the default download. Run `/opt/ltx25-studio/scripts/download-adapter-models.sh` in the Pod's terminal. Until then it reports a missing model; nothing else is affected."
+        "## How to relight a shot\n\n1. Upload your clip in **Your Clip**. This model was made for sunlit exteriors, and it works best on footage with no strong light direction already, such as an overcast day.\n2. Set **Light Direction**. Rotation 0 lights the scene from the camera's side, 90 from the right, 180 from behind and -90 from the left. The ball is added to the corner of the frame the model reads, and is not in the result.\n3. In **The Light**, keep the first sentence and match its end to the ball:\n\n`relight the video to match the light-direction ball. hard low-angle sunlight from the right`\n\n- **From:** the front · the front-right · the right · the back-right · behind · the back-left · the left · the front-left\n- **Looks:** hard directional sunlight · hard high-angle sunlight · hard low-angle sunlight · soft diffused daylight · soft warm afternoon light · cool soft daylight · dim overcast light · strong backlight with rim light · soft hazy backlight · warm golden low front sun · warm golden low side sun · frontal sunlight\n\nDescribe the light only, not the scene, and use one light setup per clip. If the words and the ball disagree, the ball wins. The default ball, elevation 15 at intensity 2, follows Lightricks' example. A higher sun brightens the ball's grey background, so lower **intensity** as you raise **elevation**: about 0.8 at elevation 45. 1280 x 704, 121 frames at 24 fps is what it was trained on, in a single pass.\n\n**Width** and **Height** set the frame's area, and your clip sets its shape. **Frames** sets the length, and the shot stops at the end of your clip. Your clip's own sound is kept, so the new shot lines up on the same audio track.\n\n**Not yet proven on LTX-2.5.** This LoRA was trained on LTX-2.3 and no 2.5 build exists, so check a short clip first.\n\n**This one needs a licence first.** Accept the terms at [Lightricks/LTX-2.3-22b-IC-LoRA-Relight](https://huggingface.co/Lightricks/LTX-2.3-22b-IC-LoRA-Relight) with the Hugging Face account behind `HF_TOKEN`. It needs the BF16 stack and this LoRA, which are not in the default download. Run `/opt/ltx25-studio/scripts/download-adapter-models.sh` in the Pod's terminal. Until then it reports a missing model; nothing else is affected."
       ],
       "color": "#222",
       "bgcolor": "#000"
     },
     {
-      "id": 66,
+      "id": 65,
       "type": "11714f55-eedc-5383-a20a-f6b99b358663",
       "pos": [
         420,
@@ -297,14 +297,14 @@
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 100
+          "link": 98
         },
         {
           "label": "Light Direction",
           "localized_name": "image",
           "name": "image",
           "type": "IMAGE",
-          "link": 101
+          "link": 99
         }
       ],
       "outputs": [
@@ -314,7 +314,7 @@
           "name": "VIDEO",
           "type": "VIDEO",
           "links": [
-            102
+            100
           ]
         }
       ],
@@ -324,7 +324,7 @@
         "ver": "0.39.0"
       },
       "widgets_values": [
-        "relight the video to match the light-direction ball. hard directional sunlight from the right",
+        "relight the video to match the light-direction ball. hard low-angle sunlight from the right",
         1280,
         704,
         121,
@@ -333,7 +333,7 @@
         "worst quality, inconsistent motion, blurry, jittery, distorted"
       ],
       "widgets_values_named": {
-        "the_light": "relight the video to match the light-direction ball. hard directional sunlight from the right",
+        "the_light": "relight the video to match the light-direction ball. hard low-angle sunlight from the right",
         "width": 1280,
         "height": 704,
         "frames_8n_1_stops_at_the_end_of_your_cli": 121,
@@ -343,7 +343,7 @@
       }
     },
     {
-      "id": 67,
+      "id": 66,
       "type": "MarkdownNote",
       "pos": [
         -1120,
@@ -369,26 +369,26 @@
   ],
   "links": [
     [
-      100,
+      98,
       1,
       0,
-      66,
+      65,
       7,
       "VIDEO"
     ],
     [
-      101,
+      99,
       28,
       0,
-      66,
+      65,
       8,
       "IMAGE"
     ],
     [
-      102,
-      66,
+      100,
+      65,
       0,
-      57,
+      56,
       0,
       "VIDEO"
     ]
@@ -417,8 +417,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 0,
-          "lastNodeId": 66,
-          "lastLinkId": 103,
+          "lastNodeId": 65,
+          "lastLinkId": 101,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -448,7 +448,7 @@
             "name": "the_light",
             "type": "STRING",
             "linkIds": [
-              93
+              91
             ],
             "localized_name": "the_light",
             "label": "The Light",
@@ -462,7 +462,7 @@
             "name": "width",
             "type": "INT",
             "linkIds": [
-              94
+              92
             ],
             "localized_name": "width",
             "label": "Width",
@@ -476,7 +476,7 @@
             "name": "height",
             "type": "INT",
             "linkIds": [
-              95
+              93
             ],
             "localized_name": "height",
             "label": "Height",
@@ -490,7 +490,7 @@
             "name": "frames_8n_1_stops_at_the_end_of_your_cli",
             "type": "INT",
             "linkIds": [
-              96
+              94
             ],
             "localized_name": "frames_8n_1_stops_at_the_end_of_your_cli",
             "label": "Frames (8n+1, stops at the end of your clip)",
@@ -504,7 +504,7 @@
             "name": "ic_lora_strength",
             "type": "FLOAT",
             "linkIds": [
-              97
+              95
             ],
             "localized_name": "ic_lora_strength",
             "label": "IC-LoRA Strength",
@@ -518,7 +518,7 @@
             "name": "seed",
             "type": "INT",
             "linkIds": [
-              98
+              96
             ],
             "localized_name": "seed",
             "label": "Seed",
@@ -532,7 +532,7 @@
             "name": "negative_prompt_cfg_1_0_little_no_effect",
             "type": "STRING",
             "linkIds": [
-              99
+              97
             ],
             "localized_name": "negative_prompt_cfg_1_0_little_no_effect",
             "label": "Negative Prompt (CFG 1.0: little/no effect)",
@@ -576,7 +576,7 @@
             "name": "VIDEO",
             "type": "VIDEO",
             "linkIds": [
-              92
+              90
             ],
             "localized_name": "VIDEO",
             "label": "VIDEO",
@@ -827,7 +827,7 @@
                 "name": "INT",
                 "type": "INT",
                 "links": [
-                  74
+                  72
                 ]
               }
             ],
@@ -926,7 +926,8 @@
                   11,
                   27,
                   55,
-                  90
+                  59,
+                  88
                 ]
               },
               {
@@ -1273,7 +1274,7 @@
                   33,
                   35,
                   37,
-                  63
+                  61
                 ]
               },
               {
@@ -1347,7 +1348,7 @@
                   32,
                   34,
                   36,
-                  64
+                  62
                 ]
               },
               {
@@ -1410,7 +1411,8 @@
                 "links": [
                   26,
                   29,
-                  65
+                  58,
+                  63
                 ]
               },
               {
@@ -1873,7 +1875,7 @@
               "Node name for S&R": "ImageScale"
             },
             "widgets_values": [
-              "lanczos",
+              "area",
               512,
               512,
               "disabled"
@@ -1935,7 +1937,7 @@
                 "name": "IMAGE",
                 "type": "IMAGE",
                 "links": [
-                  70
+                  68
                 ]
               }
             ],
@@ -2041,14 +2043,14 @@
                 "name": "model",
                 "type": "MODEL",
                 "links": [
-                  75
+                  73
                 ]
               },
               {
                 "name": "latent_downscale_factor",
                 "type": "FLOAT",
                 "links": [
-                  71
+                  69
                 ]
               }
             ],
@@ -2150,8 +2152,8 @@
                 "name": "VAE",
                 "type": "VAE",
                 "links": [
-                  68,
-                  88
+                  66,
+                  86
                 ]
               }
             ],
@@ -2192,7 +2194,7 @@
                 "name": "VAE",
                 "type": "VAE",
                 "links": [
-                  59
+                  60
                 ]
               }
             ],
@@ -2335,16 +2337,14 @@
                 "name": "positive",
                 "type": "CONDITIONING",
                 "links": [
-                  60,
-                  66
+                  64
                 ]
               },
               {
                 "name": "negative",
                 "type": "CONDITIONING",
                 "links": [
-                  61,
-                  67
+                  65
                 ]
               }
             ],
@@ -2398,8 +2398,7 @@
                 "name": "AUDIO",
                 "type": "AUDIO",
                 "links": [
-                  58,
-                  91
+                  89
                 ]
               }
             ],
@@ -2414,7 +2413,7 @@
           },
           {
             "id": 43,
-            "type": "VAEEncodeAudio",
+            "type": "LTXVEmptyLatentAudio",
             "pos": [
               0,
               2100
@@ -2428,34 +2427,57 @@
             "mode": 0,
             "inputs": [
               {
-                "name": "audio",
-                "type": "AUDIO",
-                "link": 58
+                "name": "frames_number",
+                "type": "INT",
+                "link": 58,
+                "widget": {
+                  "name": "frames_number"
+                }
               },
               {
-                "name": "vae",
+                "name": "frame_rate",
+                "type": "FLOAT,INT",
+                "link": 59,
+                "widget": {
+                  "name": "frame_rate"
+                }
+              },
+              {
+                "name": "batch_size",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "batch_size"
+                }
+              },
+              {
+                "name": "audio_vae",
                 "type": "VAE",
-                "link": 59
+                "link": 60
               }
             ],
             "outputs": [
               {
-                "name": "LATENT",
+                "name": "Latent",
                 "type": "LATENT",
                 "links": [
-                  62
+                  71
                 ]
               }
             ],
             "properties": {
-              "Node name for S&R": "VAEEncodeAudio"
+              "Node name for S&R": "LTXVEmptyLatentAudio"
             },
-            "widgets_values": [],
-            "title": "Encode Original Sound"
+            "widgets_values": [
+              97,
+              25.0,
+              1
+            ],
+            "title": "Empty Sound"
           },
           {
             "id": 44,
-            "type": "LTXVSetAudioRefTokens",
+            "type": "EmptyLTXVLatentVideo",
             "pos": [
               350,
               2100
@@ -2469,65 +2491,9 @@
             "mode": 0,
             "inputs": [
               {
-                "name": "positive",
-                "type": "CONDITIONING",
-                "link": 60
-              },
-              {
-                "name": "negative",
-                "type": "CONDITIONING",
-                "link": 61
-              },
-              {
-                "name": "audio_latent",
-                "type": "LATENT",
-                "link": 62
-              }
-            ],
-            "outputs": [
-              {
-                "name": "positive",
-                "type": "CONDITIONING",
-                "links": []
-              },
-              {
-                "name": "negative",
-                "type": "CONDITIONING",
-                "links": []
-              },
-              {
-                "name": "frozen_audio",
-                "type": "LATENT",
-                "links": [
-                  73
-                ]
-              }
-            ],
-            "properties": {
-              "Node name for S&R": "LTXVSetAudioRefTokens"
-            },
-            "widgets_values": [],
-            "title": "Lock the Original Sound"
-          },
-          {
-            "id": 45,
-            "type": "EmptyLTXVLatentVideo",
-            "pos": [
-              700,
-              2100
-            ],
-            "size": [
-              310,
-              160
-            ],
-            "flags": {},
-            "order": 44,
-            "mode": 0,
-            "inputs": [
-              {
                 "name": "width",
                 "type": "INT",
-                "link": 63,
+                "link": 61,
                 "widget": {
                   "name": "width"
                 }
@@ -2535,7 +2501,7 @@
               {
                 "name": "height",
                 "type": "INT",
-                "link": 64,
+                "link": 62,
                 "widget": {
                   "name": "height"
                 }
@@ -2543,7 +2509,7 @@
               {
                 "name": "length",
                 "type": "INT",
-                "link": 65,
+                "link": 63,
                 "widget": {
                   "name": "length"
                 }
@@ -2562,7 +2528,7 @@
                 "name": "LATENT",
                 "type": "LATENT",
                 "links": [
-                  69
+                  67
                 ]
               }
             ],
@@ -2578,10 +2544,10 @@
             "title": "Empty Video"
           },
           {
-            "id": 46,
+            "id": 45,
             "type": "LTXAddVideoICLoRAGuide",
             "pos": [
-              1050,
+              700,
               2100
             ],
             "size": [
@@ -2589,33 +2555,33 @@
               160
             ],
             "flags": {},
-            "order": 45,
+            "order": 44,
             "mode": 0,
             "inputs": [
               {
                 "name": "positive",
                 "type": "CONDITIONING",
-                "link": 66
+                "link": 64
               },
               {
                 "name": "negative",
                 "type": "CONDITIONING",
-                "link": 67
+                "link": 65
               },
               {
                 "name": "vae",
                 "type": "VAE",
-                "link": 68
+                "link": 66
               },
               {
                 "name": "latent",
                 "type": "LATENT",
-                "link": 69
+                "link": 67
               },
               {
                 "name": "image",
                 "type": "IMAGE",
-                "link": 70
+                "link": 68
               },
               {
                 "name": "frame_idx",
@@ -2636,7 +2602,7 @@
               {
                 "name": "latent_downscale_factor",
                 "type": "FLOAT",
-                "link": 71,
+                "link": 69,
                 "widget": {
                   "name": "latent_downscale_factor"
                 }
@@ -2695,23 +2661,23 @@
                 "name": "positive",
                 "type": "CONDITIONING",
                 "links": [
-                  76,
-                  84
+                  74,
+                  82
                 ]
               },
               {
                 "name": "negative",
                 "type": "CONDITIONING",
                 "links": [
-                  77,
-                  85
+                  75,
+                  83
                 ]
               },
               {
                 "name": "latent",
                 "type": "LATENT",
                 "links": [
-                  72
+                  70
                 ]
               }
             ],
@@ -2732,8 +2698,49 @@
             "title": "Show the Model Your Clip"
           },
           {
-            "id": 47,
+            "id": 46,
             "type": "LTXVConcatAVLatent",
+            "pos": [
+              1050,
+              2100
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 45,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "video_latent",
+                "type": "LATENT",
+                "link": 70
+              },
+              {
+                "name": "audio_latent",
+                "type": "LATENT",
+                "link": 71
+              }
+            ],
+            "outputs": [
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "links": [
+                  80
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "LTXVConcatAVLatent"
+            },
+            "widgets_values": [],
+            "title": "Join Picture and Sound"
+          },
+          {
+            "id": 47,
+            "type": "RandomNoise",
             "pos": [
               1400,
               2100
@@ -2747,50 +2754,9 @@
             "mode": 0,
             "inputs": [
               {
-                "name": "video_latent",
-                "type": "LATENT",
-                "link": 72
-              },
-              {
-                "name": "audio_latent",
-                "type": "LATENT",
-                "link": 73
-              }
-            ],
-            "outputs": [
-              {
-                "name": "latent",
-                "type": "LATENT",
-                "links": [
-                  82
-                ]
-              }
-            ],
-            "properties": {
-              "Node name for S&R": "LTXVConcatAVLatent"
-            },
-            "widgets_values": [],
-            "title": "Join Picture and Locked Sound"
-          },
-          {
-            "id": 48,
-            "type": "RandomNoise",
-            "pos": [
-              1750,
-              2100
-            ],
-            "size": [
-              310,
-              160
-            ],
-            "flags": {},
-            "order": 47,
-            "mode": 0,
-            "inputs": [
-              {
                 "name": "noise_seed",
                 "type": "INT",
-                "link": 74,
+                "link": 72,
                 "widget": {
                   "name": "noise_seed"
                 }
@@ -2801,7 +2767,7 @@
                 "name": "NOISE",
                 "type": "NOISE",
                 "links": [
-                  78
+                  76
                 ]
               }
             ],
@@ -2815,18 +2781,18 @@
             "title": "Noise"
           },
           {
-            "id": 49,
+            "id": 48,
             "type": "KSamplerSelect",
             "pos": [
-              0,
-              2400
+              1750,
+              2100
             ],
             "size": [
               310,
               160
             ],
             "flags": {},
-            "order": 48,
+            "order": 47,
             "mode": 0,
             "inputs": [
               {
@@ -2843,7 +2809,7 @@
                 "name": "SAMPLER",
                 "type": "SAMPLER",
                 "links": [
-                  80
+                  78
                 ]
               }
             ],
@@ -2856,10 +2822,10 @@
             "title": "Sampler"
           },
           {
-            "id": 50,
+            "id": 49,
             "type": "ManualSigmas",
             "pos": [
-              350,
+              0,
               2400
             ],
             "size": [
@@ -2867,7 +2833,7 @@
               160
             ],
             "flags": {},
-            "order": 49,
+            "order": 48,
             "mode": 0,
             "inputs": [
               {
@@ -2884,7 +2850,7 @@
                 "name": "SIGMAS",
                 "type": "SIGMAS",
                 "links": [
-                  81
+                  79
                 ]
               }
             ],
@@ -2897,10 +2863,10 @@
             "title": "Distilled 8-Step Schedule"
           },
           {
-            "id": 51,
+            "id": 50,
             "type": "CFGGuider",
             "pos": [
-              700,
+              350,
               2400
             ],
             "size": [
@@ -2908,23 +2874,23 @@
               160
             ],
             "flags": {},
-            "order": 50,
+            "order": 49,
             "mode": 0,
             "inputs": [
               {
                 "name": "model",
                 "type": "MODEL",
-                "link": 75
+                "link": 73
               },
               {
                 "name": "positive",
                 "type": "CONDITIONING",
-                "link": 76
+                "link": 74
               },
               {
                 "name": "negative",
                 "type": "CONDITIONING",
-                "link": 77
+                "link": 75
               },
               {
                 "name": "cfg",
@@ -2940,7 +2906,7 @@
                 "name": "GUIDER",
                 "type": "GUIDER",
                 "links": [
-                  79
+                  77
                 ]
               }
             ],
@@ -2953,10 +2919,10 @@
             "title": "Guidance (CFG 1.0 for distilled)"
           },
           {
-            "id": 52,
+            "id": 51,
             "type": "SamplerCustomAdvanced",
             "pos": [
-              1050,
+              700,
               2400
             ],
             "size": [
@@ -2964,33 +2930,33 @@
               160
             ],
             "flags": {},
-            "order": 51,
+            "order": 50,
             "mode": 0,
             "inputs": [
               {
                 "name": "noise",
                 "type": "NOISE",
-                "link": 78
+                "link": 76
               },
               {
                 "name": "guider",
                 "type": "GUIDER",
-                "link": 79
+                "link": 77
               },
               {
                 "name": "sampler",
                 "type": "SAMPLER",
-                "link": 80
+                "link": 78
               },
               {
                 "name": "sigmas",
                 "type": "SIGMAS",
-                "link": 81
+                "link": 79
               },
               {
                 "name": "latent_image",
                 "type": "LATENT",
-                "link": 82
+                "link": 80
               }
             ],
             "outputs": [
@@ -2998,7 +2964,7 @@
                 "name": "output",
                 "type": "LATENT",
                 "links": [
-                  83
+                  81
                 ]
               },
               {
@@ -3014,10 +2980,10 @@
             "title": "Generate"
           },
           {
-            "id": 53,
+            "id": 52,
             "type": "LTXVSeparateAVLatent",
             "pos": [
-              1400,
+              1050,
               2400
             ],
             "size": [
@@ -3025,13 +2991,13 @@
               160
             ],
             "flags": {},
-            "order": 52,
+            "order": 51,
             "mode": 0,
             "inputs": [
               {
                 "name": "av_latent",
                 "type": "LATENT",
-                "link": 83
+                "link": 81
               }
             ],
             "outputs": [
@@ -3039,7 +3005,7 @@
                 "name": "video_latent",
                 "type": "LATENT",
                 "links": [
-                  86
+                  84
                 ]
               },
               {
@@ -3055,10 +3021,10 @@
             "title": "Split Picture and Sound"
           },
           {
-            "id": 54,
+            "id": 53,
             "type": "LTXVCropGuides",
             "pos": [
-              1750,
+              1400,
               2400
             ],
             "size": [
@@ -3066,23 +3032,23 @@
               160
             ],
             "flags": {},
-            "order": 53,
+            "order": 52,
             "mode": 0,
             "inputs": [
               {
                 "name": "positive",
                 "type": "CONDITIONING",
-                "link": 84
+                "link": 82
               },
               {
                 "name": "negative",
                 "type": "CONDITIONING",
-                "link": 85
+                "link": 83
               },
               {
                 "name": "latent",
                 "type": "LATENT",
-                "link": 86
+                "link": 84
               }
             ],
             "outputs": [
@@ -3100,7 +3066,7 @@
                 "name": "latent",
                 "type": "LATENT",
                 "links": [
-                  87
+                  85
                 ]
               }
             ],
@@ -3111,29 +3077,29 @@
             "title": "Remove Reference Frames"
           },
           {
-            "id": 55,
+            "id": 54,
             "type": "VAEDecodeTiled",
             "pos": [
-              0,
-              2700
+              1750,
+              2400
             ],
             "size": [
               310,
               160
             ],
             "flags": {},
-            "order": 54,
+            "order": 53,
             "mode": 0,
             "inputs": [
               {
                 "name": "samples",
                 "type": "LATENT",
-                "link": 87
+                "link": 85
               },
               {
                 "name": "vae",
                 "type": "VAE",
-                "link": 88
+                "link": 86
               },
               {
                 "name": "tile_size",
@@ -3173,7 +3139,7 @@
                 "name": "IMAGE",
                 "type": "IMAGE",
                 "links": [
-                  89
+                  87
                 ]
               }
             ],
@@ -3189,10 +3155,10 @@
             "title": "Decode Picture"
           },
           {
-            "id": 56,
+            "id": 55,
             "type": "CreateVideo",
             "pos": [
-              350,
+              0,
               2700
             ],
             "size": [
@@ -3200,18 +3166,18 @@
               160
             ],
             "flags": {},
-            "order": 55,
+            "order": 54,
             "mode": 0,
             "inputs": [
               {
                 "name": "images",
                 "type": "IMAGE",
-                "link": 89
+                "link": 87
               },
               {
                 "name": "fps",
                 "type": "FLOAT",
-                "link": 90,
+                "link": 88,
                 "widget": {
                   "name": "fps"
                 }
@@ -3219,7 +3185,7 @@
               {
                 "name": "audio",
                 "type": "AUDIO",
-                "link": 91
+                "link": 89
               },
               {
                 "name": "bit_depth",
@@ -3251,7 +3217,7 @@
                 "name": "VIDEO",
                 "type": "VIDEO",
                 "links": [
-                  92
+                  90
                 ]
               }
             ],
@@ -3267,7 +3233,7 @@
             "title": "Build Video with Original Sound"
           },
           {
-            "id": 59,
+            "id": 58,
             "type": "PrimitiveStringMultiline",
             "pos": [
               -380,
@@ -3288,7 +3254,7 @@
                 "widget": {
                   "name": "value"
                 },
-                "link": 93
+                "link": 91
               }
             ],
             "outputs": [
@@ -3306,10 +3272,56 @@
               "Node name for S&R": "PrimitiveStringMultiline"
             },
             "widgets_values": [
-              "relight the video to match the light-direction ball. hard directional sunlight from the right"
+              "relight the video to match the light-direction ball. hard low-angle sunlight from the right"
             ],
             "widgets_values_named": {
-              "value": "relight the video to match the light-direction ball. hard directional sunlight from the right"
+              "value": "relight the video to match the light-direction ball. hard low-angle sunlight from the right"
+            }
+          },
+          {
+            "id": 59,
+            "type": "PrimitiveInt",
+            "pos": [
+              -380,
+              300
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 92
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  2
+                ]
+              }
+            ],
+            "title": "Width",
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              1280
+            ],
+            "widgets_values_named": {
+              "value": 1280
             }
           },
           {
@@ -3317,7 +3329,53 @@
             "type": "PrimitiveInt",
             "pos": [
               -380,
-              300
+              400
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 93
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  3
+                ]
+              }
+            ],
+            "title": "Height",
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              704
+            ],
+            "widgets_values_named": {
+              "value": 704
+            }
+          },
+          {
+            "id": 61,
+            "type": "PrimitiveInt",
+            "pos": [
+              -380,
+              500
             ],
             "size": [
               300,
@@ -3343,27 +3401,27 @@
                 "name": "INT",
                 "type": "INT",
                 "links": [
-                  2
+                  4
                 ]
               }
             ],
-            "title": "Width",
+            "title": "Frames (8n+1, stops at the end of your clip)",
             "properties": {
               "Node name for S&R": "PrimitiveInt"
             },
             "widgets_values": [
-              1280
+              121
             ],
             "widgets_values_named": {
-              "value": 1280
+              "value": 121
             }
           },
           {
-            "id": 61,
-            "type": "PrimitiveInt",
+            "id": 62,
+            "type": "PrimitiveFloat",
             "pos": [
               -380,
-              400
+              600
             ],
             "size": [
               300,
@@ -3376,7 +3434,7 @@
               {
                 "localized_name": "value",
                 "name": "value",
-                "type": "INT",
+                "type": "FLOAT",
                 "widget": {
                   "name": "value"
                 },
@@ -3385,31 +3443,31 @@
             ],
             "outputs": [
               {
-                "localized_name": "INT",
-                "name": "INT",
-                "type": "INT",
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
                 "links": [
-                  3
+                  5
                 ]
               }
             ],
-            "title": "Height",
+            "title": "IC-LoRA Strength",
             "properties": {
-              "Node name for S&R": "PrimitiveInt"
+              "Node name for S&R": "PrimitiveFloat"
             },
             "widgets_values": [
-              704
+              1.0
             ],
             "widgets_values_named": {
-              "value": 704
+              "value": 1.0
             }
           },
           {
-            "id": 62,
+            "id": 63,
             "type": "PrimitiveInt",
             "pos": [
               -380,
-              500
+              700
             ],
             "size": [
               300,
@@ -3435,98 +3493,6 @@
                 "name": "INT",
                 "type": "INT",
                 "links": [
-                  4
-                ]
-              }
-            ],
-            "title": "Frames (8n+1, stops at the end of your clip)",
-            "properties": {
-              "Node name for S&R": "PrimitiveInt"
-            },
-            "widgets_values": [
-              121
-            ],
-            "widgets_values_named": {
-              "value": 121
-            }
-          },
-          {
-            "id": 63,
-            "type": "PrimitiveFloat",
-            "pos": [
-              -380,
-              600
-            ],
-            "size": [
-              300,
-              60
-            ],
-            "flags": {},
-            "order": 0,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "value",
-                "name": "value",
-                "type": "FLOAT",
-                "widget": {
-                  "name": "value"
-                },
-                "link": 97
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "FLOAT",
-                "name": "FLOAT",
-                "type": "FLOAT",
-                "links": [
-                  5
-                ]
-              }
-            ],
-            "title": "IC-LoRA Strength",
-            "properties": {
-              "Node name for S&R": "PrimitiveFloat"
-            },
-            "widgets_values": [
-              1.0
-            ],
-            "widgets_values_named": {
-              "value": 1.0
-            }
-          },
-          {
-            "id": 64,
-            "type": "PrimitiveInt",
-            "pos": [
-              -380,
-              700
-            ],
-            "size": [
-              300,
-              60
-            ],
-            "flags": {},
-            "order": 0,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "value",
-                "name": "value",
-                "type": "INT",
-                "widget": {
-                  "name": "value"
-                },
-                "link": 98
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "INT",
-                "name": "INT",
-                "type": "INT",
-                "links": [
                   6
                 ]
               }
@@ -3543,7 +3509,7 @@
             }
           },
           {
-            "id": 65,
+            "id": 64,
             "type": "PrimitiveStringMultiline",
             "pos": [
               -380,
@@ -3564,7 +3530,7 @@
                 "widget": {
                   "name": "value"
                 },
-                "link": 99
+                "link": 97
               }
             ],
             "outputs": [
@@ -3977,279 +3943,263 @@
           },
           {
             "id": 58,
-            "origin_id": 42,
-            "origin_slot": 0,
+            "origin_id": 24,
+            "origin_slot": 1,
             "target_id": 43,
             "target_slot": 0,
-            "type": "AUDIO"
+            "type": "INT"
           },
           {
             "id": 59,
-            "origin_id": 38,
-            "origin_slot": 0,
+            "origin_id": 16,
+            "origin_slot": 2,
             "target_id": 43,
             "target_slot": 1,
-            "type": "VAE"
+            "type": "FLOAT"
           },
           {
             "id": 60,
-            "origin_id": 41,
+            "origin_id": 38,
             "origin_slot": 0,
-            "target_id": 44,
-            "target_slot": 0,
-            "type": "CONDITIONING"
+            "target_id": 43,
+            "target_slot": 3,
+            "type": "VAE"
           },
           {
             "id": 61,
-            "origin_id": 41,
+            "origin_id": 22,
             "origin_slot": 1,
             "target_id": 44,
-            "target_slot": 1,
-            "type": "CONDITIONING"
+            "target_slot": 0,
+            "type": "INT"
           },
           {
             "id": 62,
-            "origin_id": 43,
-            "origin_slot": 0,
+            "origin_id": 23,
+            "origin_slot": 1,
             "target_id": 44,
-            "target_slot": 2,
-            "type": "LATENT"
+            "target_slot": 1,
+            "type": "INT"
           },
           {
             "id": 63,
-            "origin_id": 22,
+            "origin_id": 24,
             "origin_slot": 1,
-            "target_id": 45,
-            "target_slot": 0,
+            "target_id": 44,
+            "target_slot": 2,
             "type": "INT"
           },
           {
             "id": 64,
-            "origin_id": 23,
-            "origin_slot": 1,
-            "target_id": 45,
-            "target_slot": 1,
-            "type": "INT"
-          },
-          {
-            "id": 65,
-            "origin_id": 24,
-            "origin_slot": 1,
-            "target_id": 45,
-            "target_slot": 2,
-            "type": "INT"
-          },
-          {
-            "id": 66,
             "origin_id": 41,
             "origin_slot": 0,
-            "target_id": 46,
+            "target_id": 45,
             "target_slot": 0,
             "type": "CONDITIONING"
           },
           {
-            "id": 67,
+            "id": 65,
             "origin_id": 41,
             "origin_slot": 1,
-            "target_id": 46,
+            "target_id": 45,
             "target_slot": 1,
             "type": "CONDITIONING"
           },
           {
-            "id": 68,
+            "id": 66,
             "origin_id": 37,
             "origin_slot": 0,
-            "target_id": 46,
+            "target_id": 45,
             "target_slot": 2,
             "type": "VAE"
           },
           {
-            "id": 69,
-            "origin_id": 45,
+            "id": 67,
+            "origin_id": 44,
             "origin_slot": 0,
-            "target_id": 46,
+            "target_id": 45,
             "target_slot": 3,
             "type": "LATENT"
           },
           {
-            "id": 70,
+            "id": 68,
             "origin_id": 33,
             "origin_slot": 0,
-            "target_id": 46,
+            "target_id": 45,
             "target_slot": 4,
             "type": "IMAGE"
           },
           {
-            "id": 71,
+            "id": 69,
             "origin_id": 35,
             "origin_slot": 1,
-            "target_id": 46,
+            "target_id": 45,
             "target_slot": 7,
             "type": "FLOAT"
           },
           {
-            "id": 72,
-            "origin_id": 46,
+            "id": 70,
+            "origin_id": 45,
             "origin_slot": 2,
-            "target_id": 47,
+            "target_id": 46,
             "target_slot": 0,
             "type": "LATENT"
           },
           {
-            "id": 73,
-            "origin_id": 44,
-            "origin_slot": 2,
-            "target_id": 47,
+            "id": 71,
+            "origin_id": 43,
+            "origin_slot": 0,
+            "target_id": 46,
             "target_slot": 1,
             "type": "LATENT"
           },
           {
-            "id": 74,
+            "id": 72,
             "origin_id": 13,
             "origin_slot": 0,
-            "target_id": 48,
+            "target_id": 47,
             "target_slot": 0,
             "type": "INT"
           },
           {
-            "id": 75,
+            "id": 73,
             "origin_id": 35,
             "origin_slot": 0,
-            "target_id": 51,
+            "target_id": 50,
             "target_slot": 0,
             "type": "MODEL"
           },
           {
-            "id": 76,
-            "origin_id": 46,
+            "id": 74,
+            "origin_id": 45,
             "origin_slot": 0,
-            "target_id": 51,
+            "target_id": 50,
             "target_slot": 1,
             "type": "CONDITIONING"
           },
           {
-            "id": 77,
-            "origin_id": 46,
+            "id": 75,
+            "origin_id": 45,
             "origin_slot": 1,
-            "target_id": 51,
+            "target_id": 50,
             "target_slot": 2,
             "type": "CONDITIONING"
+          },
+          {
+            "id": 76,
+            "origin_id": 47,
+            "origin_slot": 0,
+            "target_id": 51,
+            "target_slot": 0,
+            "type": "NOISE"
+          },
+          {
+            "id": 77,
+            "origin_id": 50,
+            "origin_slot": 0,
+            "target_id": 51,
+            "target_slot": 1,
+            "type": "GUIDER"
           },
           {
             "id": 78,
             "origin_id": 48,
             "origin_slot": 0,
-            "target_id": 52,
-            "target_slot": 0,
-            "type": "NOISE"
-          },
-          {
-            "id": 79,
-            "origin_id": 51,
-            "origin_slot": 0,
-            "target_id": 52,
-            "target_slot": 1,
-            "type": "GUIDER"
-          },
-          {
-            "id": 80,
-            "origin_id": 49,
-            "origin_slot": 0,
-            "target_id": 52,
+            "target_id": 51,
             "target_slot": 2,
             "type": "SAMPLER"
           },
           {
-            "id": 81,
-            "origin_id": 50,
+            "id": 79,
+            "origin_id": 49,
             "origin_slot": 0,
-            "target_id": 52,
+            "target_id": 51,
             "target_slot": 3,
             "type": "SIGMAS"
           },
           {
-            "id": 82,
-            "origin_id": 47,
+            "id": 80,
+            "origin_id": 46,
             "origin_slot": 0,
-            "target_id": 52,
+            "target_id": 51,
             "target_slot": 4,
             "type": "LATENT"
           },
           {
-            "id": 83,
-            "origin_id": 52,
+            "id": 81,
+            "origin_id": 51,
             "origin_slot": 0,
-            "target_id": 53,
+            "target_id": 52,
             "target_slot": 0,
             "type": "LATENT"
           },
           {
-            "id": 84,
-            "origin_id": 46,
+            "id": 82,
+            "origin_id": 45,
             "origin_slot": 0,
-            "target_id": 54,
+            "target_id": 53,
             "target_slot": 0,
             "type": "CONDITIONING"
           },
           {
-            "id": 85,
-            "origin_id": 46,
+            "id": 83,
+            "origin_id": 45,
             "origin_slot": 1,
-            "target_id": 54,
+            "target_id": 53,
             "target_slot": 1,
             "type": "CONDITIONING"
           },
           {
-            "id": 86,
-            "origin_id": 53,
+            "id": 84,
+            "origin_id": 52,
             "origin_slot": 0,
-            "target_id": 54,
+            "target_id": 53,
             "target_slot": 2,
             "type": "LATENT"
           },
           {
-            "id": 87,
-            "origin_id": 54,
+            "id": 85,
+            "origin_id": 53,
             "origin_slot": 2,
-            "target_id": 55,
+            "target_id": 54,
             "target_slot": 0,
             "type": "LATENT"
           },
           {
-            "id": 88,
+            "id": 86,
             "origin_id": 37,
             "origin_slot": 0,
-            "target_id": 55,
+            "target_id": 54,
             "target_slot": 1,
             "type": "VAE"
           },
           {
-            "id": 89,
-            "origin_id": 55,
+            "id": 87,
+            "origin_id": 54,
             "origin_slot": 0,
-            "target_id": 56,
+            "target_id": 55,
             "target_slot": 0,
             "type": "IMAGE"
           },
           {
-            "id": 90,
+            "id": 88,
             "origin_id": 16,
             "origin_slot": 2,
-            "target_id": 56,
+            "target_id": 55,
             "target_slot": 1,
             "type": "FLOAT"
           },
           {
-            "id": 91,
+            "id": 89,
             "origin_id": 42,
             "origin_slot": 0,
-            "target_id": 56,
+            "target_id": 55,
             "target_slot": 2,
             "type": "AUDIO"
           },
           {
             "id": 1,
-            "origin_id": 59,
+            "origin_id": 58,
             "origin_slot": 0,
             "target_id": 3,
             "target_slot": 0,
@@ -4257,7 +4207,7 @@
           },
           {
             "id": 2,
-            "origin_id": 60,
+            "origin_id": 59,
             "origin_slot": 0,
             "target_id": 5,
             "target_slot": 0,
@@ -4265,7 +4215,7 @@
           },
           {
             "id": 3,
-            "origin_id": 61,
+            "origin_id": 60,
             "origin_slot": 0,
             "target_id": 7,
             "target_slot": 0,
@@ -4273,7 +4223,7 @@
           },
           {
             "id": 4,
-            "origin_id": 62,
+            "origin_id": 61,
             "origin_slot": 0,
             "target_id": 9,
             "target_slot": 0,
@@ -4281,7 +4231,7 @@
           },
           {
             "id": 5,
-            "origin_id": 63,
+            "origin_id": 62,
             "origin_slot": 0,
             "target_id": 11,
             "target_slot": 0,
@@ -4289,7 +4239,7 @@
           },
           {
             "id": 6,
-            "origin_id": 64,
+            "origin_id": 63,
             "origin_slot": 0,
             "target_id": 13,
             "target_slot": 0,
@@ -4297,65 +4247,65 @@
           },
           {
             "id": 7,
-            "origin_id": 65,
+            "origin_id": 64,
             "origin_slot": 0,
             "target_id": 15,
             "target_slot": 0,
             "type": "STRING"
           },
           {
-            "id": 93,
+            "id": 91,
             "origin_id": -10,
             "origin_slot": 0,
-            "target_id": 59,
+            "target_id": 58,
             "target_slot": 0,
             "type": "STRING"
           },
           {
-            "id": 94,
+            "id": 92,
             "origin_id": -10,
             "origin_slot": 1,
+            "target_id": 59,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 93,
+            "origin_id": -10,
+            "origin_slot": 2,
             "target_id": 60,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 94,
+            "origin_id": -10,
+            "origin_slot": 3,
+            "target_id": 61,
             "target_slot": 0,
             "type": "INT"
           },
           {
             "id": 95,
             "origin_id": -10,
-            "origin_slot": 2,
-            "target_id": 61,
+            "origin_slot": 4,
+            "target_id": 62,
             "target_slot": 0,
-            "type": "INT"
+            "type": "FLOAT"
           },
           {
             "id": 96,
             "origin_id": -10,
-            "origin_slot": 3,
-            "target_id": 62,
+            "origin_slot": 5,
+            "target_id": 63,
             "target_slot": 0,
             "type": "INT"
           },
           {
             "id": 97,
             "origin_id": -10,
-            "origin_slot": 4,
-            "target_id": 63,
-            "target_slot": 0,
-            "type": "FLOAT"
-          },
-          {
-            "id": 98,
-            "origin_id": -10,
-            "origin_slot": 5,
-            "target_id": 64,
-            "target_slot": 0,
-            "type": "INT"
-          },
-          {
-            "id": 99,
-            "origin_id": -10,
             "origin_slot": 6,
-            "target_id": 65,
+            "target_id": 64,
             "target_slot": 0,
             "type": "STRING"
           },
@@ -4376,8 +4326,8 @@
             "type": "IMAGE"
           },
           {
-            "id": 92,
-            "origin_id": 56,
+            "id": 90,
+            "origin_id": 55,
             "origin_slot": 0,
             "target_id": -20,
             "target_slot": 0,

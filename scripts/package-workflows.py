@@ -254,16 +254,16 @@ Small moves are the most reliable. The range is about 60° either side of the fr
 
 RELIGHT_NOTE=f'''## How to relight a shot
 
-1. Upload an exterior clip in **Your Clip**. This model is for sunlight.
-2. Set **Light Direction**. The ball is added to the corner of the frame the model reads, and is not in the result.
+1. Upload your clip in **Your Clip**. This model was made for sunlit exteriors, and it works best on footage with no strong light direction already, such as an overcast day.
+2. Set **Light Direction**. Rotation 0 lights the scene from the camera's side, 90 from the right, 180 from behind and -90 from the left. The ball is added to the corner of the frame the model reads, and is not in the result.
 3. In **The Light**, keep the first sentence and match its end to the ball:
 
-`relight the video to match the light-direction ball. hard directional sunlight from the right`
+`relight the video to match the light-direction ball. hard low-angle sunlight from the right`
 
-- **From:** front · front-right · right · back-right · behind · back-left · left · front-left
+- **From:** the front · the front-right · the right · the back-right · behind · the back-left · the left · the front-left
 - **Looks:** hard directional sunlight · hard high-angle sunlight · hard low-angle sunlight · soft diffused daylight · soft warm afternoon light · cool soft daylight · dim overcast light · strong backlight with rim light · soft hazy backlight · warm golden low front sun · warm golden low side sun · frontal sunlight
 
-Describe the light only, not the scene. If the words and the ball disagree, the ball wins. 1280 x 704, 121 frames at 24 fps is what it was trained on, in a single pass.
+Describe the light only, not the scene, and use one light setup per clip. If the words and the ball disagree, the ball wins. The default ball, elevation 15 at intensity 2, follows Lightricks' example. A higher sun brightens the ball's grey background, so lower **intensity** as you raise **elevation**: about 0.8 at elevation 45. 1280 x 704, 121 frames at 24 fps is what it was trained on, in a single pass.
 
 {{clip}}
 

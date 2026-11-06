@@ -1033,6 +1033,67 @@
     ],
     "output_node": false
   },
+  "LTXVEmptyLatentAudio": {
+    "input": {
+      "required": {
+        "frames_number": [
+          "INT",
+          {
+            "tooltip": "Number of frames.",
+            "default": 97,
+            "min": 1,
+            "max": 1000,
+            "step": 1,
+            "display": "number"
+          }
+        ],
+        "frame_rate": [
+          "FLOAT,INT",
+          {
+            "tooltip": "Number of frames per second.",
+            "default": 25.0,
+            "widgetType": "FLOAT",
+            "min": 1.0,
+            "max": 1000.0,
+            "step": 0.01,
+            "display": "number"
+          }
+        ],
+        "batch_size": [
+          "INT",
+          {
+            "tooltip": "The number of latent audio samples in the batch.",
+            "default": 1,
+            "min": 1,
+            "max": 4096,
+            "display": "number"
+          }
+        ],
+        "audio_vae": [
+          "VAE",
+          {
+            "display_name": "Audio VAE",
+            "tooltip": "The Audio VAE model to get configuration from."
+          }
+        ]
+      }
+    },
+    "input_order": {
+      "required": [
+        "frames_number",
+        "frame_rate",
+        "batch_size",
+        "audio_vae"
+      ]
+    },
+    "output": [
+      "LATENT"
+    ],
+    "output_name": [
+      "Latent"
+    ],
+    "output_node": false
+  },
   "LTXVSeparateAVLatent": {
     "input": {
       "required": {
