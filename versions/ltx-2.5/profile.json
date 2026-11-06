@@ -28,7 +28,10 @@
       "07_LTX25_Ingredients.json",
       "08_LTX25_Extend_After.json",
       "09_LTX25_Extend_Before.json",
-      "10_LTX25_New_Angle.json"
+      "10_LTX25_New_Angle.json",
+   "11_LTX25_New_Camera_Angle.json",
+   "12_LTX25_Relight.json",
+   "13_LTX25_Day_to_Night.json"
     ]
   },
   "runtime": {
@@ -51,7 +54,8 @@
     "boto3_version": "1.40.54",
     "watchdog_version": "6.0.0",
     "jupyterlab_version": "4.4.7",
-    "sageattention_version": "1.0.6"
+    "sageattention_version": "1.0.6",
+  "sphere_light_commit": "cc89da68f898ddabb6fddbfb0781d3999550ac18"
   },
   "compatibility": {
     "primary_gpu": "NVIDIA A100 80GB",

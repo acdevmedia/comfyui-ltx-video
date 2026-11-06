@@ -15,12 +15,23 @@ INT8_TEXT_ENCODER = 'gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors
 BF16_TRANSFORMER = 'ltx-2.5-22b-distilled-transformer-bf16.safetensors'
 BF16_TEXT_ENCODER = 'gemma4-12b-with-proj-ltx-2.5-bf16.safetensors'
 INGREDIENTS_LORA = 'ltx-2.5-22b-ic-lora-ingredients-0.9.safetensors'
+DAY_TO_NIGHT_LORA = 'ltx-2.5-22b-ic-lora-day-to-night-0.9.safetensors'
+# No LTX-2.5 build of these two exists; they are the LTX-2.3 files.
+CROSSVIEW_LORA = 'LTX2.3-22B_IC-LoRA-CrossView-Prompt_v0.9_13700.safetensors'
+RELIGHT_LORA = 'ltx-2.3-22b-ic-lora-relight-1.0.safetensors'
 CONV_VIDEO_VAE = 'ltx-2.5-video-vae-conv-bf16.safetensors'
 QUALITY_VIDEO_VAE = 'ltx-2.5-video-vae-bf16.safetensors'
 AUDIO_VAE = 'ltx-2.5-audio-vae-bf16.safetensors'
 NEGATIVE = ('blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, '
             'identity drift, changing clothing, flicker, frame jitter, unwanted cuts, exposure pumping, inconsistent lighting, '
             'color shifts, CGI appearance, distorted voices, robotic speech, watermarks')
+
+CONTROL_NEGATIVE = 'worst quality, inconsistent motion, blurry, jittery, distorted'
+# Width and Height set the frame's area; the clip sets its shape.
+FIT_WIDTH = 'max(64, round(sqrt(a * b * c / d) / 32) * 32)'
+FIT_HEIGHT = 'max(64, round(sqrt(a * b * d / c) / 32) * 32)'
+# Relight's training geometry at 1280 x 704: a 143 px patch, 22 px from the top and right edges.
+BALL_SCALE = 'sqrt(a * b / 901120)'
 
 PANEL, INSIDE = 'Panel', 'Inside'
 
@@ -214,10 +225,102 @@ def new_angle(video_file='', sheet_file='', prompt=None, start=0.0, seconds=5.0,
     return g.prompt, g.layout
 
 
+def _through_ic_lora(prompt, prompt_title, lora, lora_title, strength, width, height, frames, save_as, negative=CONTROL_NEGATIVE,
+                     video_file='', seed=42, paint=None):
+    """Re-render a clip through an IC-LoRA: the clip guides every frame, and its own sound is held and kept."""
+    g = Graph()
+    video = g.add('LoadVideo', PANEL, 'Your Clip', file=video_file)
+    text = g.control('PrimitiveStringMultiline', prompt_title, prompt)
+    w = g.control('PrimitiveInt', 'Width', width)
+    h = g.control('PrimitiveInt', 'Height', height)
+    length = g.control('PrimitiveInt', 'Frames (8n+1, stops at the end of your clip)', frames)
+    power = g.control('PrimitiveFloat', 'IC-LoRA Strength', strength)
+    seed_node = g.control('PrimitiveInt', 'Seed', seed)
+    negative_node = g.control('PrimitiveStringMultiline', 'Negative Prompt (CFG 1.0: little/no effect)', negative)
+    parts, sound = _clip_parts(g, video)
+
+    t = INSIDE
+    size = g.add('GetImageSize', t, 'Size of Your Clip', image=parts[0])
+    fit_w = g.math(FIT_WIDTH, 'Fit Frame Width', a=w[0], b=h[0], c=size[0], d=size[1])
+    fit_h = g.math(FIT_HEIGHT, 'Fit Frame Height', a=w[0], b=h[0], c=size[0], d=size[1])
+    n_frames = g.math('1 + floor((min(a, b) - 1) / 8) * 8', 'Frames to Generate (8n+1)', a=length[0], b=size[2])
+    shot_seconds = g.math('a / b', 'Exact Shot Length (s)', a=n_frames[1], b=parts[2])
+    shot = g.add('ImageFromBatch', t, 'Frames for This Shot', image=parts[0], batch_index=0, length=n_frames[1])
+    guide = g.add('ImageScale', t, 'Fit Clip to Frame', image=shot[0], upscale_method='lanczos', width=fit_w[1], height=fit_h[1], crop='center')
+    if paint:
+        guide = paint(g, guide, fit_w, fit_h)
+
+    m = INSIDE
+    model = g.add('UNETLoader', m, 'LTX-2.5 Distilled (BF16)', unet_name=BF16_TRANSFORMER, weight_dtype='default')
+    lora_node = g.add('LTXICLoRALoaderModelOnly', m, lora_title, model=model[0], lora_name=lora, strength_model=power[0])
+    clip = g.add('CLIPLoader', m, 'Text Encoder (BF16)', clip_name=BF16_TEXT_ENCODER, type='ltxv', device='default')
+    vae = g.add('VAELoader', m, 'Video Decoder (best quality)', vae_name=QUALITY_VIDEO_VAE)
+    audio_vae = g.add('VAELoader', m, 'Audio VAE', vae_name=AUDIO_VAE)
+
+    p = INSIDE
+    pos = g.add('CLIPTextEncode', p, 'Encode Prompt', text=text[0], clip=clip[0])
+    neg = g.add('CLIPTextEncode', p, 'Encode Negative Prompt', text=negative_node[0], clip=clip[0])
+    cond = g.add('LTXVConditioning', p, 'Match Clip Frame Rate', positive=pos[0], negative=neg[0], frame_rate=parts[2])
+    shot_sound = g.add('TrimAudioDuration', p, 'Original Sound for This Shot', audio=sound[0], start_index=0.0, duration=shot_seconds[0])
+    sound_latent = g.add('VAEEncodeAudio', p, 'Encode Original Sound', audio=shot_sound[0], vae=audio_vae[0])
+    frozen = g.add('LTXVSetAudioRefTokens', p, 'Lock the Original Sound', positive=cond[0], negative=cond[1], audio_latent=sound_latent[0])
+
+    s = INSIDE
+    empty = g.add('EmptyLTXVLatentVideo', s, 'Empty Video', width=fit_w[1], height=fit_h[1], length=n_frames[1], batch_size=1)
+    guided = g.add('LTXAddVideoICLoRAGuide', s, 'Show the Model Your Clip', positive=cond[0], negative=cond[1], vae=vae[0], latent=empty[0],
+                   image=guide[0], frame_idx=0, strength=1.0, latent_downscale_factor=lora_node[1], crop='disabled', use_tiled_encode=False,
+                   tile_size=256, tile_overlap=64, use_streaming=False, tile_frames=97)
+    av = g.add('LTXVConcatAVLatent', s, 'Join Picture and Locked Sound', video_latent=guided[2], audio_latent=frozen[2])
+    sep = _sampler(g, lora_node[0], guided[0], guided[1], av[0], seed_node)
+    cropped = g.add('LTXVCropGuides', s, 'Remove Reference Frames', positive=guided[0], negative=guided[1], latent=sep[0])
+
+    a = INSIDE
+    decoded = g.add('VAEDecodeTiled', a, 'Decode Picture', samples=cropped[2], vae=vae[0], tile_size=512, overlap=64, temporal_size=64, temporal_overlap=16)
+    # Mux the untouched original waveform so the new shot lines up sample-for-sample in the edit.
+    final = g.add('CreateVideo', a, 'Build Video with Original Sound', images=decoded[0], fps=parts[2], audio=shot_sound[0], bit_depth='auto', color_space='sRGB', codec='none')
+    g.add('SaveVideo', a, 'Save Video', video=final[0], filename_prefix=f'video/{save_as}', format='auto', format__codec='auto')
+    return g.prompt, g.layout
+
+
+def new_camera_angle(video_file='', prompt='crossview. new camera angle: to the left, higher, closer.', width=960, height=544, frames=121, strength=1.5, seed=42):
+    """Re-shoot a clip from a new position with the CrossView IC-LoRA. It is an LTX-2.3 LoRA, so this is unverified on 2.5."""
+    return _through_ic_lora(prompt, 'The Camera Move', CROSSVIEW_LORA, 'CrossView IC-LoRA (LTX-2.3)', strength, width, height, frames, 'LTX25_new_camera_angle',
+                            negative='text, subtitles, logo, watermark, signature', video_file=video_file, seed=seed)
+
+
+def _light_ball(g, guide, fit_w, fit_h):
+    """Add the direction ball to every frame of the guide, last, at Relight's training geometry."""
+    ball = g.add('SphereLightManualNode', PANEL, 'Light Direction', rotation=0.0, elevation=45.0, intensity=1.5, render_b64='')
+    t = INSIDE
+    patch = g.math(f'round(143 * {BALL_SCALE})', 'Ball Patch Size', a=fit_w[1], b=fit_h[1])
+    margin = g.math(f'round(22 * {BALL_SCALE})', 'Ball Margin', a=fit_w[1], b=fit_h[1])
+    left = g.math('a - b - c', 'Ball Patch Left Edge', a=fit_w[1], b=patch[1], c=margin[1])
+    sized = g.add('ImageScale', t, 'Fit Ball to Patch', image=ball[0], upscale_method='lanczos', width=patch[1], height=patch[1], crop='disabled')
+    return g.add('ImageCompositeMasked', t, 'Ball in the Top-Right Corner', destination=guide[0], source=sized[0], x=left[1], y=margin[1], resize_source=False)
+
+
+def relight(video_file='', prompt='relight the video to match the light-direction ball. hard directional sunlight from the right', width=1280, height=704, frames=121, strength=1.0, seed=42):
+    """Move the sun in an exterior clip with the Relight IC-LoRA. It is an LTX-2.3 LoRA, so this is unverified on 2.5."""
+    return _through_ic_lora(prompt, 'The Light', RELIGHT_LORA, 'Relight IC-LoRA (LTX-2.3)', strength, width, height, frames, 'LTX25_relight',
+                            video_file=video_file, seed=seed, paint=_light_ball)
+
+
+def day_to_night(video_file='', prompt=None, width=768, height=448, frames=97, strength=1.0, seed=42):
+    """Turn a daylight clip into night with Lightricks' LTX-2.5 Day-to-Night IC-LoRA."""
+    prompt = prompt or ('A realistic nighttime scene lit by street lamps and warm windows, with a dark sky and deep soft shadows. '
+                        'Only the lighting changes from day to night; identical composition, framing, camera movement and motion.')
+    return _through_ic_lora(prompt, 'The Night Look', DAY_TO_NIGHT_LORA, 'Day-to-Night IC-LoRA', strength, width, height, frames, 'LTX25_day_to_night',
+                            negative='daytime, bright sunlight, blue sky, overexposed, worst quality, inconsistent motion, blurry, jittery, distorted',
+                            video_file=video_file, seed=seed)
+
+
 BUILDERS = {
     'extend_after': lambda **kw: extend('after', **kw),
     'extend_before': lambda **kw: extend('before', **kw),
     'new_angle': new_angle,
+    'new_camera_angle': new_camera_angle,
+    'relight': relight,
+    'day_to_night': day_to_night,
 }
 
 

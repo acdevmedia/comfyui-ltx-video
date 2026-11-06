@@ -16,7 +16,7 @@ for key in (
     "torch_index_url", "comfyui_commit", "manager_commit", "custom_scripts_commit",
     "ltxvideo_commit", "huggingface_hub_version", "transformers_version", "diffusers_version",
     "comfy_aimdo_version", "comfy_kitchen_version", "av_version", "boto3_version",
-    "watchdog_version", "jupyterlab_version", "sageattention_version",
+    "watchdog_version", "jupyterlab_version", "sageattention_version", "sphere_light_commit",
 ):
     print(runtime[key])
 PY
@@ -57,6 +57,9 @@ fi
 git clone https://github.com/Lightricks/ComfyUI-LTXVideo.git custom_nodes/ComfyUI-LTXVideo
 git -C custom_nodes/ComfyUI-LTXVideo checkout --detach "${SETTINGS[8]}"
 pip install --no-cache-dir -r custom_nodes/ComfyUI-LTXVideo/requirements.txt
+
+git clone https://github.com/eric-venti-seeds/Sphere-Light-Render-ComfyUI.git custom_nodes/Sphere-Light-Render-ComfyUI
+git -C custom_nodes/Sphere-Light-Render-ComfyUI checkout --detach "${SETTINGS[19]}"
 
 PINS=(
   "huggingface_hub==${SETTINGS[9]}" "transformers==${SETTINGS[10]}"

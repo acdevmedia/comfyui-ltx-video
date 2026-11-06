@@ -13,16 +13,26 @@ for m in manifest['models']:
     assert '/' in m.get('target',m['file']), f"model path must be category-relative: {m['id']}"
 assert any(m['id']=='ingredients-ic-lora' and m['repo']=='Lightricks/LTX-2.5-22b-IC-LoRA-Ingredients' for m in manifest['models'])
 assert all('group' in m for m in manifest['models']), 'every model must have an explicit download group'
+for m in manifest['models']:
+    if 'revision' in m:
+        # Hugging Face hides a gated file's hash without an accepted licence; scripts/pin-gated-models.py fills it in.
+        assert len(m['revision'])==40 and m['size']>0, m['id']
+        assert len(m.get('sha256') or '')==64 or (m.get('gated') and m['sha256'] is None), m['id']
 loader=importlib.util.spec_from_file_location('download_models',root/'scripts/download-models.py')
 downloader=importlib.util.module_from_spec(loader); loader.loader.exec_module(downloader)
 default_ids={m['id'] for m in downloader.selected_models(manifest,'default',True)}
 optional_ids={m['id'] for m in downloader.selected_models(manifest,'optional',True)}
 ingredient_ids={m['id'] for m in downloader.selected_models(manifest,'ingredients',True)}
+adapter_ids={m['id'] for m in downloader.selected_models(manifest,'adapters',True)}
 assert 'gemma4-enhancer-bf16' in optional_ids and 'gemma4-enhancer-bf16' not in default_ids
 assert {'ltx25-transformer-int8','ltx25-text-encoder-int8','gemma4-enhancer-int8'} <= default_ids
 assert {'ingredients-transformer-bf16','ingredients-text-encoder-bf16','ingredients-ic-lora'} <= default_ids
 assert ingredient_ids == {'ingredients-transformer-bf16','ingredients-text-encoder-bf16','ingredients-ic-lora'}
-assert all((root/'scripts'/name).is_file() for name in ('download-ingredients-models.sh','download-optional-models.sh','download-all-models.sh'))
+# A licence-gated LoRA must never stop startup, so nothing in this group is fetched unless asked for.
+assert {'crossview-ic-lora','relight-ic-lora','day-to-night-ic-lora'}|ingredient_ids == adapter_ids
+assert not {'crossview-ic-lora','relight-ic-lora','day-to-night-ic-lora'} & default_ids
+assert 'transition-lora' in default_ids and 'transition-lora' in {m['id'] for m in downloader.selected_models(manifest,'default',False)}
+assert all((root/'scripts'/name).is_file() for name in ('download-ingredients-models.sh','download-adapter-models.sh','download-optional-models.sh','download-all-models.sh'))
 print(f"Model manifest is structurally valid ({len(ids)} declared files).")
 with tempfile.TemporaryDirectory() as temp:
     env=os.environ.copy(); env['COMFYUI_DIR']=temp; env['MODEL_MANIFEST']=str(root/'versions/ltx-2.5/config/models.json')

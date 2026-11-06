@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Build filmmaker-named workflow assets from the preserved master and official graph refs."""
 import copy, json, uuid
+from api_to_ui import to_ui
+from v2v_graphs import PANEL, day_to_night, new_camera_angle, relight
 from workflow_panels import fold_into_panel
 from workflow_dimensions import apply_dimensions, fit_frame_to_image
 from pathlib import Path
@@ -156,6 +158,40 @@ def expose_negative_prompt(data, control_id, encoder_id):
     control['inputs'].append({'label':NEGATIVE_LABEL,'name':'director_negative_prompt','type':'STRING','widget':{'name':'director_negative_prompt'},'link':None})
     control['widgets_values'].append(NEGATIVE_PROMPT)
 
+TRANSITION='ltx2.3-transition.safetensors'
+TRANSITION_LABEL='Transition LoRA strength'
+
+def expose_transition_lora(data, control_id, loader_id):
+    """Add the scene transition LoRA after the model loader, off at strength 0, with a panel control.
+
+    Mirrors the control on the LTX-2.3 bundles. It is an LTX-2.3 LoRA, so its effect on 2.5 is unverified.
+    """
+    control=next(n for n in data['nodes'] if n['id']==control_id)
+    sub=next(s for s in data['definitions']['subgraphs'] if s['id']==control['type'])
+    loader=next(n for n in sub['nodes'] if n['id']==loader_id)
+    out=next(l for l in sub['links'] if l['origin_id']==loader_id)
+    target=next(n for n in sub['nodes'] if n['id']==out['target_id'])
+    node_id=sub['state']['lastNodeId']+1
+    next_link=max([sub['state']['lastLinkId'],data.get('last_link_id',0)]+[l['id'] for l in sub['links']])+1
+    model_link,strength_link=next_link,next_link+1
+    sub['inputs'].append({'id':str(uuid.uuid5(uuid.NAMESPACE_URL,f"{sub['id']}/transition_strength")),'name':'transition_strength',
+        'type':'FLOAT','linkIds':[strength_link],'label':TRANSITION_LABEL,'pos':list(sub['inputs'][-1].get('pos',[0,0]))})
+    # The loader's link now ends at the LoRA, and a new link carries the patched model on.
+    target['inputs'][out['target_slot']]['link']=model_link
+    sub['links'].append({'id':model_link,'origin_id':node_id,'origin_slot':0,'target_id':out['target_id'],'target_slot':out['target_slot'],'type':'MODEL'})
+    sub['links'].append({'id':strength_link,'origin_id':-10,'origin_slot':len(sub['inputs'])-1,'target_id':node_id,'target_slot':2,'type':'FLOAT'})
+    sub['nodes'].append({'id':node_id,'type':'LoraLoaderModelOnly','pos':[loader['pos'][0],loader['pos'][1]+130],'size':[400,110],'flags':{},'order':loader['order'],'mode':0,
+        'inputs':[{'localized_name':'model','name':'model','type':'MODEL','link':out['id']},
+                  {'localized_name':'lora_name','name':'lora_name','type':'COMBO','widget':{'name':'lora_name'},'link':None},
+                  {'localized_name':'strength_model','name':'strength_model','type':'FLOAT','widget':{'name':'strength_model'},'link':strength_link}],
+        'outputs':[{'localized_name':'MODEL','name':'MODEL','type':'MODEL','links':[model_link]}],'title':'Scene Transition LoRA',
+        'properties':{'Node name for S&R':'LoraLoaderModelOnly'},'widgets_values':[TRANSITION,0.0]})
+    out['target_id'],out['target_slot']=node_id,0
+    sub['state'].update(lastNodeId=node_id,lastLinkId=strength_link)
+    data['last_link_id']=max(data.get('last_link_id',0),strength_link)
+    control['inputs'].append({'label':TRANSITION_LABEL,'name':'transition_strength','type':'FLOAT','widget':{'name':'transition_strength'},'link':None})
+    control['widgets_values'].append(0.0)
+
 NEGATIVE_NOTE='''## About the negative prompt
 
 The negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.
@@ -186,6 +222,76 @@ This re-stages a moment of your clip from a different camera position while keep
 4. Run. The result carries your clip's original sound, so line it up at the same timecode in your editor.
 
 **Do not use a frame grabbed straight from your clip as the sheet.** The model copies its framing instead of moving the camera. This is a re-staged shot rather than a true camera move: the people, set and light stay close to the sheet, but the performance is newly generated. It needs the Ingredients models (start the Pod with AUTO_DOWNLOAD_ADAPTERS=true, or run scripts/download-ingredients-models.sh).'''
+
+CLIP_SHAPE='''**Width** and **Height** set the frame's area, and your clip sets its shape. **Frames** sets the length, and the shot stops at the end of your clip. Your clip's own sound is kept, so the new shot lines up on the same audio track.'''
+
+DOWNLOAD='''It needs the BF16 stack and this LoRA, which are not in the default download. Run `/opt/ltx25-studio/scripts/download-adapter-models.sh` in the Pod's terminal. Until then it reports a missing model; nothing else is affected.'''
+
+GATED='''**This one needs a licence first.** Accept the terms at [{repo}](https://huggingface.co/{repo}) with the Hugging Face account behind `HF_TOKEN`. '''
+
+CAMERA_NOTE=f'''## How to move the camera
+
+This re-shoots your clip from a new position, like a second camera on the same take. It moves the camera on existing footage, which New Angle (workflow 10) cannot: that one re-stages the moment from a reference sheet.
+
+1. Upload your clip in **Your Clip**.
+2. In **The Camera Move**, write only the move, in these exact words:
+
+`crossview. new camera angle: to the left, higher, closer.`
+
+- **Side:** same angle · slightly to the left · slightly to the right · to the left · to the right · far to the left · far to the right
+- **Height:** lower · same height · higher
+- **Distance:** closer · same distance · further
+
+3. Run. For a big move, feed the result back in and make another small one.
+
+Small moves are the most reliable. The range is about 60° either side of the front, so a view from behind is out of reach. **IC-LoRA Strength** starts at 1.5 because the effect is weaker on fast sampling; 1.2 to 1.5 is the useful range.
+
+{{clip}}
+
+**Not yet proven on LTX-2.5.** This LoRA was trained on LTX-2.3 and no 2.5 build exists, so check a short clip first. It is a v0.9 proof of concept.
+
+{{download}}'''
+
+RELIGHT_NOTE=f'''## How to relight a shot
+
+1. Upload an exterior clip in **Your Clip**. This model is for sunlight.
+2. Set **Light Direction**. The ball is added to the corner of the frame the model reads, and is not in the result.
+3. In **The Light**, keep the first sentence and match its end to the ball:
+
+`relight the video to match the light-direction ball. hard directional sunlight from the right`
+
+- **From:** front · front-right · right · back-right · behind · back-left · left · front-left
+- **Looks:** hard directional sunlight · hard high-angle sunlight · hard low-angle sunlight · soft diffused daylight · soft warm afternoon light · cool soft daylight · dim overcast light · strong backlight with rim light · soft hazy backlight · warm golden low front sun · warm golden low side sun · frontal sunlight
+
+Describe the light only, not the scene. If the words and the ball disagree, the ball wins. 1280 x 704, 121 frames at 24 fps is what it was trained on, in a single pass.
+
+{{clip}}
+
+**Not yet proven on LTX-2.5.** This LoRA was trained on LTX-2.3 and no 2.5 build exists, so check a short clip first.
+
+{{gated}}{{download}}'''
+
+NIGHT_NOTE=f'''## How to turn day into night
+
+1. Upload a daylight clip at 24 fps in **Your Clip**.
+2. In **The Night Look**, describe the night and keep the last sentence, which holds the shot still. Steer the colour with phrases such as warm tungsten light or cool white LED light.
+3. Run. Composition, camera and motion come from your clip.
+
+768 x 448, 97 frames at 24 fps is what it was trained on; longer clips drift towards the end.
+
+{{clip}}
+
+{{gated}}{{download}}'''
+
+def ic_lora_workflow(build, name, title, note, note_title):
+    """An API graph from v2v_graphs.py folded offline into the one-panel layout, with its how-to note."""
+    prompt,layout=build()
+    data=to_ui(prompt,title,read(PROFILE_DIR/'config/node-schemas.json')); rename(data,title)
+    fields=[{'label':node['_meta']['title'],'source':int(key)} for key,node in prompt.items() if layout[key]==PANEL and node['class_type'].startswith('Primitive')]
+    keep=[int(key) for key,node in prompt.items() if node['class_type'] in ('LoadVideo','SphereLightManualNode','SaveVideo')]
+    add_note(data,note_title,note)
+    fold_into_panel(data,title+' — Filmmaker Controls',keep,fields)
+    write(name,data)
 
 A2V_NOTE='''## How to make video from audio
 
@@ -358,6 +464,7 @@ def main():
             if n.get('type')=='PrimitiveInt' and n.get('title','').lower()=='height': n['widgets_values'][0]=544
             if n.get('type')=='PrimitiveBoolean' and 'prompt enhance' in n.get('title','').lower(): n['widgets_values']=[False]
     expose_negative_prompt(flf,251,217)
+    expose_transition_lora(flf,251,230)
     use_conv_video_vae(flf); use_ltxv_tiled_decode(flf); write('03_LTX25_First_Last_Frame.json',flf)
 
     a2v=read(REF/'LTX-2.5_A2V_Two_Stage_Distilled.json'); rename(a2v,'Audio to Video — Filmmaker'); set_duration(a2v); use_default_prompt_enhancer(a2v); use_int8_stack(a2v)
@@ -405,5 +512,10 @@ def main():
     angle=read(V2V/'new_angle.json'); rename(angle,'New Angle — Coverage Locked to Your Clip\'s Sound')
     add_note(angle,'How to Shoot a New Angle',NEW_ANGLE_NOTE)
     write('10_LTX25_New_Angle.json',angle)
+
+    relight_repo='Lightricks/LTX-2.3-22b-IC-LoRA-Relight'; night_repo='Lightricks/LTX-2.5-22b-IC-LoRA-Day-To-Night'
+    ic_lora_workflow(new_camera_angle,'11_LTX25_New_Camera_Angle.json','New Camera Angle',CAMERA_NOTE.format(clip=CLIP_SHAPE,download=DOWNLOAD),'How to Move the Camera')
+    ic_lora_workflow(relight,'12_LTX25_Relight.json','Relight',RELIGHT_NOTE.format(clip=CLIP_SHAPE,gated=GATED.format(repo=relight_repo),download=DOWNLOAD),'How to Relight a Shot')
+    ic_lora_workflow(day_to_night,'13_LTX25_Day_to_Night.json','Day to Night',NIGHT_NOTE.format(clip=CLIP_SHAPE,gated=GATED.format(repo=night_repo),download=DOWNLOAD),'How to Turn Day into Night')
 
 if __name__=='__main__': main()

@@ -1,0 +1,3844 @@
+{
+  "id": "New Camera Angle",
+  "last_node_id": 61,
+  "last_link_id": 88,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadVideo",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        310,
+        160
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "file",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "file"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            86
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadVideo"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "Your Clip"
+    },
+    {
+      "id": 51,
+      "type": "SaveVideo",
+      "pos": [
+        1060,
+        0
+      ],
+      "size": [
+        310,
+        160
+      ],
+      "flags": {},
+      "order": 50,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 87
+        },
+        {
+          "name": "filename_prefix",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "filename_prefix"
+          }
+        },
+        {
+          "name": "format",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "format"
+          }
+        },
+        {
+          "name": "format.codec",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "format.codec"
+          }
+        },
+        {
+          "name": "codec",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "codec"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveVideo"
+      },
+      "widgets_values": [
+        "video/LTX25_new_camera_angle",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "title": "Save Video"
+    },
+    {
+      "id": 52,
+      "type": "MarkdownNote",
+      "pos": [
+        -560,
+        0
+      ],
+      "size": [
+        500,
+        520
+      ],
+      "flags": {},
+      "order": 51,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "How to Move the Camera",
+      "properties": {},
+      "widgets_values": [
+        "## How to move the camera\n\nThis re-shoots your clip from a new position, like a second camera on the same take. It moves the camera on existing footage, which New Angle (workflow 10) cannot: that one re-stages the moment from a reference sheet.\n\n1. Upload your clip in **Your Clip**.\n2. In **The Camera Move**, write only the move, in these exact words:\n\n`crossview. new camera angle: to the left, higher, closer.`\n\n- **Side:** same angle · slightly to the left · slightly to the right · to the left · to the right · far to the left · far to the right\n- **Height:** lower · same height · higher\n- **Distance:** closer · same distance · further\n\n3. Run. For a big move, feed the result back in and make another small one.\n\nSmall moves are the most reliable. The range is about 60° either side of the front, so a view from behind is out of reach. **IC-LoRA Strength** starts at 1.5 because the effect is weaker on fast sampling; 1.2 to 1.5 is the useful range.\n\n**Width** and **Height** set the frame's area, and your clip sets its shape. **Frames** sets the length, and the shot stops at the end of your clip. Your clip's own sound is kept, so the new shot lines up on the same audio track.\n\n**Not yet proven on LTX-2.5.** This LoRA was trained on LTX-2.3 and no 2.5 build exists, so check a short clip first. It is a v0.9 proof of concept.\n\nIt needs the BF16 stack and this LoRA, which are not in the default download. Run `/opt/ltx25-studio/scripts/download-adapter-models.sh` in the Pod's terminal. Until then it reports a missing model; nothing else is affected."
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 60,
+      "type": "5a50e77e-a2ef-5c54-81d4-16985336fd02",
+      "pos": [
+        420,
+        0
+      ],
+      "size": [
+        560,
+        360
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "The Camera Move",
+          "localized_name": "the_camera_move",
+          "name": "the_camera_move",
+          "type": "STRING",
+          "widget": {
+            "name": "the_camera_move"
+          },
+          "link": null
+        },
+        {
+          "label": "Width",
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "label": "Height",
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        },
+        {
+          "label": "Frames (8n+1, stops at the end of your clip)",
+          "localized_name": "frames_8n_1_stops_at_the_end_of_your_cli",
+          "name": "frames_8n_1_stops_at_the_end_of_your_cli",
+          "type": "INT",
+          "widget": {
+            "name": "frames_8n_1_stops_at_the_end_of_your_cli"
+          },
+          "link": null
+        },
+        {
+          "label": "IC-LoRA Strength",
+          "localized_name": "ic_lora_strength",
+          "name": "ic_lora_strength",
+          "type": "FLOAT",
+          "widget": {
+            "name": "ic_lora_strength"
+          },
+          "link": null
+        },
+        {
+          "label": "Seed",
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "label": "Negative Prompt (CFG 1.0: little/no effect)",
+          "localized_name": "negative_prompt_cfg_1_0_little_no_effect",
+          "name": "negative_prompt_cfg_1_0_little_no_effect",
+          "type": "STRING",
+          "widget": {
+            "name": "negative_prompt_cfg_1_0_little_no_effect"
+          },
+          "link": null
+        },
+        {
+          "label": "Your Clip",
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 86
+        }
+      ],
+      "outputs": [
+        {
+          "label": "VIDEO",
+          "localized_name": "VIDEO",
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            87
+          ]
+        }
+      ],
+      "title": "New Camera Angle — Filmmaker Controls",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0"
+      },
+      "widgets_values": [
+        "crossview. new camera angle: to the left, higher, closer.",
+        960,
+        544,
+        121,
+        1.5,
+        42,
+        "text, subtitles, logo, watermark, signature"
+      ],
+      "widgets_values_named": {
+        "the_camera_move": "crossview. new camera angle: to the left, higher, closer.",
+        "width": 960,
+        "height": 544,
+        "frames_8n_1_stops_at_the_end_of_your_cli": 121,
+        "ic_lora_strength": 1.5,
+        "seed": 42,
+        "negative_prompt_cfg_1_0_little_no_effect": "text, subtitles, logo, watermark, signature"
+      }
+    },
+    {
+      "id": 61,
+      "type": "MarkdownNote",
+      "pos": [
+        -1120,
+        0
+      ],
+      "size": [
+        500,
+        420
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "About the Negative Prompt",
+      "properties": {},
+      "widgets_values": [
+        "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    }
+  ],
+  "links": [
+    [
+      86,
+      1,
+      0,
+      60,
+      7,
+      "VIDEO"
+    ],
+    [
+      87,
+      60,
+      0,
+      51,
+      0,
+      "VIDEO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.75,
+      "offset": [
+        20,
+        70
+      ]
+    },
+    "acdev_studio": {
+      "product": "ACDEV LTX-2.5 Studio",
+      "version": "ltx-2.5",
+      "workflow": "New Camera Angle"
+    }
+  },
+  "version": 0.4,
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "5a50e77e-a2ef-5c54-81d4-16985336fd02",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 60,
+          "lastLinkId": 88,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "New Camera Angle — Filmmaker Controls",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -400,
+            0,
+            160,
+            200
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            2350,
+            0,
+            140,
+            60
+          ]
+        },
+        "inputs": [
+          {
+            "id": "53e81ba6-e82d-594b-9174-c1ed965eef34",
+            "name": "the_camera_move",
+            "type": "STRING",
+            "linkIds": [
+              79
+            ],
+            "localized_name": "the_camera_move",
+            "label": "The Camera Move",
+            "pos": [
+              0,
+              0
+            ]
+          },
+          {
+            "id": "bfcbf2ab-3007-50a1-b3dc-5b6603de75f3",
+            "name": "width",
+            "type": "INT",
+            "linkIds": [
+              80
+            ],
+            "localized_name": "width",
+            "label": "Width",
+            "pos": [
+              0,
+              20
+            ]
+          },
+          {
+            "id": "8a7df80a-1e67-53f3-85bf-869378347c1a",
+            "name": "height",
+            "type": "INT",
+            "linkIds": [
+              81
+            ],
+            "localized_name": "height",
+            "label": "Height",
+            "pos": [
+              0,
+              40
+            ]
+          },
+          {
+            "id": "5f860a4c-2d69-50fc-bed0-e3f0af7c46eb",
+            "name": "frames_8n_1_stops_at_the_end_of_your_cli",
+            "type": "INT",
+            "linkIds": [
+              82
+            ],
+            "localized_name": "frames_8n_1_stops_at_the_end_of_your_cli",
+            "label": "Frames (8n+1, stops at the end of your clip)",
+            "pos": [
+              0,
+              60
+            ]
+          },
+          {
+            "id": "518d30b5-c2d6-5c32-af5f-e7783234d161",
+            "name": "ic_lora_strength",
+            "type": "FLOAT",
+            "linkIds": [
+              83
+            ],
+            "localized_name": "ic_lora_strength",
+            "label": "IC-LoRA Strength",
+            "pos": [
+              0,
+              80
+            ]
+          },
+          {
+            "id": "a269790e-e6fa-5ff5-a195-36e6908cae7e",
+            "name": "seed",
+            "type": "INT",
+            "linkIds": [
+              84
+            ],
+            "localized_name": "seed",
+            "label": "Seed",
+            "pos": [
+              0,
+              100
+            ]
+          },
+          {
+            "id": "455a1460-d276-5966-8033-bb019b0c440a",
+            "name": "negative_prompt_cfg_1_0_little_no_effect",
+            "type": "STRING",
+            "linkIds": [
+              85
+            ],
+            "localized_name": "negative_prompt_cfg_1_0_little_no_effect",
+            "label": "Negative Prompt (CFG 1.0: little/no effect)",
+            "pos": [
+              0,
+              120
+            ]
+          },
+          {
+            "id": "bd855786-d425-5284-9f7b-3b44d09059b6",
+            "name": "video",
+            "type": "VIDEO",
+            "linkIds": [
+              8
+            ],
+            "localized_name": "video",
+            "label": "Your Clip",
+            "pos": [
+              0,
+              140
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "91b870d3-77e7-55f6-b670-cc02e607644d",
+            "name": "VIDEO",
+            "type": "VIDEO",
+            "linkIds": [
+              78
+            ],
+            "localized_name": "VIDEO",
+            "label": "VIDEO",
+            "pos": [
+              0,
+              0
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 3,
+            "type": "PrimitiveStringMultiline",
+            "pos": [
+              700,
+              0
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "STRING",
+                "link": 1,
+                "widget": {
+                  "name": "value"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  35
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PrimitiveStringMultiline"
+            },
+            "widgets_values": [
+              ""
+            ],
+            "title": "The Camera Move"
+          },
+          {
+            "id": 5,
+            "type": "PrimitiveInt",
+            "pos": [
+              1400,
+              0
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT",
+                "link": 2,
+                "widget": {
+                  "name": "value"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  16,
+                  20
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              0,
+              "fixed"
+            ],
+            "title": "Width"
+          },
+          {
+            "id": 7,
+            "type": "PrimitiveInt",
+            "pos": [
+              0,
+              300
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT",
+                "link": 3,
+                "widget": {
+                  "name": "value"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  17,
+                  21
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              0,
+              "fixed"
+            ],
+            "title": "Height"
+          },
+          {
+            "id": 9,
+            "type": "PrimitiveInt",
+            "pos": [
+              700,
+              300
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 8,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT",
+                "link": 4,
+                "widget": {
+                  "name": "value"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  24
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              0,
+              "fixed"
+            ],
+            "title": "Frames (8n+1, stops at the end of your clip)"
+          },
+          {
+            "id": 11,
+            "type": "PrimitiveFloat",
+            "pos": [
+              1400,
+              300
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 10,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "FLOAT",
+                "link": 5,
+                "widget": {
+                  "name": "value"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  34
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PrimitiveFloat"
+            },
+            "widgets_values": [
+              0
+            ],
+            "title": "IC-LoRA Strength"
+          },
+          {
+            "id": 13,
+            "type": "PrimitiveInt",
+            "pos": [
+              0,
+              600
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 12,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT",
+                "link": 6,
+                "widget": {
+                  "name": "value"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  60
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              0,
+              "randomize"
+            ],
+            "title": "Seed"
+          },
+          {
+            "id": 15,
+            "type": "PrimitiveStringMultiline",
+            "pos": [
+              700,
+              600
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 14,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "STRING",
+                "link": 7,
+                "widget": {
+                  "name": "value"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  37
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PrimitiveStringMultiline"
+            },
+            "widgets_values": [
+              ""
+            ],
+            "title": "Negative Prompt (CFG 1.0: little/no effect)"
+          },
+          {
+            "id": 16,
+            "type": "GetVideoComponents",
+            "pos": [
+              1050,
+              600
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 15,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "video",
+                "type": "VIDEO",
+                "link": 8
+              }
+            ],
+            "outputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "links": [
+                  9,
+                  15,
+                  28
+                ]
+              },
+              {
+                "name": "audio",
+                "type": "AUDIO",
+                "links": [
+                  13
+                ]
+              },
+              {
+                "name": "fps",
+                "type": "FLOAT",
+                "links": [
+                  11,
+                  27,
+                  41,
+                  76
+                ]
+              },
+              {
+                "name": "bit_depth",
+                "type": "COMBO",
+                "links": []
+              },
+              {
+                "name": "color_space",
+                "type": "COMBO",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "GetVideoComponents"
+            },
+            "widgets_values": [],
+            "title": "Split Clip into Frames, Sound and FPS"
+          },
+          {
+            "id": 17,
+            "type": "GetImageSize",
+            "pos": [
+              1400,
+              600
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 16,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 9
+              }
+            ],
+            "outputs": [
+              {
+                "name": "width",
+                "type": "INT",
+                "links": []
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "links": []
+              },
+              {
+                "name": "batch_size",
+                "type": "INT",
+                "links": [
+                  10
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "GetImageSize"
+            },
+            "widgets_values": [],
+            "title": "Count Clip Frames"
+          },
+          {
+            "id": 18,
+            "type": "ComfyMathExpression",
+            "pos": [
+              1750,
+              600
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 17,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "expression",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "expression"
+                }
+              },
+              {
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 10
+              },
+              {
+                "name": "values.b",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 11
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  12
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              },
+              {
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyMathExpression"
+            },
+            "widgets_values": [
+              "a / b"
+            ],
+            "title": "Clip Length (seconds)"
+          },
+          {
+            "id": 19,
+            "type": "EmptyAudio",
+            "pos": [
+              0,
+              900
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 18,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "duration",
+                "type": "FLOAT",
+                "link": 12,
+                "widget": {
+                  "name": "duration"
+                }
+              },
+              {
+                "name": "sample_rate",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "sample_rate"
+                }
+              },
+              {
+                "name": "channels",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "channels"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "AUDIO",
+                "type": "AUDIO",
+                "links": [
+                  14
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EmptyAudio"
+            },
+            "widgets_values": [
+              60.0,
+              44100,
+              2
+            ],
+            "title": "Silence (if the clip has no sound)"
+          },
+          {
+            "id": 20,
+            "type": "AudioMerge",
+            "pos": [
+              350,
+              900
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 19,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "audio1",
+                "type": "AUDIO",
+                "link": 13
+              },
+              {
+                "name": "audio2",
+                "type": "AUDIO",
+                "link": 14
+              },
+              {
+                "name": "merge_method",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "merge_method"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "AUDIO",
+                "type": "AUDIO",
+                "links": [
+                  42
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "AudioMerge"
+            },
+            "widgets_values": [
+              "add"
+            ],
+            "title": "Clip Sound (or silence)"
+          },
+          {
+            "id": 21,
+            "type": "GetImageSize",
+            "pos": [
+              700,
+              900
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 20,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 15
+              }
+            ],
+            "outputs": [
+              {
+                "name": "width",
+                "type": "INT",
+                "links": [
+                  18,
+                  22
+                ]
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "links": [
+                  19,
+                  23
+                ]
+              },
+              {
+                "name": "batch_size",
+                "type": "INT",
+                "links": [
+                  25
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "GetImageSize"
+            },
+            "widgets_values": [],
+            "title": "Size of Your Clip"
+          },
+          {
+            "id": 22,
+            "type": "ComfyMathExpression",
+            "pos": [
+              1050,
+              900
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 21,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "expression",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "expression"
+                }
+              },
+              {
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 16
+              },
+              {
+                "name": "values.b",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 17
+              },
+              {
+                "name": "values.c",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 18
+              },
+              {
+                "name": "values.d",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 19
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  31,
+                  49
+                ]
+              },
+              {
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyMathExpression"
+            },
+            "widgets_values": [
+              "max(64, round(sqrt(a * b * c / d) / 32) * 32)"
+            ],
+            "title": "Fit Frame Width"
+          },
+          {
+            "id": 23,
+            "type": "ComfyMathExpression",
+            "pos": [
+              1400,
+              900
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 22,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "expression",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "expression"
+                }
+              },
+              {
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 20
+              },
+              {
+                "name": "values.b",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 21
+              },
+              {
+                "name": "values.c",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 22
+              },
+              {
+                "name": "values.d",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 23
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  32,
+                  50
+                ]
+              },
+              {
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyMathExpression"
+            },
+            "widgets_values": [
+              "max(64, round(sqrt(a * b * d / c) / 32) * 32)"
+            ],
+            "title": "Fit Frame Height"
+          },
+          {
+            "id": 24,
+            "type": "ComfyMathExpression",
+            "pos": [
+              1750,
+              900
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 23,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "expression",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "expression"
+                }
+              },
+              {
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 24
+              },
+              {
+                "name": "values.b",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 25
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  26,
+                  29,
+                  51
+                ]
+              },
+              {
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyMathExpression"
+            },
+            "widgets_values": [
+              "1 + floor((min(a, b) - 1) / 8) * 8"
+            ],
+            "title": "Frames to Generate (8n+1)"
+          },
+          {
+            "id": 25,
+            "type": "ComfyMathExpression",
+            "pos": [
+              0,
+              1200
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 24,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "expression",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "expression"
+                }
+              },
+              {
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 26
+              },
+              {
+                "name": "values.b",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 27
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  43
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              },
+              {
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyMathExpression"
+            },
+            "widgets_values": [
+              "a / b"
+            ],
+            "title": "Exact Shot Length (s)"
+          },
+          {
+            "id": 26,
+            "type": "ImageFromBatch",
+            "pos": [
+              350,
+              1200
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 25,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 28
+              },
+              {
+                "name": "batch_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "batch_index"
+                }
+              },
+              {
+                "name": "length",
+                "type": "INT",
+                "link": 29,
+                "widget": {
+                  "name": "length"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [
+                  30
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ImageFromBatch"
+            },
+            "widgets_values": [
+              0,
+              1
+            ],
+            "title": "Frames for This Shot"
+          },
+          {
+            "id": 27,
+            "type": "ImageScale",
+            "pos": [
+              700,
+              1200
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 26,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 30
+              },
+              {
+                "name": "upscale_method",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "upscale_method"
+                }
+              },
+              {
+                "name": "width",
+                "type": "INT",
+                "link": 31,
+                "widget": {
+                  "name": "width"
+                }
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "link": 32,
+                "widget": {
+                  "name": "height"
+                }
+              },
+              {
+                "name": "crop",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "crop"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [
+                  56
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ImageScale"
+            },
+            "widgets_values": [
+              "lanczos",
+              512,
+              512,
+              "center"
+            ],
+            "title": "Fit Clip to Frame"
+          },
+          {
+            "id": 28,
+            "type": "UNETLoader",
+            "pos": [
+              1050,
+              1200
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 27,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "unet_name",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "unet_name"
+                }
+              },
+              {
+                "name": "weight_dtype",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "weight_dtype"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [
+                  33
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "UNETLoader"
+            },
+            "widgets_values": [
+              "ltx-2.5-22b-distilled-transformer-bf16.safetensors",
+              "default"
+            ],
+            "title": "LTX-2.5 Distilled (BF16)"
+          },
+          {
+            "id": 29,
+            "type": "LTXICLoRALoaderModelOnly",
+            "pos": [
+              1400,
+              1200
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 28,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "MODEL",
+                "link": 33
+              },
+              {
+                "name": "lora_name",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "lora_name"
+                }
+              },
+              {
+                "name": "strength_model",
+                "type": "FLOAT",
+                "link": 34,
+                "widget": {
+                  "name": "strength_model"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "model",
+                "type": "MODEL",
+                "links": [
+                  61
+                ]
+              },
+              {
+                "name": "latent_downscale_factor",
+                "type": "FLOAT",
+                "links": [
+                  57
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "LTXICLoRALoaderModelOnly"
+            },
+            "widgets_values": [
+              "LTX2.3-22B_IC-LoRA-CrossView-Prompt_v0.9_13700.safetensors",
+              1.0
+            ],
+            "title": "CrossView IC-LoRA (LTX-2.3)"
+          },
+          {
+            "id": 30,
+            "type": "CLIPLoader",
+            "pos": [
+              1750,
+              1200
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 29,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "clip_name",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "clip_name"
+                }
+              },
+              {
+                "name": "type",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "type"
+                }
+              },
+              {
+                "name": "device",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "device"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "CLIP",
+                "type": "CLIP",
+                "links": [
+                  36,
+                  38
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "CLIPLoader"
+            },
+            "widgets_values": [
+              "gemma4-12b-with-proj-ltx-2.5-bf16.safetensors",
+              "ltxv",
+              "default"
+            ],
+            "title": "Text Encoder (BF16)"
+          },
+          {
+            "id": 31,
+            "type": "VAELoader",
+            "pos": [
+              0,
+              1500
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 30,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "vae_name",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "vae_name"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "VAE",
+                "type": "VAE",
+                "links": [
+                  54,
+                  74
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "VAELoader"
+            },
+            "widgets_values": [
+              "ltx-2.5-video-vae-bf16.safetensors"
+            ],
+            "title": "Video Decoder (best quality)"
+          },
+          {
+            "id": 32,
+            "type": "VAELoader",
+            "pos": [
+              350,
+              1500
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 31,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "vae_name",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "vae_name"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "VAE",
+                "type": "VAE",
+                "links": [
+                  45
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "VAELoader"
+            },
+            "widgets_values": [
+              "ltx-2.5-audio-vae-bf16.safetensors"
+            ],
+            "title": "Audio VAE"
+          },
+          {
+            "id": 33,
+            "type": "CLIPTextEncode",
+            "pos": [
+              700,
+              1500
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 32,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "text",
+                "type": "STRING",
+                "link": 35,
+                "widget": {
+                  "name": "text"
+                }
+              },
+              {
+                "name": "clip",
+                "type": "CLIP",
+                "link": 36
+              }
+            ],
+            "outputs": [
+              {
+                "name": "CONDITIONING",
+                "type": "CONDITIONING",
+                "links": [
+                  39
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+              ""
+            ],
+            "title": "Encode Prompt"
+          },
+          {
+            "id": 34,
+            "type": "CLIPTextEncode",
+            "pos": [
+              1050,
+              1500
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 33,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "text",
+                "type": "STRING",
+                "link": 37,
+                "widget": {
+                  "name": "text"
+                }
+              },
+              {
+                "name": "clip",
+                "type": "CLIP",
+                "link": 38
+              }
+            ],
+            "outputs": [
+              {
+                "name": "CONDITIONING",
+                "type": "CONDITIONING",
+                "links": [
+                  40
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+              ""
+            ],
+            "title": "Encode Negative Prompt"
+          },
+          {
+            "id": 35,
+            "type": "LTXVConditioning",
+            "pos": [
+              1400,
+              1500
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 34,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "link": 39
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "link": 40
+              },
+              {
+                "name": "frame_rate",
+                "type": "FLOAT",
+                "link": 41,
+                "widget": {
+                  "name": "frame_rate"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "links": [
+                  46,
+                  52
+                ]
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "links": [
+                  47,
+                  53
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "LTXVConditioning"
+            },
+            "widgets_values": [
+              25.0
+            ],
+            "title": "Match Clip Frame Rate"
+          },
+          {
+            "id": 36,
+            "type": "TrimAudioDuration",
+            "pos": [
+              1750,
+              1500
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 35,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "audio",
+                "type": "AUDIO",
+                "link": 42
+              },
+              {
+                "name": "start_index",
+                "type": "FLOAT",
+                "link": null,
+                "widget": {
+                  "name": "start_index"
+                }
+              },
+              {
+                "name": "duration",
+                "type": "FLOAT",
+                "link": 43,
+                "widget": {
+                  "name": "duration"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "AUDIO",
+                "type": "AUDIO",
+                "links": [
+                  44,
+                  77
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "TrimAudioDuration"
+            },
+            "widgets_values": [
+              0.0,
+              60.0
+            ],
+            "title": "Original Sound for This Shot"
+          },
+          {
+            "id": 37,
+            "type": "VAEEncodeAudio",
+            "pos": [
+              0,
+              1800
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 36,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "audio",
+                "type": "AUDIO",
+                "link": 44
+              },
+              {
+                "name": "vae",
+                "type": "VAE",
+                "link": 45
+              }
+            ],
+            "outputs": [
+              {
+                "name": "LATENT",
+                "type": "LATENT",
+                "links": [
+                  48
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "VAEEncodeAudio"
+            },
+            "widgets_values": [],
+            "title": "Encode Original Sound"
+          },
+          {
+            "id": 38,
+            "type": "LTXVSetAudioRefTokens",
+            "pos": [
+              350,
+              1800
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 37,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "link": 46
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "link": 47
+              },
+              {
+                "name": "audio_latent",
+                "type": "LATENT",
+                "link": 48
+              }
+            ],
+            "outputs": [
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "links": []
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "links": []
+              },
+              {
+                "name": "frozen_audio",
+                "type": "LATENT",
+                "links": [
+                  59
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "LTXVSetAudioRefTokens"
+            },
+            "widgets_values": [],
+            "title": "Lock the Original Sound"
+          },
+          {
+            "id": 39,
+            "type": "EmptyLTXVLatentVideo",
+            "pos": [
+              700,
+              1800
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 38,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "width",
+                "type": "INT",
+                "link": 49,
+                "widget": {
+                  "name": "width"
+                }
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "link": 50,
+                "widget": {
+                  "name": "height"
+                }
+              },
+              {
+                "name": "length",
+                "type": "INT",
+                "link": 51,
+                "widget": {
+                  "name": "length"
+                }
+              },
+              {
+                "name": "batch_size",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "batch_size"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "LATENT",
+                "type": "LATENT",
+                "links": [
+                  55
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EmptyLTXVLatentVideo"
+            },
+            "widgets_values": [
+              768,
+              512,
+              97,
+              1
+            ],
+            "title": "Empty Video"
+          },
+          {
+            "id": 40,
+            "type": "LTXAddVideoICLoRAGuide",
+            "pos": [
+              1050,
+              1800
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 39,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "link": 52
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "link": 53
+              },
+              {
+                "name": "vae",
+                "type": "VAE",
+                "link": 54
+              },
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "link": 55
+              },
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 56
+              },
+              {
+                "name": "frame_idx",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "frame_idx"
+                }
+              },
+              {
+                "name": "strength",
+                "type": "FLOAT",
+                "link": null,
+                "widget": {
+                  "name": "strength"
+                }
+              },
+              {
+                "name": "latent_downscale_factor",
+                "type": "FLOAT",
+                "link": 57,
+                "widget": {
+                  "name": "latent_downscale_factor"
+                }
+              },
+              {
+                "name": "crop",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "crop"
+                }
+              },
+              {
+                "name": "use_tiled_encode",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "use_tiled_encode"
+                }
+              },
+              {
+                "name": "tile_size",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "tile_size"
+                }
+              },
+              {
+                "name": "tile_overlap",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "tile_overlap"
+                }
+              },
+              {
+                "name": "use_streaming",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "use_streaming"
+                }
+              },
+              {
+                "name": "tile_frames",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "tile_frames"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "links": [
+                  62,
+                  70
+                ]
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "links": [
+                  63,
+                  71
+                ]
+              },
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "links": [
+                  58
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "LTXAddVideoICLoRAGuide"
+            },
+            "widgets_values": [
+              0,
+              1.0,
+              1.0,
+              "disabled",
+              false,
+              256,
+              64,
+              false,
+              97
+            ],
+            "title": "Show the Model Your Clip"
+          },
+          {
+            "id": 41,
+            "type": "LTXVConcatAVLatent",
+            "pos": [
+              1400,
+              1800
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 40,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "video_latent",
+                "type": "LATENT",
+                "link": 58
+              },
+              {
+                "name": "audio_latent",
+                "type": "LATENT",
+                "link": 59
+              }
+            ],
+            "outputs": [
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "links": [
+                  68
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "LTXVConcatAVLatent"
+            },
+            "widgets_values": [],
+            "title": "Join Picture and Locked Sound"
+          },
+          {
+            "id": 42,
+            "type": "RandomNoise",
+            "pos": [
+              1750,
+              1800
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 41,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "noise_seed",
+                "type": "INT",
+                "link": 60,
+                "widget": {
+                  "name": "noise_seed"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "NOISE",
+                "type": "NOISE",
+                "links": [
+                  64
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RandomNoise"
+            },
+            "widgets_values": [
+              0,
+              "randomize"
+            ],
+            "title": "Noise"
+          },
+          {
+            "id": 43,
+            "type": "KSamplerSelect",
+            "pos": [
+              0,
+              2100
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 42,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "sampler_name",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "sampler_name"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "SAMPLER",
+                "type": "SAMPLER",
+                "links": [
+                  66
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "KSamplerSelect"
+            },
+            "widgets_values": [
+              "euler_ancestral"
+            ],
+            "title": "Sampler"
+          },
+          {
+            "id": 44,
+            "type": "ManualSigmas",
+            "pos": [
+              350,
+              2100
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 43,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "sigmas",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "sigmas"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "SIGMAS",
+                "type": "SIGMAS",
+                "links": [
+                  67
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ManualSigmas"
+            },
+            "widgets_values": [
+              "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+            ],
+            "title": "Distilled 8-Step Schedule"
+          },
+          {
+            "id": 45,
+            "type": "CFGGuider",
+            "pos": [
+              700,
+              2100
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 44,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "MODEL",
+                "link": 61
+              },
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "link": 62
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "link": 63
+              },
+              {
+                "name": "cfg",
+                "type": "FLOAT",
+                "link": null,
+                "widget": {
+                  "name": "cfg"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "GUIDER",
+                "type": "GUIDER",
+                "links": [
+                  65
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "CFGGuider"
+            },
+            "widgets_values": [
+              1.0
+            ],
+            "title": "Guidance (CFG 1.0 for distilled)"
+          },
+          {
+            "id": 46,
+            "type": "SamplerCustomAdvanced",
+            "pos": [
+              1050,
+              2100
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 45,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "noise",
+                "type": "NOISE",
+                "link": 64
+              },
+              {
+                "name": "guider",
+                "type": "GUIDER",
+                "link": 65
+              },
+              {
+                "name": "sampler",
+                "type": "SAMPLER",
+                "link": 66
+              },
+              {
+                "name": "sigmas",
+                "type": "SIGMAS",
+                "link": 67
+              },
+              {
+                "name": "latent_image",
+                "type": "LATENT",
+                "link": 68
+              }
+            ],
+            "outputs": [
+              {
+                "name": "output",
+                "type": "LATENT",
+                "links": [
+                  69
+                ]
+              },
+              {
+                "name": "denoised_output",
+                "type": "LATENT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "SamplerCustomAdvanced"
+            },
+            "widgets_values": [],
+            "title": "Generate"
+          },
+          {
+            "id": 47,
+            "type": "LTXVSeparateAVLatent",
+            "pos": [
+              1400,
+              2100
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 46,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "av_latent",
+                "type": "LATENT",
+                "link": 69
+              }
+            ],
+            "outputs": [
+              {
+                "name": "video_latent",
+                "type": "LATENT",
+                "links": [
+                  72
+                ]
+              },
+              {
+                "name": "audio_latent",
+                "type": "LATENT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "LTXVSeparateAVLatent"
+            },
+            "widgets_values": [],
+            "title": "Split Picture and Sound"
+          },
+          {
+            "id": 48,
+            "type": "LTXVCropGuides",
+            "pos": [
+              1750,
+              2100
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 47,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "link": 70
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "link": 71
+              },
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "link": 72
+              }
+            ],
+            "outputs": [
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "links": []
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "links": []
+              },
+              {
+                "name": "latent",
+                "type": "LATENT",
+                "links": [
+                  73
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "LTXVCropGuides"
+            },
+            "widgets_values": [],
+            "title": "Remove Reference Frames"
+          },
+          {
+            "id": 49,
+            "type": "VAEDecodeTiled",
+            "pos": [
+              0,
+              2400
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 48,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "samples",
+                "type": "LATENT",
+                "link": 73
+              },
+              {
+                "name": "vae",
+                "type": "VAE",
+                "link": 74
+              },
+              {
+                "name": "tile_size",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "tile_size"
+                }
+              },
+              {
+                "name": "overlap",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "overlap"
+                }
+              },
+              {
+                "name": "temporal_size",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "temporal_size"
+                }
+              },
+              {
+                "name": "temporal_overlap",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "temporal_overlap"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [
+                  75
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "VAEDecodeTiled"
+            },
+            "widgets_values": [
+              512,
+              64,
+              64,
+              16
+            ],
+            "title": "Decode Picture"
+          },
+          {
+            "id": 50,
+            "type": "CreateVideo",
+            "pos": [
+              350,
+              2400
+            ],
+            "size": [
+              310,
+              160
+            ],
+            "flags": {},
+            "order": 49,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "link": 75
+              },
+              {
+                "name": "fps",
+                "type": "FLOAT",
+                "link": 76,
+                "widget": {
+                  "name": "fps"
+                }
+              },
+              {
+                "name": "audio",
+                "type": "AUDIO",
+                "link": 77
+              },
+              {
+                "name": "bit_depth",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "bit_depth"
+                }
+              },
+              {
+                "name": "color_space",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "color_space"
+                }
+              },
+              {
+                "name": "codec",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "codec"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "VIDEO",
+                "type": "VIDEO",
+                "links": [
+                  78
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "CreateVideo"
+            },
+            "widgets_values": [
+              30.0,
+              "auto",
+              "sRGB",
+              "none"
+            ],
+            "title": "Build Video with Original Sound"
+          },
+          {
+            "id": 53,
+            "type": "PrimitiveStringMultiline",
+            "pos": [
+              -380,
+              200
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "STRING",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 79
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "STRING",
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  1
+                ]
+              }
+            ],
+            "title": "The Camera Move",
+            "properties": {
+              "Node name for S&R": "PrimitiveStringMultiline"
+            },
+            "widgets_values": [
+              "crossview. new camera angle: to the left, higher, closer."
+            ],
+            "widgets_values_named": {
+              "value": "crossview. new camera angle: to the left, higher, closer."
+            }
+          },
+          {
+            "id": 54,
+            "type": "PrimitiveInt",
+            "pos": [
+              -380,
+              300
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 80
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  2
+                ]
+              }
+            ],
+            "title": "Width",
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              960
+            ],
+            "widgets_values_named": {
+              "value": 960
+            }
+          },
+          {
+            "id": 55,
+            "type": "PrimitiveInt",
+            "pos": [
+              -380,
+              400
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 81
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  3
+                ]
+              }
+            ],
+            "title": "Height",
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              544
+            ],
+            "widgets_values_named": {
+              "value": 544
+            }
+          },
+          {
+            "id": 56,
+            "type": "PrimitiveInt",
+            "pos": [
+              -380,
+              500
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 82
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  4
+                ]
+              }
+            ],
+            "title": "Frames (8n+1, stops at the end of your clip)",
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              121
+            ],
+            "widgets_values_named": {
+              "value": 121
+            }
+          },
+          {
+            "id": 57,
+            "type": "PrimitiveFloat",
+            "pos": [
+              -380,
+              600
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 83
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  5
+                ]
+              }
+            ],
+            "title": "IC-LoRA Strength",
+            "properties": {
+              "Node name for S&R": "PrimitiveFloat"
+            },
+            "widgets_values": [
+              1.5
+            ],
+            "widgets_values_named": {
+              "value": 1.5
+            }
+          },
+          {
+            "id": 58,
+            "type": "PrimitiveInt",
+            "pos": [
+              -380,
+              700
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 84
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  6
+                ]
+              }
+            ],
+            "title": "Seed",
+            "properties": {
+              "Node name for S&R": "PrimitiveInt"
+            },
+            "widgets_values": [
+              42
+            ],
+            "widgets_values_named": {
+              "value": 42
+            }
+          },
+          {
+            "id": 59,
+            "type": "PrimitiveStringMultiline",
+            "pos": [
+              -380,
+              800
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "STRING",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 85
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "STRING",
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  7
+                ]
+              }
+            ],
+            "title": "Negative Prompt (CFG 1.0: little/no effect)",
+            "properties": {
+              "Node name for S&R": "PrimitiveStringMultiline"
+            },
+            "widgets_values": [
+              "text, subtitles, logo, watermark, signature"
+            ],
+            "widgets_values_named": {
+              "value": "text, subtitles, logo, watermark, signature"
+            }
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 9,
+            "origin_id": 16,
+            "origin_slot": 0,
+            "target_id": 17,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 10,
+            "origin_id": 17,
+            "origin_slot": 2,
+            "target_id": 18,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 11,
+            "origin_id": 16,
+            "origin_slot": 2,
+            "target_id": 18,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 12,
+            "origin_id": 18,
+            "origin_slot": 0,
+            "target_id": 19,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 13,
+            "origin_id": 16,
+            "origin_slot": 1,
+            "target_id": 20,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 14,
+            "origin_id": 19,
+            "origin_slot": 0,
+            "target_id": 20,
+            "target_slot": 1,
+            "type": "AUDIO"
+          },
+          {
+            "id": 15,
+            "origin_id": 16,
+            "origin_slot": 0,
+            "target_id": 21,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 16,
+            "origin_id": 5,
+            "origin_slot": 0,
+            "target_id": 22,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 17,
+            "origin_id": 7,
+            "origin_slot": 0,
+            "target_id": 22,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 18,
+            "origin_id": 21,
+            "origin_slot": 0,
+            "target_id": 22,
+            "target_slot": 3,
+            "type": "INT"
+          },
+          {
+            "id": 19,
+            "origin_id": 21,
+            "origin_slot": 1,
+            "target_id": 22,
+            "target_slot": 4,
+            "type": "INT"
+          },
+          {
+            "id": 20,
+            "origin_id": 5,
+            "origin_slot": 0,
+            "target_id": 23,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 21,
+            "origin_id": 7,
+            "origin_slot": 0,
+            "target_id": 23,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 22,
+            "origin_id": 21,
+            "origin_slot": 0,
+            "target_id": 23,
+            "target_slot": 3,
+            "type": "INT"
+          },
+          {
+            "id": 23,
+            "origin_id": 21,
+            "origin_slot": 1,
+            "target_id": 23,
+            "target_slot": 4,
+            "type": "INT"
+          },
+          {
+            "id": 24,
+            "origin_id": 9,
+            "origin_slot": 0,
+            "target_id": 24,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 25,
+            "origin_id": 21,
+            "origin_slot": 2,
+            "target_id": 24,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 26,
+            "origin_id": 24,
+            "origin_slot": 1,
+            "target_id": 25,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 27,
+            "origin_id": 16,
+            "origin_slot": 2,
+            "target_id": 25,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 28,
+            "origin_id": 16,
+            "origin_slot": 0,
+            "target_id": 26,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 29,
+            "origin_id": 24,
+            "origin_slot": 1,
+            "target_id": 26,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 30,
+            "origin_id": 26,
+            "origin_slot": 0,
+            "target_id": 27,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 31,
+            "origin_id": 22,
+            "origin_slot": 1,
+            "target_id": 27,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 32,
+            "origin_id": 23,
+            "origin_slot": 1,
+            "target_id": 27,
+            "target_slot": 3,
+            "type": "INT"
+          },
+          {
+            "id": 33,
+            "origin_id": 28,
+            "origin_slot": 0,
+            "target_id": 29,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 34,
+            "origin_id": 11,
+            "origin_slot": 0,
+            "target_id": 29,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 35,
+            "origin_id": 3,
+            "origin_slot": 0,
+            "target_id": 33,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 36,
+            "origin_id": 30,
+            "origin_slot": 0,
+            "target_id": 33,
+            "target_slot": 1,
+            "type": "CLIP"
+          },
+          {
+            "id": 37,
+            "origin_id": 15,
+            "origin_slot": 0,
+            "target_id": 34,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 38,
+            "origin_id": 30,
+            "origin_slot": 0,
+            "target_id": 34,
+            "target_slot": 1,
+            "type": "CLIP"
+          },
+          {
+            "id": 39,
+            "origin_id": 33,
+            "origin_slot": 0,
+            "target_id": 35,
+            "target_slot": 0,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 40,
+            "origin_id": 34,
+            "origin_slot": 0,
+            "target_id": 35,
+            "target_slot": 1,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 41,
+            "origin_id": 16,
+            "origin_slot": 2,
+            "target_id": 35,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 42,
+            "origin_id": 20,
+            "origin_slot": 0,
+            "target_id": 36,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 43,
+            "origin_id": 25,
+            "origin_slot": 0,
+            "target_id": 36,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 44,
+            "origin_id": 36,
+            "origin_slot": 0,
+            "target_id": 37,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 45,
+            "origin_id": 32,
+            "origin_slot": 0,
+            "target_id": 37,
+            "target_slot": 1,
+            "type": "VAE"
+          },
+          {
+            "id": 46,
+            "origin_id": 35,
+            "origin_slot": 0,
+            "target_id": 38,
+            "target_slot": 0,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 47,
+            "origin_id": 35,
+            "origin_slot": 1,
+            "target_id": 38,
+            "target_slot": 1,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 48,
+            "origin_id": 37,
+            "origin_slot": 0,
+            "target_id": 38,
+            "target_slot": 2,
+            "type": "LATENT"
+          },
+          {
+            "id": 49,
+            "origin_id": 22,
+            "origin_slot": 1,
+            "target_id": 39,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 50,
+            "origin_id": 23,
+            "origin_slot": 1,
+            "target_id": 39,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 51,
+            "origin_id": 24,
+            "origin_slot": 1,
+            "target_id": 39,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 52,
+            "origin_id": 35,
+            "origin_slot": 0,
+            "target_id": 40,
+            "target_slot": 0,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 53,
+            "origin_id": 35,
+            "origin_slot": 1,
+            "target_id": 40,
+            "target_slot": 1,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 54,
+            "origin_id": 31,
+            "origin_slot": 0,
+            "target_id": 40,
+            "target_slot": 2,
+            "type": "VAE"
+          },
+          {
+            "id": 55,
+            "origin_id": 39,
+            "origin_slot": 0,
+            "target_id": 40,
+            "target_slot": 3,
+            "type": "LATENT"
+          },
+          {
+            "id": 56,
+            "origin_id": 27,
+            "origin_slot": 0,
+            "target_id": 40,
+            "target_slot": 4,
+            "type": "IMAGE"
+          },
+          {
+            "id": 57,
+            "origin_id": 29,
+            "origin_slot": 1,
+            "target_id": 40,
+            "target_slot": 7,
+            "type": "FLOAT"
+          },
+          {
+            "id": 58,
+            "origin_id": 40,
+            "origin_slot": 2,
+            "target_id": 41,
+            "target_slot": 0,
+            "type": "LATENT"
+          },
+          {
+            "id": 59,
+            "origin_id": 38,
+            "origin_slot": 2,
+            "target_id": 41,
+            "target_slot": 1,
+            "type": "LATENT"
+          },
+          {
+            "id": 60,
+            "origin_id": 13,
+            "origin_slot": 0,
+            "target_id": 42,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 61,
+            "origin_id": 29,
+            "origin_slot": 0,
+            "target_id": 45,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 62,
+            "origin_id": 40,
+            "origin_slot": 0,
+            "target_id": 45,
+            "target_slot": 1,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 63,
+            "origin_id": 40,
+            "origin_slot": 1,
+            "target_id": 45,
+            "target_slot": 2,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 64,
+            "origin_id": 42,
+            "origin_slot": 0,
+            "target_id": 46,
+            "target_slot": 0,
+            "type": "NOISE"
+          },
+          {
+            "id": 65,
+            "origin_id": 45,
+            "origin_slot": 0,
+            "target_id": 46,
+            "target_slot": 1,
+            "type": "GUIDER"
+          },
+          {
+            "id": 66,
+            "origin_id": 43,
+            "origin_slot": 0,
+            "target_id": 46,
+            "target_slot": 2,
+            "type": "SAMPLER"
+          },
+          {
+            "id": 67,
+            "origin_id": 44,
+            "origin_slot": 0,
+            "target_id": 46,
+            "target_slot": 3,
+            "type": "SIGMAS"
+          },
+          {
+            "id": 68,
+            "origin_id": 41,
+            "origin_slot": 0,
+            "target_id": 46,
+            "target_slot": 4,
+            "type": "LATENT"
+          },
+          {
+            "id": 69,
+            "origin_id": 46,
+            "origin_slot": 0,
+            "target_id": 47,
+            "target_slot": 0,
+            "type": "LATENT"
+          },
+          {
+            "id": 70,
+            "origin_id": 40,
+            "origin_slot": 0,
+            "target_id": 48,
+            "target_slot": 0,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 71,
+            "origin_id": 40,
+            "origin_slot": 1,
+            "target_id": 48,
+            "target_slot": 1,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 72,
+            "origin_id": 47,
+            "origin_slot": 0,
+            "target_id": 48,
+            "target_slot": 2,
+            "type": "LATENT"
+          },
+          {
+            "id": 73,
+            "origin_id": 48,
+            "origin_slot": 2,
+            "target_id": 49,
+            "target_slot": 0,
+            "type": "LATENT"
+          },
+          {
+            "id": 74,
+            "origin_id": 31,
+            "origin_slot": 0,
+            "target_id": 49,
+            "target_slot": 1,
+            "type": "VAE"
+          },
+          {
+            "id": 75,
+            "origin_id": 49,
+            "origin_slot": 0,
+            "target_id": 50,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 76,
+            "origin_id": 16,
+            "origin_slot": 2,
+            "target_id": 50,
+            "target_slot": 1,
+            "type": "FLOAT"
+          },
+          {
+            "id": 77,
+            "origin_id": 36,
+            "origin_slot": 0,
+            "target_id": 50,
+            "target_slot": 2,
+            "type": "AUDIO"
+          },
+          {
+            "id": 1,
+            "origin_id": 53,
+            "origin_slot": 0,
+            "target_id": 3,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 2,
+            "origin_id": 54,
+            "origin_slot": 0,
+            "target_id": 5,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 3,
+            "origin_id": 55,
+            "origin_slot": 0,
+            "target_id": 7,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 4,
+            "origin_id": 56,
+            "origin_slot": 0,
+            "target_id": 9,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 5,
+            "origin_id": 57,
+            "origin_slot": 0,
+            "target_id": 11,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 6,
+            "origin_id": 58,
+            "origin_slot": 0,
+            "target_id": 13,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 7,
+            "origin_id": 59,
+            "origin_slot": 0,
+            "target_id": 15,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 79,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 53,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 80,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 54,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 81,
+            "origin_id": -10,
+            "origin_slot": 2,
+            "target_id": 55,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 82,
+            "origin_id": -10,
+            "origin_slot": 3,
+            "target_id": 56,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 83,
+            "origin_id": -10,
+            "origin_slot": 4,
+            "target_id": 57,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 84,
+            "origin_id": -10,
+            "origin_slot": 5,
+            "target_id": 58,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 85,
+            "origin_id": -10,
+            "origin_slot": 6,
+            "target_id": 59,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 8,
+            "origin_id": -10,
+            "origin_slot": 7,
+            "target_id": 16,
+            "target_slot": 0,
+            "type": "VIDEO"
+          },
+          {
+            "id": 78,
+            "origin_id": 50,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "VIDEO"
+          }
+        ],
+        "extra": {}
+      }
+    ]
+  }
+}

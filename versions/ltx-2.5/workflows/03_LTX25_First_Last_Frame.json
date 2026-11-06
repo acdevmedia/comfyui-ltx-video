@@ -1,8 +1,8 @@
 {
   "id": "0112e9af-5129-48ba-af78-92c40ac40b40",
   "revision": 0,
-  "last_node_id": 262,
-  "last_link_id": 396,
+  "last_node_id": 263,
+  "last_link_id": 398,
   "nodes": [
     {
       "id": 39,
@@ -223,6 +223,15 @@
             "name": "director_negative_prompt"
           },
           "link": null
+        },
+        {
+          "label": "Transition LoRA strength",
+          "name": "transition_strength",
+          "type": "FLOAT",
+          "widget": {
+            "name": "transition_strength"
+          },
+          "link": null
         }
       ],
       "outputs": [
@@ -252,7 +261,8 @@
         "ltx-2.5-audio-vae-bf16.safetensors",
         "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
         "gemma4_e2b_it_int8_convrot.safetensors",
-        "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping"
+        "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping",
+        0.0
       ],
       "title": "First and Last Frame — Filmmaker Controls"
     },
@@ -381,7 +391,7 @@
       ]
     },
     {
-      "id": 262,
+      "id": 263,
       "type": "MarkdownNote",
       "pos": [
         -370,
@@ -439,8 +449,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 9,
-          "lastNodeId": 258,
-          "lastLinkId": 387,
+          "lastNodeId": 259,
+          "lastLinkId": 389,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -471,7 +481,7 @@
             "type": "IMAGE,MASK",
             "linkIds": [
               325,
-              388
+              390
             ],
             "localized_name": "input",
             "label": "first_frame",
@@ -655,6 +665,19 @@
               387
             ],
             "label": "Negative Prompt (CFG 1.0: little/no effect)",
+            "pos": [
+              -120.185546875,
+              2494
+            ]
+          },
+          {
+            "id": "9f42362c-4078-539f-92f6-aa6413085d43",
+            "name": "transition_strength",
+            "type": "FLOAT",
+            "linkIds": [
+              389
+            ],
+            "label": "Transition LoRA strength",
             "pos": [
               -120.185546875,
               2494
@@ -1688,7 +1711,7 @@
                 "localized_name": "model",
                 "name": "model",
                 "type": "MODEL",
-                "link": 345
+                "link": 388
               },
               {
                 "localized_name": "positive",
@@ -2798,8 +2821,8 @@
                 "name": "INT",
                 "type": "INT",
                 "links": [
-                  389,
-                  393
+                  391,
+                  395
                 ]
               }
             ],
@@ -2857,8 +2880,8 @@
                 "name": "INT",
                 "type": "INT",
                 "links": [
-                  390,
-                  394
+                  392,
+                  396
                 ]
               }
             ],
@@ -3205,6 +3228,65 @@
             ]
           },
           {
+            "id": 259,
+            "type": "LoraLoaderModelOnly",
+            "pos": [
+              690,
+              2100
+            ],
+            "size": [
+              400,
+              110
+            ],
+            "flags": {},
+            "order": 31,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "model",
+                "name": "model",
+                "type": "MODEL",
+                "link": 345
+              },
+              {
+                "localized_name": "lora_name",
+                "name": "lora_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "lora_name"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "strength_model",
+                "name": "strength_model",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "strength_model"
+                },
+                "link": 389
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "MODEL",
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [
+                  388
+                ]
+              }
+            ],
+            "title": "Scene Transition LoRA",
+            "properties": {
+              "Node name for S&R": "LoraLoaderModelOnly"
+            },
+            "widgets_values": [
+              "ltx2.3-transition.safetensors",
+              0.0
+            ]
+          },
+          {
             "type": "GetImageSize",
             "title": "Size of your image",
             "pos": [
@@ -3220,7 +3302,7 @@
               {
                 "name": "image",
                 "type": "IMAGE",
-                "link": 388
+                "link": 390
               }
             ],
             "outputs": [
@@ -3228,16 +3310,16 @@
                 "name": "width",
                 "type": "INT",
                 "links": [
-                  391,
-                  395
+                  393,
+                  397
                 ]
               },
               {
                 "name": "height",
                 "type": "INT",
                 "links": [
-                  392,
-                  396
+                  394,
+                  398
                 ]
               },
               {
@@ -3246,7 +3328,7 @@
                 "links": []
               }
             ],
-            "id": 259,
+            "id": 260,
             "flags": {},
             "order": 0,
             "mode": 0,
@@ -3280,22 +3362,22 @@
               {
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 389
+                "link": 391
               },
               {
                 "name": "values.b",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 390
+                "link": 392
               },
               {
                 "name": "values.c",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 391
+                "link": 393
               },
               {
                 "name": "values.d",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 392
+                "link": 394
               }
             ],
             "outputs": [
@@ -3318,7 +3400,7 @@
                 "links": []
               }
             ],
-            "id": 260,
+            "id": 261,
             "flags": {},
             "order": 0,
             "mode": 0,
@@ -3352,22 +3434,22 @@
               {
                 "name": "values.a",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 393
+                "link": 395
               },
               {
                 "name": "values.b",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 394
+                "link": 396
               },
               {
                 "name": "values.c",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 395
+                "link": 397
               },
               {
                 "name": "values.d",
                 "type": "FLOAT,INT,BOOLEAN",
-                "link": 396
+                "link": 398
               }
             ],
             "outputs": [
@@ -3390,7 +3472,7 @@
                 "links": []
               }
             ],
-            "id": 261,
+            "id": 262,
             "flags": {},
             "order": 0,
             "mode": 0,
@@ -3809,7 +3891,7 @@
             "id": 345,
             "origin_id": 230,
             "origin_slot": 0,
-            "target_id": 235,
+            "target_id": 259,
             "target_slot": 0,
             "type": "MODEL"
           },
@@ -3911,7 +3993,7 @@
           },
           {
             "id": 311,
-            "origin_id": 260,
+            "origin_id": 261,
             "origin_slot": 1,
             "target_id": 213,
             "target_slot": 1,
@@ -3919,7 +4001,7 @@
           },
           {
             "id": 312,
-            "origin_id": 261,
+            "origin_id": 262,
             "origin_slot": 1,
             "target_id": 213,
             "target_slot": 2,
@@ -3927,7 +4009,7 @@
           },
           {
             "id": 313,
-            "origin_id": 260,
+            "origin_id": 261,
             "origin_slot": 1,
             "target_id": 214,
             "target_slot": 1,
@@ -3935,7 +4017,7 @@
           },
           {
             "id": 314,
-            "origin_id": 261,
+            "origin_id": 262,
             "origin_slot": 1,
             "target_id": 214,
             "target_slot": 2,
@@ -4119,54 +4201,38 @@
           },
           {
             "id": 388,
+            "origin_id": 259,
+            "origin_slot": 0,
+            "target_id": 235,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 389,
+            "origin_id": -10,
+            "origin_slot": 15,
+            "target_id": 259,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 390,
             "origin_id": -10,
             "origin_slot": 0,
-            "target_id": 259,
+            "target_id": 260,
             "target_slot": 0,
             "type": "IMAGE"
           },
           {
-            "id": 389,
+            "id": 391,
             "origin_id": 215,
             "origin_slot": 0,
-            "target_id": 260,
+            "target_id": 261,
             "target_slot": 1,
-            "type": "INT"
-          },
-          {
-            "id": 390,
-            "origin_id": 216,
-            "origin_slot": 0,
-            "target_id": 260,
-            "target_slot": 2,
-            "type": "INT"
-          },
-          {
-            "id": 391,
-            "origin_id": 259,
-            "origin_slot": 0,
-            "target_id": 260,
-            "target_slot": 3,
             "type": "INT"
           },
           {
             "id": 392,
-            "origin_id": 259,
-            "origin_slot": 1,
-            "target_id": 260,
-            "target_slot": 4,
-            "type": "INT"
-          },
-          {
-            "id": 393,
-            "origin_id": 215,
-            "origin_slot": 0,
-            "target_id": 261,
-            "target_slot": 1,
-            "type": "INT"
-          },
-          {
-            "id": 394,
             "origin_id": 216,
             "origin_slot": 0,
             "target_id": 261,
@@ -4174,18 +4240,50 @@
             "type": "INT"
           },
           {
-            "id": 395,
-            "origin_id": 259,
+            "id": 393,
+            "origin_id": 260,
             "origin_slot": 0,
             "target_id": 261,
             "target_slot": 3,
             "type": "INT"
           },
           {
-            "id": 396,
-            "origin_id": 259,
+            "id": 394,
+            "origin_id": 260,
             "origin_slot": 1,
             "target_id": 261,
+            "target_slot": 4,
+            "type": "INT"
+          },
+          {
+            "id": 395,
+            "origin_id": 215,
+            "origin_slot": 0,
+            "target_id": 262,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 396,
+            "origin_id": 216,
+            "origin_slot": 0,
+            "target_id": 262,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 397,
+            "origin_id": 260,
+            "origin_slot": 0,
+            "target_id": 262,
+            "target_slot": 3,
+            "type": "INT"
+          },
+          {
+            "id": 398,
+            "origin_id": 260,
+            "origin_slot": 1,
+            "target_id": 262,
             "target_slot": 4,
             "type": "INT"
           }

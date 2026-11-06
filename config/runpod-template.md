@@ -30,7 +30,7 @@ The template exposes only HTTP 8188 for ComfyUI. RunPod provides its browser-bas
 
 ## Storage estimate
 
-The original INT8 ConvRot filmmaker workflow uses about 43.18 GiB. Ingredients adds about 64.81 GiB when `AUTO_DOWNLOAD_ADAPTERS=true`, for about 107.99 GiB before temporary download/cache overhead. The optional BF16 prompt-enhancement encoder adds 9.57 GiB. The 200 GB default leaves room for downloads and generated files; do not reduce the container disk below 150 GB. The README has the per-file size table.
+The original INT8 ConvRot filmmaker workflow uses about 43.54 GiB. Ingredients adds about 64.81 GiB when `AUTO_DOWNLOAD_ADAPTERS=true`, for about 108.35 GiB before temporary download/cache overhead. The optional BF16 prompt-enhancement encoder adds 9.57 GiB. The 200 GB default leaves room for downloads and generated files; do not reduce the container disk below 150 GB. The README has the per-file size table.
 
 ## Optional S3 backup
 

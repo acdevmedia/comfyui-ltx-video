@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Provision only declared LTX files; resumable through Hugging Face Hub cache."""
+import hashlib
 import json
 import argparse
 import os
@@ -36,6 +37,14 @@ def valid_local_file(path: Path) -> bool:
         return False
 
 
+def sha256_of(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(16 * 1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
 def selected_models(data: dict, group: str, adapter_downloads: bool) -> list[dict]:
     models = data["models"]
     if group == "all":
@@ -44,7 +53,10 @@ def selected_models(data: dict, group: str, adapter_downloads: bool) -> list[dic
         return [m for m in models if m.get("optional") or m.get("group") == "optional"]
     if group == "ingredients":
         return [m for m in models if m.get("group") == "ingredients"]
-    selected = [m for m in models if m.get("default", False) and not m.get("optional", False)]
+    if group == "adapters":
+        # These workflows share the Ingredients BF16 stack, so it comes with them.
+        return [m for m in models if m.get("group") in ("adapters", "ingredients")]
+    selected = [m for m in models if m.get("default", False) and not m.get("optional", False) and m.get("group") != "adapters"]
     if not adapter_downloads:
         selected = [m for m in selected if m.get("group") != "ingredients"]
     return selected
@@ -52,7 +64,7 @@ def selected_models(data: dict, group: str, adapter_downloads: bool) -> list[dic
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--group", choices=("default", "ingredients", "optional", "all"), default="default", help="Model set to download (default follows the RunPod startup profile).")
+    parser.add_argument("--group", choices=("default", "ingredients", "adapters", "optional", "all"), default="default", help="Model set to download (default follows the RunPod startup profile).")
     args = parser.parse_args()
     if args.group == "default" and os.environ.get("AUTO_DOWNLOAD_MODELS", "true").lower() not in {"1", "true", "yes"}:
         print("[models] Automatic downloads disabled by AUTO_DOWNLOAD_MODELS.", flush=True)
@@ -84,17 +96,29 @@ def main() -> None:
     api = HfApi(token=token)
     file_info = {}
     expected_total = 0
+    skipped = set()
+
+    def skip_gated(item: dict) -> None:
+        print(f"[models] Skipping {item['repo']}: accept its licence with the account behind this token, then run this again. Only its own workflow is affected.", flush=True)
+        skipped.add(item["id"])
+
     for item in pending:
         repo, filename = item["repo"], item["file"]
         print(f"[models] Checking {repo}:{filename}", flush=True)
         try:
-            info = api.get_paths_info(repo, paths=[filename], repo_type="model")[0]
+            info = api.get_paths_info(repo, paths=[filename], repo_type="model", revision=item.get("revision"))[0]
         except GatedRepoError:
+            if item.get("gated"):
+                skip_gated(item)
+                continue
             fail(f"Access to {repo} is gated. Accept its model terms while signed in to the Hugging Face account used by this token.", 21)
         except RepositoryNotFoundError:
             fail(f"Repository or file is unavailable: {repo}:{filename}. Verify model access and the pinned manifest.", 22)
         except HfHubHTTPError as exc:
             status = getattr(getattr(exc, "response", None), "status_code", None)
+            if status in (401, 403) and item.get("gated"):
+                skip_gated(item)
+                continue
             if status in (401, 403):
                 fail(f"Hugging Face rejected access to {repo}. Check token validity, read permissions, and gated-model acceptance.", 23)
             fail(f"Hugging Face metadata request failed for {repo} (HTTP {status or 'unknown'}). Check network access and retry.", 24)
@@ -103,6 +127,11 @@ def main() -> None:
         expected = getattr(info, "size", None)
         file_info[item["id"]] = (info, expected)
         if expected: expected_total += expected
+
+    pending = [m for m in pending if m["id"] not in skipped]
+    if not pending:
+        print(f"[models] Nothing else to fetch in group '{args.group}'.", flush=True)
+        return
 
     free = shutil.disk_usage(MODEL_ROOT).free
     if expected_total and free < expected_total + (2 * 1024**3):
@@ -119,13 +148,16 @@ def main() -> None:
         print(f"[models] Downloading {target_rel}" + (f" ({expected / 1024**3:.2f} GiB)" if expected else ""), flush=True)
         try:
             local_dir = MODEL_ROOT if target_rel == filename else target.parent
-            downloaded = Path(hf_hub_download(repo_id=repo, filename=filename, repo_type="model", local_dir=str(local_dir), token=token))
+            downloaded = Path(hf_hub_download(repo_id=repo, filename=filename, repo_type="model", revision=item.get("revision"), local_dir=str(local_dir), token=token))
             if downloaded.resolve() != target.resolve():
                 shutil.copy2(downloaded, target)
             if not valid_local_file(target):
                 fail(f"Download finished without a valid file at {target_rel}.", 26)
             if expected and target.stat().st_size != expected:
                 fail(f"Downloaded size does not match Hugging Face metadata for {target_rel}; it will be retried next startup.", 27)
+            if item.get("sha256") and sha256_of(target) != item["sha256"]:
+                target.unlink(missing_ok=True)
+                fail(f"SHA256 does not match the pinned value for {target_rel}; it will be retried next startup.", 29)
             print(f"[models] Ready: {target_rel} ({target.stat().st_size / 1024**3:.2f} GiB)", flush=True)
         except SystemExit:
             raise

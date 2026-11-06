@@ -1,6 +1,6 @@
 # Workflow guide
 
-For the selected `LTX_VERSION`, ten JSONs are read from `versions/<LTX_VERSION>/workflows/` and installed into `/workspace/ComfyUI/user/default/workflows/` only when the same filename is not already present. The selected profile's default graph is also installed as the initial frontend graph.
+For the selected `LTX_VERSION`, thirteen JSONs are read from `versions/<LTX_VERSION>/workflows/` and installed into `/workspace/ComfyUI/user/default/workflows/` only when the same filename is not already present. The selected profile's default graph is also installed as the initial frontend graph.
 
 ## Image to Video and Text to Video
 
@@ -11,6 +11,8 @@ The resolution selector presents aspect and megapixel controls. The default 0.5 
 ## First and Last Frame
 
 This graph uses ComfyUI's official `video_ltx2_5_flf2v` workflow structure, which is single-stage. Replace `Opening Frame` and `Closing Frame` independently; the model generates the motion between them. Do not add a second-stage graph unless that path is validated for this template.
+
+**Transition LoRA strength** is 0 by default, and at 0 ComfyUI skips the LoRA. It uses the [LTX-2.3 Transition LoRA](https://huggingface.co/joyfox/LTX-2.3-Transition-LORA) (Apache 2.0): set it to 1 and add the trigger phrase from the model card to help one shot flow into the next, as on the Eros and Sulphur bundles. It was trained on LTX-2.3 for guidance around 4, and this workflow runs the INT8 distilled model at CFG 1. ComfyUI's LoRA patching supports quantised weights, but the result on 2.5 has not been tested.
 
 ## Audio to Video
 
@@ -37,6 +39,8 @@ Generated video: [describe the action, framing, camera movement, and sound]
 ```
 
 The model card's trained bucket is 768×448, 121 frames, 24 fps. Longer durations and other sizes are outside that training distribution. Keep the same reference-sheet file on the persistent `/workspace/ComfyUI/input/` volume and reuse it across shots; repeat the same visual identity details in each scene prompt.
+
+This workflow already covers recurring characters on 2.5, so the LTX-2.3 Ingredients LoRA is not needed here. Lightricks publish an LTX-2.5 build, and that is the one this graph uses at the same guide settings.
 
 ## Inputs and output
 
@@ -65,13 +69,25 @@ GPU testing showed that the sheet must be a real reference sheet, as the Ingredi
 
 Limits: five seconds (121 frames at 24 fps, 768x448) is the trained bucket; the performance is newly generated rather than copied from the clip; and it needs the BF16 Ingredients stack (`AUTO_DOWNLOAD_ADAPTERS=true`).
 
-## One-panel layout (04, 05, 07-10)
+## New Camera Angle, Relight and Day to Night
+
+Workflows 11 to 13 take one clip and return it re-rendered through an IC-LoRA. They follow Lightricks' `LTX-2.5_V2V_ICLoRA_Single_Stage_Distilled` pattern: the clip's frames become the `LTXAddVideoICLoRAGuide` guide, `LTXVCropGuides` removes them after sampling, the clip's sound is frozen with `LTXVSetAudioRefTokens`, and the untouched waveform is muxed into the result. All three use the BF16 stack from Ingredients and one 8-step distilled pass. Width and Height set the frame's area and the clip sets its shape, and Frames stops at the clip's end. Fetch the models with `scripts/download-adapter-models.sh`.
+
+- **New Camera Angle** uses [CrossView Prompt v0.9](https://huggingface.co/Cseti/LTX2.3-22B_IC-LoRA-CrossView-Prompt) (Apache 2.0) at 1.5, the strength its author gives for distilled models. The prompt must use its fixed vocabulary of 63 moves. Unlike New Angle (10), which re-stages a moment from a reference sheet and generates a new performance, this moves the camera on the footage itself. The range is about ±60° around the front, and big moves are made by chaining small ones.
+- **Relight** uses [Relight 1.0](https://huggingface.co/Lightricks/LTX-2.3-22b-IC-LoRA-Relight) at 1.0. The ball comes from the pinned [Sphere Light Render](https://github.com/eric-venti-seeds/Sphere-Light-Render-ComfyUI) node (MIT) and is composited last onto every guide frame: 143 px, 22 px from the top and right at 1280×704, scaled with the frame's area. The node renders in the browser and bakes the image in at queue time, so it stays on the canvas and an API call without the page gets a grey ball. Exteriors only, and it must stay single-pass because the second stage drops the reference.
+- **Day to Night** uses Lightricks' [LTX-2.5 build](https://huggingface.co/Lightricks/LTX-2.5-22b-IC-LoRA-Day-To-Night) at 1.0. Its model card recommends 30 steps at CFG 3 to 4; this runs the distilled recipe at CFG 1 like the rest of the bundle.
+
+**Not GPU-tested.** Only Day to Night has an LTX-2.5 build. CrossView and Relight are LTX-2.3 files: their authors do not claim 2.5 support and no public source confirms it, so they are labelled as unproven until a render settles it. The transformer architecture looks the same (the 2.3 and 2.5 builds of Day to Night and Ingredients differ by a few kilobytes), which is a reason to try them and not proof they work. Relight's ball compositing follows the documented geometry; Lightricks' own workflow file sits behind the licence gate and has not been compared.
+
+## One-panel layout (04, 05, 07-13)
 
 Audio to Video, Text to Audio, Ingredients, Extend After, Extend Before and New Angle use the same layout as Image to Video: the canvas shows only the inputs (your clip and/or image), one controls panel with plain-English fields, the Save node and the notes. Everything else (40-50 nodes) lives inside the panel, which is a ComfyUI subgraph; open it from its corner icon to edit the wiring.
 
-The editable files in `archive/v2v-workflow-sources/` are generator sources. For 08-10, `scripts/v2v_graphs.py` defines the graphs in API format: `g.control()` creates each panel field, with a pass-through inside the panel so that controls feeding arithmetic sockets still become fields and appear in a fixed order. On a running Pod, the ComfyUI frontend loads that prompt (`app.loadApiJson`), folds every node except the inputs, controls and Save into one subgraph (`rootGraph.convertToSubgraph`), turns each control into a labelled panel field, and serializes the result. Ingredients was folded the same way from its previous official-graph adaptation, with a Seed field added. Each panel was checked to produce exactly the prompt of the graph it replaced and was render-tested from the UI. After changing a graph, repeat that conversion and re-run `scripts/package-workflows.py`; `tests/test-workflows.py` fails if 04, 05 or 07-10 show more than four non-note nodes on the canvas.
+The editable files in `archive/v2v-workflow-sources/` are generator sources. For 08-10, `scripts/v2v_graphs.py` defines the graphs in API format: `g.control()` creates each panel field, with a pass-through inside the panel so that controls feeding arithmetic sockets still become fields and appear in a fixed order. On a running Pod, the ComfyUI frontend loads that prompt (`app.loadApiJson`), folds every node except the inputs, controls and Save into one subgraph (`rootGraph.convertToSubgraph`), turns each control into a labelled panel field, and serializes the result. Ingredients was folded the same way from its previous official-graph adaptation, with a Seed field added. Each panel was checked to produce exactly the prompt of the graph it replaced and was render-tested from the UI. After changing a graph, repeat that conversion and re-run `scripts/package-workflows.py`; `tests/test-workflows.py` fails if 04, 05 or 07-13 show more than four non-note nodes on the canvas.
 
 Audio to Video and Text to Audio are folded offline, on every generation, by `scripts/workflow_panels.py` (`fold_into_panel`), which writes the same structure the frontend produces. Its `flatten` check resolves every nested panel, primitive and field down to plain node inputs before and after folding and stops generation if anything differs; it detects a field wired to the wrong input or swapped conditioning. Two defaults were set deliberately before folding: **Rewrite My Prompt with AI** is off in both (matching `prompt_rewriting: false` in the profile), and Text to Audio's Input Parameters panel got clean values, because an earlier upstream rewiring had left a model filename in its prompt-enhance slot. New panel fields expose controls that were buried in sub-panels: Seed, Width and Height, and Use the Opening Frame in Audio to Video (an opening image is ignored unless it is on). These two folded workflows have been checked structurally but not yet loaded in the ComfyUI interface or rendered on a GPU.
+
+Workflows 11 to 13 skip the running Pod. `scripts/api_to_ui.py` turns the API graph from `scripts/v2v_graphs.py` into a UI graph using the schemas saved in `config/node-schemas.json`, and `fold_into_panel` folds it on every generation. Run through this path, New Angle's builder gives the same 35 nodes and wiring as its frontend-folded, GPU-tested workflow, apart from `5.0` written as `5` and `0.0` as `0`. `tests/test-workflows.py` checks each graph against those schemas: input and output slots, link types, and the guide, crop and sound paths. Schemas for nodes newer than the saved `object_info` were read from source at their pinned commits.
 
 ## Video decoding
 
