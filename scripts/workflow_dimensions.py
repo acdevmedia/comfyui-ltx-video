@@ -179,6 +179,74 @@ def sync_api(api, ui):
                     link=next(link_parts(l) for l in ui['links'] if link_parts(l)[0]==inp['link'])
                     api[nid]['inputs'][inp['name']]=[str(link[1]),link[2]]
 
+def fit_expression(mine, other, step):
+    """One side of a frame with area a*b and the proportions of a c x d image, on the model's grid."""
+    return 'max(64,round(sqrt(a*b*%s/%s)/%d)*%d)'%(mine,other,step,step)
+
+def fit_frame_to_image(data, graph, width, height, image, toggle=None, step=32):
+    """Point a subgraph's Width and Height consumers at a frame fitted to its image; nothing is cropped.
+
+    `width` and `height` are the panel's primitives, which keep setting the frame's area while the image
+    sets its proportions. `image` is the (node id, slot) supplying the picture. `toggle` is a (node id,
+    slot, value) boolean that, when it holds `value`, means no image is in use: the typed size then stands.
+    """
+    groups = [data] + data.get('definitions', {}).get('subgraphs', [])
+    next_node = max(n['id'] for g in groups for n in g['nodes'])
+    next_link = max([link_parts(l)[0] for g in groups for l in g.get('links', [])] + [data.get('last_link_id') or 0])
+    nodes = {n['id']: n for n in graph['nodes']}
+    def add(node):
+        nonlocal next_node
+        next_node += 1
+        node.update(id=next_node, flags={}, order=0, mode=0, properties={'Node name for S&R': node['type']})
+        graph['nodes'].append(node)
+        nodes[next_node] = node
+        return node
+    def connect(origin, origin_slot, target, target_slot, kind):
+        nonlocal next_link
+        next_link += 1
+        graph['links'].append(dict(id=next_link, origin_id=origin, origin_slot=origin_slot, target_id=target['id'], target_slot=target_slot, type=kind))
+        target['inputs'][target_slot]['link'] = next_link
+        if origin == -10:
+            graph['inputs'][origin_slot]['linkIds'].append(next_link)
+        else:
+            output = nodes[origin]['outputs'][origin_slot]
+            output['links'] = (output.get('links') or []) + [next_link]
+    x, y = nodes[width]['pos']
+    getter = add({'type': 'GetImageSize', 'title': 'Size of your image', 'pos': [x, y + 900], 'size': [300, 120], 'widgets_values': [],
+                  'inputs': [{'name': 'image', 'type': 'IMAGE', 'link': None}],
+                  'outputs': [{'name': name, 'type': 'INT', 'links': []} for name in ('width', 'height', 'batch_size')]})
+    def fit(title, expression, row):
+        if toggle:
+            typed = 'a' if row == 0 else 'b'
+            expression = '%s if %se else %s' % (typed, '' if toggle[2] else 'not ', expression)
+        return add({'type': 'ComfyMathExpression', 'title': title, 'pos': [x, y + 1040 + row * 200], 'size': [300, 180], 'widgets_values': [expression],
+                    'inputs': [{'name': 'expression', 'type': 'STRING', 'link': None, 'widget': {'name': 'expression'}}] +
+                              [{'name': 'values.' + letter, 'type': 'FLOAT,INT,BOOLEAN', 'link': None} for letter in ('abcde' if toggle else 'abcd')],
+                    'outputs': [{'name': 'FLOAT', 'type': 'FLOAT', 'links': []}, {'name': 'INT', 'type': 'INT', 'links': []}, {'name': 'BOOL', 'type': 'BOOLEAN', 'links': []}]})
+    fit_w = fit('Fit Frame Width', fit_expression('c', 'd', step), 0)
+    fit_h = fit('Fit Frame Height', fit_expression('d', 'c', step), 1)
+    for primitive, fitted in ((width, fit_w), (height, fit_h)):
+        output = nodes[primitive]['outputs'][0]
+        moved = output['links'] or []
+        for link in graph['links']:
+            if link['id'] in moved:
+                link['origin_id'], link['origin_slot'] = fitted['id'], 1
+        fitted['outputs'][1]['links'] = list(moved)
+        output['links'] = []
+    connect(image[0], image[1], getter, 0, 'IMAGE')
+    for node in (fit_w, fit_h):
+        connect(width, 0, node, 1, 'INT')
+        connect(height, 0, node, 2, 'INT')
+        connect(getter['id'], 0, node, 3, 'INT')
+        connect(getter['id'], 1, node, 4, 'INT')
+        if toggle:
+            connect(toggle[0], toggle[1], node, 5, 'BOOLEAN')
+    data['last_node_id'], data['last_link_id'] = next_node, next_link
+    state = data.get('state')
+    if state:
+        state.update(lastNodeId=next_node, lastLinkId=next_link)
+    return fit_w, fit_h
+
 def main():
     root=Path(__file__).resolve().parents[1]
     for path in sorted(root.glob('versions/*/workflows/*.json')):

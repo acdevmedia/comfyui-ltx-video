@@ -4,15 +4,29 @@ Synced from account template **LTX 2.5 Distilled ComfyUI Video One-Click** (`abm
 
 [Open template](https://console.runpod.io/deploy?template=abmsxu1p5j)
 
-Image: `ghcr.io/acdevmedia/ltx-studio:2.5`. Container disk: **200 GB**. Workspace: `/workspace`. Template service: `8188/http`. No persistent volume is requested by the repository template configuration.
+Image: `ghcr.io/acdevmedia/ltx-studio:2.5`. Container disk: **200 GB**. Workspace: `/workspace`. Template service: `8188/http` (ComfyUI) and `3923/http` (copyparty). No persistent volume is requested by the repository template configuration.
 
 `config/runpod-template.json` holds the Pod defaults. `.runpod/template-source.json` records the account source. `.runpod/hub.json` exposes the same values through Hub inputs or fixed values. `.runpod/tests.json` uses the same defaults for readiness tests.
 
 ## Credentials
 
+The file browser on port 3923 signs in with Runpod Secrets `COPYPARTY_USERNAME` and `COPYPARTY_SECRET`, which the template maps to `COPYPARTY_USERNAME` and `COPYPARTY_PASSWORD`.
+
 Create Runpod Secret `HUGGINGFACE_TOKEN` with a Hugging Face read token and accept the gated model terms. Secret references are passed through unchanged; no credential values are stored here. Optional S3 credentials are only needed when backup is enabled.
 
 ## Template variables
+
+### `COPYPARTY_USERNAME`
+
+Default: `{{ RUNPOD_SECRET_COPYPARTY_USERNAME }}`.
+
+Username for the output file browser on port 3923, from Runpod Secret `COPYPARTY_USERNAME`.
+
+### `COPYPARTY_PASSWORD`
+
+Default: `{{ RUNPOD_SECRET_COPYPARTY_SECRET }}`.
+
+Password for the output file browser, from Runpod Secret `COPYPARTY_SECRET`. Without both values the file browser does not start; ComfyUI is unaffected.
 
 ### `AUTO_DOWNLOAD_ADAPTERS`
 

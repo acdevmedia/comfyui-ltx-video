@@ -23,8 +23,10 @@ ENV DEBIAN_FRONTEND=noninteractive PATH="/opt/venv/bin:/usr/local/cuda/bin:${PAT
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-venv python-is-python3 openssh-server openssh-client git git-lfs \
     curl ca-certificates vim nginx libgl1 libglib2.0-0 libsqlite3-0 ffmpeg inotify-tools \
-    util-linux rsync tini gcc libc6-dev python3-dev && rm -rf /var/lib/apt/lists/*
+    util-linux rsync tini gcc libc6-dev python3-dev zip unzip && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /opt/venv /opt/venv
+RUN python3 -m pip install --no-cache-dir 'copyparty==1.20.26' && \
+    /usr/bin/python3 -m venv /opt/awscli && /opt/awscli/bin/pip install --no-cache-dir 'awscli==1.46.3' && ln -s /opt/awscli/bin/aws /usr/local/bin/aws
 COPY --from=builder /opt/ltx25-studio/ComfyUI /opt/ltx25-studio/ComfyUI
 COPY config /opt/ltx25-studio/config
 COPY versions /opt/ltx25-studio/versions
@@ -35,6 +37,7 @@ COPY scripts /opt/ltx25-studio/scripts
 COPY backup /opt/ltx25-studio/backup
 COPY .env.example /opt/ltx25-studio/.env.example
 RUN chmod +x /opt/ltx25-studio/docker/*.sh /opt/ltx25-studio/scripts/*.sh /opt/ltx25-studio/backup/*.sh && \
+    bash /opt/ltx25-studio/scripts/test-copyparty.sh && \
     mkdir -p /workspace /run/sshd && \
     rm -rf /opt/ltx25-studio/ComfyUI/models/* /opt/ltx25-studio/ComfyUI/input/* /opt/ltx25-studio/ComfyUI/output/*
 WORKDIR /workspace
@@ -45,7 +48,7 @@ ENV COMFYUI_DIR=/workspace/ComfyUI HF_HOME=/workspace/.cache/huggingface \
     WORKFLOW_SOURCE_DIR=/opt/ltx25-studio/versions/${LTX_VERSION}/workflows \
     COMFYUI_ATTENTION=sage HF_XET_HIGH_PERFORMANCE=1 \
     PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
-EXPOSE 8188 8888 22
+EXPOSE 8188 8888 22 3923
 HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 CMD ["/opt/ltx25-studio/docker/healthcheck.sh"]
 ENTRYPOINT ["/usr/bin/tini", "--", "/opt/ltx25-studio/docker/entrypoint.sh"]
 

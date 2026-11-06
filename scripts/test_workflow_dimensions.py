@@ -1,8 +1,9 @@
 """Check that render dimensions resolve to editable controls on the main canvas."""
 import copy
 import json
+import math
 from pathlib import Path
-from workflow_dimensions import LATENTS, apply_dimensions, link_parts
+from workflow_dimensions import LATENTS, apply_dimensions, fit_expression, link_parts
 ROOT=Path(__file__).resolve().parents[1]
 
 def inspect(data):
@@ -50,6 +51,9 @@ def inspect(data):
             assert resize['type']=='ResizeImageMaskNode',resize['type']
             axis='width' if link[2]==0 else 'height'
             return resolve(g,parents,resize,'resize_type.'+axis,depth+1)
+        if source['type']=='ComfyMathExpression' and source.get('title','').startswith('Fit Frame'):
+            # The panel sets the area; the image fills in the proportions.
+            return resolve(g,parents,source,'values.a' if source['title'].endswith('Width') else 'values.b',depth+1)
         if source['type']=='ComfyMathExpression':
             assert source['widgets_values'][0]=='a/2',source['widgets_values']
             control,name,value,factor=resolve(g,parents,source,'values.a',depth+1)
@@ -76,6 +80,26 @@ def inspect(data):
             if name in control.get('widgets_values_named',{}):control['widgets_values_named'][name]=expected
         assert resolve(g,parents,n,dim)[2]==expected*factor
     return len(targets)
+
+def fitted(width, height, image_width, image_height, **flags):
+    names=dict(a=width,b=height,c=image_width,d=image_height,max=max,round=round,sqrt=math.sqrt,**flags)
+    return tuple(eval(fit_expression(*sides,32),{'__builtins__':{}},names) for sides in (('c','d'),('d','c')))
+
+# The area stays put while the image sets the proportions, so a portrait is never sliced.
+assert fitted(1280,720,1920,1080)==(1280,704)
+assert fitted(720,1280,1080,1920)==(704,1280)
+assert fitted(1280,720,1024,1536)==(768,1184)
+assert fitted(960,544,3000,3000)==(736,736)
+
+# Every workflow that starts from a picture fits to it, and honours its off switch.
+for name,expression in (('01_LTX25_Image_to_Video.json','a if e else '),('03_LTX25_First_Last_Frame.json',''),
+                        ('04_LTX25_Audio_to_Video.json','a if not e else '),('06_LTX25_Two_Stage_Advanced.json','a if e else ')):
+    data=json.loads((ROOT/'versions/ltx-2.5/workflows'/name).read_text())
+    found=[n['widgets_values'][0] for g in data['definitions']['subgraphs'] for n in g['nodes'] if n.get('title')=='Fit Frame Width']
+    assert found==[expression+fit_expression('c','d',32)],(name,found)
+    if name.startswith('03_'):
+        crops=[n['widgets_values'][3] for g in data['definitions']['subgraphs'] for n in g['nodes'] if n['type']=='ResizeImageMaskNode' and n['id']==213]
+        assert crops==['disabled'],crops
 
 count=0
 for path in sorted(ROOT.glob('versions/*/workflows/*.json')):

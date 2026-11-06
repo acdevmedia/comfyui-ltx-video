@@ -2,7 +2,7 @@
 """Build filmmaker-named workflow assets from the preserved master and official graph refs."""
 import copy, json, uuid
 from workflow_panels import fold_into_panel
-from workflow_dimensions import apply_dimensions
+from workflow_dimensions import apply_dimensions, fit_frame_to_image
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -265,8 +265,31 @@ def add_negative_prompt_note(data):
     if 'last_node_id' in data: data['last_node_id']=node_id
     if 'lastNodeId' in state: state['lastNodeId']=node_id
 
+def link_origin(graph, link_id):
+    link=next(l for l in graph['links'] if l['id']==link_id)
+    return link['origin_id'],link['origin_slot']
+
+def fit_to_opening_image(name, data):
+    """Let the picture a workflow starts from set the frame's shape, so it is used whole."""
+    def nested(node_id):
+        return next((g,n) for g in data['definitions']['subgraphs'] for n in g['nodes'] if n['id']==node_id)
+    def image_of(node):
+        return link_origin(graph,next(i for i in node['inputs'] if i['name']=='input')['link'])
+    if name[:3] in ('01_','06_'):
+        graph,resize=nested(351);switch=next(n for n in graph['nodes'] if n.get('title')=='Switch to Text to Video?')
+        fit_frame_to_image(data,graph,372,360,image_of(resize),(switch['id'],0,True))
+    elif name[:3]=='03_':
+        graph,resize=nested(213)
+        fit_frame_to_image(data,graph,215,216,image_of(resize))
+        # The opening frame now matches the frame exactly; the closing one still crops if it differs.
+        resize['widgets_values'][3]='disabled'
+    elif name[:3]=='04_':
+        graph=nested(6012)[0];slot=next(i for i,x in enumerate(graph['inputs']) if x['name']=='input')
+        fit_frame_to_image(data,graph,6012,6013,(-10,slot),(6014,0,False))
+
 def write(name, data):
     apply_dimensions(data,(768,448) if 'Ingredients' in name else None)
+    fit_to_opening_image(name,data)
     add_negative_prompt_note(data)
     # Preserve the packaged workflows' random-seed default when rebuilding from
     # older upstream references (including nodes inside controls subgraphs).

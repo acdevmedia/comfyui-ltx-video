@@ -158,7 +158,7 @@
         "input": {
           "name": "Ltx Default Megapixels",
           "type": "number",
-          "description": "Resolution target for newly installed workflows; the installer clamps dimensions to a 0.2\u20132.0 megapixel range.",
+          "description": "Resolution target for newly installed workflows; the installer clamps dimensions to a 0.2–2.0 megapixel range.",
           "default": 0.5,
           "advanced": true
         }
@@ -313,6 +313,14 @@
             }
           ]
         }
+      },
+      {
+        "key": "COPYPARTY_USERNAME",
+        "value": "{{ RUNPOD_SECRET_COPYPARTY_USERNAME }}"
+      },
+      {
+        "key": "COPYPARTY_PASSWORD",
+        "value": "{{ RUNPOD_SECRET_COPYPARTY_SECRET }}"
       }
     ]
   }

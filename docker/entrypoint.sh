@@ -54,6 +54,9 @@ if [[ "${ENABLE_JUPYTER:-false}" =~ ^(1|true|yes)$ ]]; then
 fi
 if [[ -n "${PUBLIC_KEY:-}" ]]; then install -d -m 700 /root/.ssh; printf '%s\n' "$PUBLIC_KEY" >> /root/.ssh/authorized_keys; chmod 600 /root/.ssh/authorized_keys; ssh-keygen -A; /usr/sbin/sshd; fi
 echo "[setup 6/6] Starting ComfyUI and web access services."
+source "$APP/scripts/copyparty.sh"
+start_copyparty /workspace/ComfyUI/output 'LTX outputs'
+if [[ -n "${COPYPARTY_PID:-}" ]]; then background+=("$COPYPARTY_PID"); fi
 if [[ "${COMFYUI_ATTENTION:-sage}" == sage ]]; then
   echo "[startup] Checking that SageAttention kernels compile and run on this GPU."
   if timeout 300 python -c 'import torch; from sageattention import sageattn; q=torch.randn(1,8,256,128,device="cuda",dtype=torch.float16); torch.cuda.synchronize(); assert sageattn(q,q,q,tensor_layout="HND",is_causal=False).isfinite().all()' >>/workspace/logs/comfyui.log 2>&1; then

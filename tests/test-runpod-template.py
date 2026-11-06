@@ -10,8 +10,8 @@ assert template["category"] == "NVIDIA" and template["isPublic"] is True
 assert template["isServerless"] is False
 assert template["containerDiskInGb"] == 200
 assert "volumeMountPath" not in template and "volumeInGb" not in template
-assert template["ports"] == ["8188/http"]
-assert template["portLabels"] == {"8188/http": "ComfyUI"}
+assert template["ports"] == ["8188/http", "3923/http"]
+assert template["portLabels"] == {"8188/http": "ComfyUI", "3923/http": "Copyparty"}
 assert template["startJupyter"] is False and template["startSsh"] is False, "RunPod must not add Jupyter/SSH ports"
 assert not {"AI_TOOLKIT_AUTH", "ENABLE_JUPYTER", "JUPYTER_TOKEN", "PUBLIC_KEY"} & set(template["env"])
 assert "Web terminal" in template["readme"]

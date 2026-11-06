@@ -138,6 +138,7 @@ The public template recommends an **NVIDIA A100 80 GB**, uses a 200 GB temporary
 | `MODEL_DOWNLOAD_WORKERS` | `3` | Number of model files downloaded concurrently. |
 | `COMFYUI_ATTENTION` | `sage` | `sage` uses SageAttention after a startup GPU check (falls back to PyTorch if it fails); `pytorch` forces PyTorch attention for comparison. |
 | `HF_HOME` | `/workspace/.cache/huggingface` | Persistent Hub cache location. |
+| `COPYPARTY_USERNAME`, `COPYPARTY_PASSWORD` | Runpod Secrets | Login for the file browser on port 3923. It stays off without both. |
 | `HF_TOKEN` | empty | Hugging Face read token for gated model downloads. |
 | `HUGGING_FACE_HUB_TOKEN` | empty | Alternate name for `HF_TOKEN`. `HF_TOKEN` takes precedence. |
 | `TINI_SUBREAPER` | `1` | Registers Tini as a child subreaper when the upstream launcher runs it outside PID 1. |
@@ -239,6 +240,12 @@ The repository includes CPU-only tests and GPU/cloud acceptance instructions. A 
 
 See the [complete template environment reference](docs/runpod-environment.md) for every variable, its default, secret mapping, and Hub-specific differences. Defaults are synchronized from account template `abmsxu1p5j`.
 
+## Browse and download outputs
+
+**Connect → HTTP 3923 / Copyparty** opens a gallery of everything in `/workspace/ComfyUI/output`, newest first. Sign in with the values of Runpod Secrets `COPYPARTY_USERNAME` and `COPYPARTY_SECRET`. Select files to download them, or a whole folder as a ZIP. It is read-only: nothing can be uploaded, changed or deleted, and if either secret is missing it stays off without affecting ComfyUI. The log is `/workspace/logs/copyparty.log`.
+
+`zip`, `unzip` and `aws` are on the path in the terminal for moving outputs off the Pod yourself.
+
 ## Editable render size
 
-Set **Render Width** and **Render Height** on the canvas, or **Width** and **Height** in the main controls panel. These fields drive generation directly; resolution presets no longer override them. The added image-resize controls use a center crop to the selected dimensions; change the resize node’s crop setting if needed. Use dimensions supported by the model (multiples of 32 for LTX video, 16 for image workflows). LTX’s two-stage workflows retain their internal half-resolution first pass and upscale to the selected output size. Existing installed workflows and user edits are preserved; open a newly packaged workflow to get these controls.
+Set **Width** and **Height** in the main controls panel. Workflows that start from text render at exactly that size; use multiples of 32. Workflows that start from a picture (Image to Video, First and Last Frame, Audio to Video with an opening frame, and Two-Stage Advanced) use it whole: Width and Height set the frame's area, and so the render time and memory, and the image sets its shape. A typed size that already matches the image is used as it is; a head-to-toe portrait renders as a portrait with the whole figure in frame, and nothing is outpainted. Turning the picture off (**Switch to Text to Video?**, or **Use the Opening Frame**) returns to the exact typed size. In First and Last Frame the opening frame sets the shape and a closing frame with different proportions is centre-cropped. The video-input workflows still resize and centre-crop your clip to the typed size. LTX's two-stage workflows keep their internal half-resolution first pass and upscale to the final size. Existing installed workflows and user edits are preserved; open a newly packaged workflow to get this behaviour.
