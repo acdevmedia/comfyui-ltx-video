@@ -266,6 +266,16 @@ def add_negative_prompt_note(data):
 
 def write(name, data):
     add_negative_prompt_note(data)
+    # Preserve the packaged workflows' random-seed default when rebuilding from
+    # older upstream references (including nodes inside controls subgraphs).
+    for graph in [data]+data.get('definitions',{}).get('subgraphs',[]):
+        for node in graph.get('nodes',[]):
+            values=node.get('widgets_values')
+            seed_node=node.get('type')=='RandomNoise' or (node.get('type')=='PrimitiveInt' and node.get('title','').lower()=='seed')
+            if seed_node and isinstance(values,list):
+                for index in range(1,len(values)):
+                    if values[index]=='fixed' and isinstance(values[index-1],int):
+                        values[index]='randomize'
     (WORK/name).write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n')
 
 def main():

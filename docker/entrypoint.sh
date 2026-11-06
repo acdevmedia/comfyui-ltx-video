@@ -16,6 +16,10 @@ echo "[startup] This first-start setup checks the GPU, verifies Hugging Face acc
 echo "[startup] Detailed logs: /workspace/logs/startup.log (ComfyUI: comfyui.log; downloads are also printed below)."
 echo "[startup] Container disk is temporary. Download important outputs or enable S3 backup before deleting/replacing this Pod."
 echo "[startup] Hugging Face and S3 secret values are never printed."
+# Avoid host-sized PyTorch thread pools being throttled by the Pod's CPU quota,
+# particularly during ImageScale and SaveVideo (the same optimization as Eros).
+source "$APP/docker/cpu-threads.sh"
+configure_cpu_threads
 "$APP/docker/initialise-workspace.sh"
 echo "[startup] Checking ComfyUI's RunPod proxy compatibility before launch."
 python "$APP/scripts/patch-comfyui-proxy-guard.py" "$APP/ComfyUI/server.py"

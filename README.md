@@ -84,6 +84,8 @@ The standard video defaults are 30 seconds, 24 fps, 721 frames, 16:9, and 0.5 me
 
 ### Model downloads and storage
 
+CPU thread pools are sized automatically to the container's cgroup CPU quota, capped by available CPUs, before Python starts. This applies the Eros optimization to avoid CPU throttling during image scaling and video export on hosts with many more cores than the Pod is allocated. Set `OMP_NUM_THREADS` and optionally `MKL_NUM_THREADS` to override; startup logs show both values. This does not move GPU generation or VAE decoding to the CPU. LTX export speedup has not yet been benchmarked.
+
 Startup downloads the INT8 ConvRot models shared by workflows 01–06. The Ingredients BF16 checkpoints/IC-LoRA are opt-in (`AUTO_DOWNLOAD_ADAPTERS=true` or `scripts/download-ingredients-models.sh`), and the separate BF16 prompt-enhancement encoder is optional. The table lists approximate on-disk sizes reported by a successful RunPod A100 first launch; Hugging Face metadata and filesystem rounding can cause small differences. The core workflow set is about **43.18 GiB**, Ingredients adds **64.81 GiB** when enabled, for about **107.99 GiB** with both. The optional BF16 prompt-enhancement encoder adds **9.57 GiB**. The template uses a **200 GB container disk** for the default model set, download headroom, temporary cache, and outputs. Do not stop startup preflight by deleting model files.
 
 | Group | ComfyUI model folder | SafeTensors file | Download size |
