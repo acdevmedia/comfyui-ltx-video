@@ -8,10 +8,10 @@ Scene Transition, CrossView Prompt, Relight and Day to Night are also integrated
 |---|---|---|---|---|
 | Scene Transition | Apache 2.0 | No | Yes | Yes |
 | CrossView Prompt | Apache 2.0 | No | Yes | Yes |
-| Relight | LTX-2 Community License | Yes | Yes | After a maintainer runs `scripts/pin-gated-models.py` |
-| Day to Night | LTX-2.x Community License | Yes | Yes | After a maintainer runs `scripts/pin-gated-models.py` |
+| Relight | LTX-2 Community License | Yes | Yes | Yes |
+| Day to Night | LTX-2.x Community License | Yes | Yes | Yes |
 
-Accept each gated repository's terms with the Hugging Face account behind `HF_TOKEN`. Hugging Face hides a gated file's hash until then, so these two are checked by size until `python3 scripts/pin-gated-models.py` fills the hash in; it reads `HF_TOKEN` from the shell or the ignored `.env` and never prints it. The community licences need a separate commercial licence for companies with annual revenue of $10 million or more.
+Accept each gated repository's terms with the Hugging Face account behind `HF_TOKEN`. Hugging Face hides a gated file's hash until then, so to add another gated LoRA, set its `sha256` to `null`, accept the licence and run `python3 scripts/pin-gated-models.py`. It reads `HF_TOKEN` from the shell or the ignored `.env`, never prints it, and also confirms the hashes already pinned. The community licences need a separate commercial licence for companies with annual revenue of $10 million or more.
 
 Other requested adapters remain listed as not provisioned. Their exact LTX-2.5 checkpoint compatibility, graph inputs, and controls must be verified before they appear as enabled switches. A generic LoRA dropdown would not correctly implement IC-LoRA controls. Clean Plate, Restore, and Water Simulation remain excluded.
 

@@ -15,9 +15,8 @@ assert any(m['id']=='ingredients-ic-lora' and m['repo']=='Lightricks/LTX-2.5-22b
 assert all('group' in m for m in manifest['models']), 'every model must have an explicit download group'
 for m in manifest['models']:
     if 'revision' in m:
-        # Hugging Face hides a gated file's hash without an accepted licence; scripts/pin-gated-models.py fills it in.
-        assert len(m['revision'])==40 and m['size']>0, m['id']
-        assert len(m.get('sha256') or '')==64 or (m.get('gated') and m['sha256'] is None), m['id']
+        # Hugging Face hides a gated file's hash without an accepted licence; scripts/pin-gated-models.py fetches it.
+        assert len(m['revision'])==40 and m['size']>0 and len(m.get('sha256') or '')==64, m['id']
 loader=importlib.util.spec_from_file_location('download_models',root/'scripts/download-models.py')
 downloader=importlib.util.module_from_spec(loader); loader.loader.exec_module(downloader)
 default_ids={m['id'] for m in downloader.selected_models(manifest,'default',True)}
