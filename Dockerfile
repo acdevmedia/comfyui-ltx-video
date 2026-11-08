@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN python3 -m venv ${VENV_PATH}
 ENV PATH="${VENV_PATH}/bin:${PATH}"
 COPY versions /opt/ltx25-studio/versions
-COPY frontend/workflow-defaults/ /opt/ltx25-studio/ComfyUI/web/extensions/ACDEV-workflow-defaults/
 COPY scripts/build-comfy-stack.sh /opt/ltx25-studio/scripts/build-comfy-stack.sh
 RUN chmod +x /opt/ltx25-studio/scripts/build-comfy-stack.sh && /opt/ltx25-studio/scripts/build-comfy-stack.sh
 
@@ -32,6 +31,7 @@ COPY --from=builder /opt/ltx25-studio/ComfyUI /opt/ltx25-studio/ComfyUI
 COPY config /opt/ltx25-studio/config
 COPY versions /opt/ltx25-studio/versions
 COPY frontend/video-gallery/ /opt/ltx25-studio/ComfyUI/web/extensions/ACDEV-LTX25-video-gallery/
+COPY frontend/workflow-defaults/ /opt/ltx25-studio/ComfyUI/web/extensions/ACDEV-workflow-defaults/
 COPY docker /opt/ltx25-studio/docker
 COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 COPY scripts /opt/ltx25-studio/scripts

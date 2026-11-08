@@ -33,3 +33,7 @@ result = subprocess.run(
 assert json.loads(result.stdout)["imageName"] == template["imageName"]
 assert template["dockerEntrypoint"] == [] and template["dockerStartCmd"] == []
 print("RunPod template payload is public, container-only, port-configured, and uses RunPod secret references.")
+
+for dockerfile in (root / "Dockerfile", root / ".runpod/Dockerfile"):
+    text = dockerfile.read_text()
+    assert text.index("COPY frontend/workflow-defaults/") > text.index("AS runtime"), "Seed extension must be copied after the builder stage"
