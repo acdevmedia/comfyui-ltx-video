@@ -1,7 +1,7 @@
 {
   "id": "07824bbb-6672-4bb0-ac36-4313a519e35b",
   "revision": 5,
-  "last_node_id": 412,
+  "last_node_id": 411,
   "last_link_id": 808,
   "nodes": [
     {
@@ -119,7 +119,7 @@
         "format.codec": "auto",
         "codec": "auto"
       },
-      "title": "Final Cut — Export Video"
+      "title": "Final Cut \u2014 Export Video"
     },
     {
       "id": 398,
@@ -143,7 +143,7 @@
           "link": 764
         },
         {
-          "label": "Scene Prompt — Camera, Action, Dialogue & Sound",
+          "label": "Scene Prompt \u2014 Camera, Action, Dialogue & Sound",
           "name": "value",
           "type": "STRING",
           "widget": {
@@ -239,7 +239,7 @@
           "link": 785
         },
         {
-          "label": "Video Guidance — First Render (CFG)",
+          "label": "Video Guidance \u2014 First Render (CFG)",
           "name": "director_stage_1_video_cfg",
           "type": "FLOAT",
           "widget": {
@@ -248,7 +248,7 @@
           "link": null
         },
         {
-          "label": "Audio Guidance — First Render (CFG)",
+          "label": "Audio Guidance \u2014 First Render (CFG)",
           "name": "director_stage_1_audio_cfg",
           "type": "FLOAT",
           "widget": {
@@ -257,7 +257,7 @@
           "link": null
         },
         {
-          "label": "Video Guidance — Detail Render (CFG)",
+          "label": "Video Guidance \u2014 Detail Render (CFG)",
           "name": "director_stage_2_video_cfg",
           "type": "FLOAT",
           "widget": {
@@ -266,7 +266,7 @@
           "link": null
         },
         {
-          "label": "Audio Guidance — Detail Render (CFG)",
+          "label": "Audio Guidance \u2014 Detail Render (CFG)",
           "name": "director_stage_2_audio_cfg",
           "type": "FLOAT",
           "widget": {
@@ -308,7 +308,7 @@
           "widget": {
             "name": "filmmaker_352_sampler_name"
           },
-          "label": "Video Sampling Method — First Render"
+          "label": "Video Sampling Method \u2014 First Render"
         },
         {
           "name": "filmmaker_341_sampler_name",
@@ -317,7 +317,7 @@
           "widget": {
             "name": "filmmaker_341_sampler_name"
           },
-          "label": "Video Sampling Method — Detail Render"
+          "label": "Video Sampling Method \u2014 Detail Render"
         },
         {
           "name": "filmmaker_397_sigmas",
@@ -326,7 +326,7 @@
           "widget": {
             "name": "filmmaker_397_sigmas"
           },
-          "label": "Sampling Timings — First Render"
+          "label": "Sampling Timings \u2014 First Render"
         },
         {
           "name": "filmmaker_396_sigmas",
@@ -335,7 +335,7 @@
           "widget": {
             "name": "filmmaker_396_sigmas"
           },
-          "label": "Sampling Timings — Detail Render"
+          "label": "Sampling Timings \u2014 Detail Render"
         },
         {
           "name": "filmmaker_351_mode",
@@ -344,7 +344,7 @@
           "widget": {
             "name": "filmmaker_351_mode"
           },
-          "label": "Opening Image — Resize Mode"
+          "label": "Opening Image \u2014 Resize Mode"
         },
         {
           "name": "filmmaker_351_size",
@@ -353,7 +353,7 @@
           "widget": {
             "name": "filmmaker_351_size"
           },
-          "label": "Opening Image — Resize Limit"
+          "label": "Opening Image \u2014 Resize Limit"
         },
         {
           "name": "filmmaker_351_resampling",
@@ -362,7 +362,7 @@
           "widget": {
             "name": "filmmaker_351_resampling"
           },
-          "label": "Opening Image — Resize Filter"
+          "label": "Opening Image \u2014 Resize Filter"
         },
         {
           "name": "filmmaker_350_crf",
@@ -371,7 +371,7 @@
           "widget": {
             "name": "filmmaker_350_crf"
           },
-          "label": "Opening Image — Compression Quality (CRF)"
+          "label": "Opening Image \u2014 Compression Quality (CRF)"
         },
         {
           "name": "exact_frame",
@@ -416,6 +416,9 @@
           },
           "version": "7.8",
           "input_ue_unconnectable": {}
+        },
+        "acdevSeedModes": {
+          "noise_seed": "randomize"
         }
       },
       "widgets_values": [
@@ -476,7 +479,7 @@
         "filmmaker_350_crf": 18,
         "exact_frame": false
       },
-      "title": "Image to Video — Filmmaker Controls"
+      "title": "Image to Video \u2014 Filmmaker Controls"
     },
     {
       "id": 407,
@@ -513,7 +516,7 @@
           ]
         }
       ],
-      "title": "Avoid — Visual, Anatomy, Motion, Lighting & Audio",
+      "title": "Avoid \u2014 Visual, Anatomy, Motion, Lighting & Audio",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.16.3",
@@ -537,65 +540,6 @@
       "widgets_values_named": {
         "value": "pc game, console game, video game, cartoon, childish, ugly, underexposed, dark faces, muddy shadows, harsh shadows on faces, blown highlights, clipped whites, overexposure, uneven exposure, dramatic chiaroscuro, silhouetted faces, unnatural rim lighting, excessive bloom, lens flare, light streaks, volumetric light beams, god rays, spotlighting, theatrical lighting, orange and teal colour grading, oversaturated colours, unnatural skin tones, waxy skin, plastic skin, excessive skin smoothing, heavy colour grading, HDR look, artificial HDR, excessive sharpening, flat lifeless lighting, inconsistent lighting, exposure pumping, sudden colour shifts, background music, musical score, cinematic score, orchestral soundtrack, incidental music, dramatic music, ambient music, synthesizer music, musical stings, background singing, narration, voiceover, audience laughter, laugh track, applause, audio hiss, tape hiss, white noise, static, electrical interference, audio distortion, clipping, garbled dialogue, slurred speech, rushed dialogue, unnaturally fast speech, compressed speech, robotic voices, synthetic speech artifacts, audio glitches, audio popping, distorted environmental sounds, animation, CGI, 3D render, waxy face, distorted anatomy, extra fingers, fused hands, duplicate limbs, deformed face, inconsistent facial identity, flickering, frame jitter, temporal instability, camera jump, unwanted camera cut, text overlay, subtitles, watermark, black frames, frozen frames, harsh direct lighting, crushed blacks, unnatural colour cast, oversaturated grading, lighting flicker, cinematic soundtrack, orchestral music, unwanted narration, buzzing, crackling, robotic voice, repeated speech, lip sync errors"
       }
-    },
-    {
-      "id": 408,
-      "type": "MarkdownNote",
-      "pos": [
-        760,
-        1740
-      ],
-      "size": [
-        420,
-        560
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 3,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Picture Size — Megapixels & Testing Reference",
-      "properties": {
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n\n\n**Testing:** Fix the seed, switch prompt rewriting off, keep the same fps, resolution and frame count. At CFG 1.0 negative conditioning has little/no effect. Compare video CFG 1.0 vs 1.3 cautiously. The distilled sampler/sigma schedules remain at official defaults inside the subgraph."
-      ],
-      "widgets_values_named": {
-        "text": "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
-      },
-      "color": "#222",
-      "bgcolor": "#000"
-    },
-    {
-      "id": 412,
-      "type": "MarkdownNote",
-      "pos": [
-        -520,
-        30
-      ],
-      "size": [
-        500,
-        420
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "About the Negative Prompt",
-      "properties": {},
-      "widgets_values": [
-        "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
     }
   ],
   "links": [
@@ -861,7 +805,7 @@
             "linkIds": [
               784
             ],
-            "label": "Picture Prompt Strength — Initial Render",
+            "label": "Picture Prompt Strength \u2014 Initial Render",
             "pos": [
               -480.1855,
               7060
@@ -874,7 +818,7 @@
             "linkIds": [
               785
             ],
-            "label": "Sound Prompt Strength — Initial Render",
+            "label": "Sound Prompt Strength \u2014 Initial Render",
             "pos": [
               -480.1855,
               7080
@@ -887,7 +831,7 @@
             "linkIds": [
               786
             ],
-            "label": "Picture Prompt Strength — Detail Pass",
+            "label": "Picture Prompt Strength \u2014 Detail Pass",
             "pos": [
               -480.1855,
               7100
@@ -900,7 +844,7 @@
             "linkIds": [
               787
             ],
-            "label": "Sound Prompt Strength — Detail Pass",
+            "label": "Sound Prompt Strength \u2014 Detail Pass",
             "pos": [
               -480.1855,
               7120
@@ -913,7 +857,7 @@
             "linkIds": [
               788
             ],
-            "label": "Video Sampling Method — First Render",
+            "label": "Video Sampling Method \u2014 First Render",
             "pos": [
               -480,
               7540
@@ -926,7 +870,7 @@
             "linkIds": [
               789
             ],
-            "label": "Video Sampling Method — Detail Render",
+            "label": "Video Sampling Method \u2014 Detail Render",
             "pos": [
               -480,
               7560
@@ -939,7 +883,7 @@
             "linkIds": [
               790
             ],
-            "label": "Sampling Timings — First Render",
+            "label": "Sampling Timings \u2014 First Render",
             "pos": [
               -480,
               7580
@@ -952,7 +896,7 @@
             "linkIds": [
               791
             ],
-            "label": "Sampling Timings — Detail Render",
+            "label": "Sampling Timings \u2014 Detail Render",
             "pos": [
               -480,
               7600
@@ -965,7 +909,7 @@
             "linkIds": [
               792
             ],
-            "label": "Opening Image — Resize Mode",
+            "label": "Opening Image \u2014 Resize Mode",
             "pos": [
               -480,
               7620
@@ -978,7 +922,7 @@
             "linkIds": [
               793
             ],
-            "label": "Opening Image — Resize Limit",
+            "label": "Opening Image \u2014 Resize Limit",
             "pos": [
               -480,
               7640
@@ -991,7 +935,7 @@
             "linkIds": [
               794
             ],
-            "label": "Opening Image — Resize Filter",
+            "label": "Opening Image \u2014 Resize Filter",
             "pos": [
               -480,
               7660
@@ -1004,7 +948,7 @@
             "linkIds": [
               795
             ],
-            "label": "Opening Image — Preprocess Level",
+            "label": "Opening Image \u2014 Preprocess Level",
             "pos": [
               -480,
               7680
@@ -1413,10 +1357,10 @@
               }
             },
             "widgets_values": [
-              "Egyptian royal in blue-and-gold headdress and high collar, white dress with golden embroidery and armbands, desert, robot soldiers in formation left and right. She walks steadily forward, head held level and gaze fixed ahead—no dipping or lowering of the head. The camera performs a single, smooth push-in only: starting in a wider shot of her, the robots, and the desert, it moves steadily forward until she is in a medium or medium-close frame, then holds. She stops, posture and head still upright, and says: “The old gods are silent. I am not.” Robot soldiers shift or march in place; sand and fabric move with the wind. No pull-back; the only camera move is the continuous push-in."
+              "Egyptian royal in blue-and-gold headdress and high collar, white dress with golden embroidery and armbands, desert, robot soldiers in formation left and right. She walks steadily forward, head held level and gaze fixed ahead\u2014no dipping or lowering of the head. The camera performs a single, smooth push-in only: starting in a wider shot of her, the robots, and the desert, it moves steadily forward until she is in a medium or medium-close frame, then holds. She stops, posture and head still upright, and says: \u201cThe old gods are silent. I am not.\u201d Robot soldiers shift or march in place; sand and fabric move with the wind. No pull-back; the only camera move is the continuous push-in."
             ],
             "widgets_values_named": {
-              "value": "Egyptian royal in blue-and-gold headdress and high collar, white dress with golden embroidery and armbands, desert, robot soldiers in formation left and right. She walks steadily forward, head held level and gaze fixed ahead—no dipping or lowering of the head. The camera performs a single, smooth push-in only: starting in a wider shot of her, the robots, and the desert, it moves steadily forward until she is in a medium or medium-close frame, then holds. She stops, posture and head still upright, and says: “The old gods are silent. I am not.” Robot soldiers shift or march in place; sand and fabric move with the wind. No pull-back; the only camera move is the continuous push-in."
+              "value": "Egyptian royal in blue-and-gold headdress and high collar, white dress with golden embroidery and armbands, desert, robot soldiers in formation left and right. She walks steadily forward, head held level and gaze fixed ahead\u2014no dipping or lowering of the head. The camera performs a single, smooth push-in only: starting in a wider shot of her, the robots, and the desert, it moves steadily forward until she is in a medium or medium-close frame, then holds. She stops, posture and head still upright, and says: \u201cThe old gods are silent. I am not.\u201d Robot soldiers shift or march in place; sand and fabric move with the wind. No pull-back; the only camera move is the continuous push-in."
             }
           },
           {
@@ -1582,7 +1526,7 @@
                 "localized_name": "STRING",
                 "name": "STRING",
                 "type": "STRING",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1688,8 +1632,8 @@
                 "name": "BOOLEAN",
                 "type": "BOOLEAN",
                 "links": [
-                  683,
                   693,
+                  683,
                   801,
                   807
                 ]
@@ -2084,8 +2028,8 @@
                 "name": "CLIP",
                 "type": "CLIP",
                 "links": [
-                  731,
-                  732
+                  732,
+                  731
                 ]
               }
             ],
@@ -2628,7 +2572,7 @@
                 "localized_name": "denoised_output",
                 "name": "denoised_output",
                 "type": "LATENT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -3042,7 +2986,7 @@
                 "localized_name": "FLOAT",
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "INT",
@@ -3056,7 +3000,7 @@
                 "localized_name": "BOOL",
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -3120,7 +3064,7 @@
                 "localized_name": "FLOAT",
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "INT",
@@ -3134,7 +3078,7 @@
                 "localized_name": "BOOL",
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -3197,8 +3141,8 @@
                 "name": "output_image",
                 "type": "IMAGE",
                 "links": [
-                  681,
                   691,
+                  681,
                   757
                 ]
               }
@@ -3506,7 +3450,7 @@
                 "localized_name": "BOOL",
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "title": "Math Expression (fps)",
@@ -3578,7 +3522,7 @@
                 "localized_name": "FLOAT",
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "INT",
@@ -3593,7 +3537,7 @@
                 "localized_name": "BOOL",
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "title": "Math Expression (length)",
@@ -3661,6 +3605,9 @@
                 "widget_ue_connectable": {},
                 "version": "7.7",
                 "input_ue_unconnectable": {}
+              },
+              "acdevSeedModes": {
+                "noise_seed": "randomize"
               }
             },
             "widgets_values": [
@@ -3993,7 +3940,7 @@
                 "localized_name": "denoised_output",
                 "name": "denoised_output",
                 "type": "LATENT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -4318,10 +4265,10 @@
               {
                 "name": "batch_size",
                 "type": "INT",
-                "links": []
+                "links": null
               }
             ],
-            "id": 409,
+            "id": 408,
             "flags": {},
             "order": 0,
             "mode": 0,
@@ -4387,7 +4334,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -4399,10 +4346,10 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
-            "id": 410,
+            "id": 409,
             "flags": {},
             "order": 0,
             "mode": 0,
@@ -4468,7 +4415,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -4480,10 +4427,10 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
-            "id": 411,
+            "id": 410,
             "flags": {},
             "order": 0,
             "mode": 0,
@@ -5217,7 +5164,7 @@
           },
           {
             "id": 687,
-            "origin_id": 410,
+            "origin_id": 409,
             "origin_slot": 1,
             "target_id": 353,
             "target_slot": 0,
@@ -5225,7 +5172,7 @@
           },
           {
             "id": 688,
-            "origin_id": 411,
+            "origin_id": 410,
             "origin_slot": 1,
             "target_id": 355,
             "target_slot": 0,
@@ -5363,7 +5310,7 @@
             "id": 796,
             "origin_id": -10,
             "origin_slot": 0,
-            "target_id": 409,
+            "target_id": 408,
             "target_slot": 0,
             "type": "IMAGE"
           },
@@ -5371,7 +5318,7 @@
             "id": 797,
             "origin_id": 372,
             "origin_slot": 0,
-            "target_id": 410,
+            "target_id": 409,
             "target_slot": 1,
             "type": "INT"
           },
@@ -5379,23 +5326,23 @@
             "id": 798,
             "origin_id": 360,
             "origin_slot": 0,
-            "target_id": 410,
+            "target_id": 409,
             "target_slot": 2,
             "type": "INT"
           },
           {
             "id": 799,
-            "origin_id": 409,
+            "origin_id": 408,
             "origin_slot": 0,
-            "target_id": 410,
+            "target_id": 409,
             "target_slot": 3,
             "type": "INT"
           },
           {
             "id": 800,
-            "origin_id": 409,
+            "origin_id": 408,
             "origin_slot": 1,
-            "target_id": 410,
+            "target_id": 409,
             "target_slot": 4,
             "type": "INT"
           },
@@ -5403,7 +5350,7 @@
             "id": 801,
             "origin_id": 363,
             "origin_slot": 0,
-            "target_id": 410,
+            "target_id": 409,
             "target_slot": 5,
             "type": "BOOLEAN"
           },
@@ -5411,7 +5358,7 @@
             "id": 802,
             "origin_id": -10,
             "origin_slot": 27,
-            "target_id": 410,
+            "target_id": 409,
             "target_slot": 6,
             "type": "BOOLEAN"
           },
@@ -5419,7 +5366,7 @@
             "id": 803,
             "origin_id": 372,
             "origin_slot": 0,
-            "target_id": 411,
+            "target_id": 410,
             "target_slot": 1,
             "type": "INT"
           },
@@ -5427,23 +5374,23 @@
             "id": 804,
             "origin_id": 360,
             "origin_slot": 0,
-            "target_id": 411,
+            "target_id": 410,
             "target_slot": 2,
             "type": "INT"
           },
           {
             "id": 805,
-            "origin_id": 409,
+            "origin_id": 408,
             "origin_slot": 0,
-            "target_id": 411,
+            "target_id": 410,
             "target_slot": 3,
             "type": "INT"
           },
           {
             "id": 806,
-            "origin_id": 409,
+            "origin_id": 408,
             "origin_slot": 1,
-            "target_id": 411,
+            "target_id": 410,
             "target_slot": 4,
             "type": "INT"
           },
@@ -5451,7 +5398,7 @@
             "id": 807,
             "origin_id": 363,
             "origin_slot": 0,
-            "target_id": 411,
+            "target_id": 410,
             "target_slot": 5,
             "type": "BOOLEAN"
           },
@@ -5459,7 +5406,7 @@
             "id": 808,
             "origin_id": -10,
             "origin_slot": 27,
-            "target_id": 411,
+            "target_id": 410,
             "target_slot": 6,
             "type": "BOOLEAN"
           }
@@ -5490,7 +5437,7 @@
         },
         "class_type": "LTXVGemmaCLIPModelLoader",
         "_meta": {
-          "title": "🅛🅣🅧 Gemma 3 Model Loader"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 Gemma 3 Model Loader"
         }
       },
       "3": {
@@ -5576,7 +5523,7 @@
         },
         "class_type": "LTXVAudioVAELoader",
         "_meta": {
-          "title": "🅛🅣🅧 LTXV Audio VAE Loader"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 LTXV Audio VAE Loader"
         }
       },
       "14": {
@@ -5592,7 +5539,7 @@
         },
         "class_type": "LTXVAudioVAEDecode",
         "_meta": {
-          "title": "🅛🅣🅧 LTXV Audio VAE Decode"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 LTXV Audio VAE Decode"
         }
       },
       "15": {
@@ -5621,7 +5568,7 @@
         },
         "class_type": "VHS_VideoCombine",
         "_meta": {
-          "title": "Video Combine 🎥🅥🅗🅢"
+          "title": "Video Combine \ud83c\udfa5\ud83c\udd65\ud83c\udd57\ud83c\udd62"
         }
       },
       "17": {
@@ -5646,7 +5593,7 @@
         },
         "class_type": "MultimodalGuider",
         "_meta": {
-          "title": "🅛🅣🅧 Multimodal Guider"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 Multimodal Guider"
         }
       },
       "18": {
@@ -5663,7 +5610,7 @@
         },
         "class_type": "GuiderParameters",
         "_meta": {
-          "title": "🅛🅣🅧 Guider Parameters"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 Guider Parameters"
         }
       },
       "19": {
@@ -5676,7 +5623,7 @@
         },
         "class_type": "GuiderParameters",
         "_meta": {
-          "title": "🅛🅣🅧 Guider Parameters"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 Guider Parameters"
         }
       },
       "21": {
@@ -5735,7 +5682,7 @@
         },
         "class_type": "LTXVEmptyLatentAudio",
         "_meta": {
-          "title": "🅛🅣🅧 LTXV Empty Latent Audio"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 LTXV Empty Latent Audio"
         }
       },
       "27": {
@@ -5764,7 +5711,7 @@
         },
         "class_type": "LTXVConcatAVLatent",
         "_meta": {
-          "title": "🅛🅣🅧 LTXV Concat AV Latent"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 LTXV Concat AV Latent"
         }
       },
       "29": {
@@ -5780,7 +5727,7 @@
         },
         "class_type": "LTXVSeparateAVLatent",
         "_meta": {
-          "title": "🅛🅣🅧 LTXV Separate AV Latent"
+          "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 LTXV Separate AV Latent"
         }
       },
       "41": {
@@ -5879,7 +5826,7 @@
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",
-      "workflow": "Image to Video — Filmmaker"
+      "workflow": "Image to Video \u2014 Filmmaker"
     }
   },
   "version": 0.4

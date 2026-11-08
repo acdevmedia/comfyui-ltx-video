@@ -257,3 +257,15 @@ See the [complete template environment reference](docs/runpod-environment.md) fo
 ## Editable render size
 
 Set **Width** and **Height** in the main controls panel. Workflows that start from text render at exactly that size; use multiples of 32. Workflows that start from a picture (Image to Video, First and Last Frame, Audio to Video with an opening frame, and Two-Stage Advanced) use it whole by default: Width and Height set the frame's area, and so the render time and memory, and the image sets its shape. A typed size that already matches the image is used as it is; a head-to-toe portrait renders as a portrait with the whole figure in frame, and nothing is outpainted. Turn on **Exact Frame** to use your typed Width and Height exactly instead, for a landscape video from a portrait image for example. The image is then centre-cropped to that frame, so a tall figure loses its top and bottom. Turning the picture off (**Switch to Text to Video?**, or **Use the Opening Frame**) returns to the exact typed size. In First and Last Frame the opening frame sets the shape and a closing frame with different proportions is centre-cropped. The video-input workflows still resize and centre-crop your clip to the typed size. LTX's two-stage workflows keep their internal half-resolution first pass and upscale to the final size. Existing installed workflows and user edits are preserved; open a newly packaged workflow to get this behaviour.
+
+### Workflow defaults
+
+Seed controls default to randomize, including upstream controls and independent
+first-pass/refinement seeds in nested panels. Random seeds use 15 digits where the
+node range allows it. Use the native after-generate control, or the added seed mode
+selector, to choose Fixed and enter a repeatable seed manually. These choices persist
+when the workflow is saved. Model internals are folded into collapsed subgraphs and notes are
+removed from packaged canvases. Inputs, editable controls and output previews remain
+available. After editing or regenerating workflows, run
+`python3 scripts/workflow_defaults.py` to reapply the canvas layout. These changes ship
+with the next container image; existing pods need the updated image.

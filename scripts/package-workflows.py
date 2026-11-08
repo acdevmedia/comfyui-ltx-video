@@ -517,3 +517,8 @@ def main():
     ic_lora_workflow(day_to_night,'13_LTX25_Day_to_Night.json','Day to Night',NIGHT_NOTE.format(clip=CLIP_SHAPE,gated=GATED.format(repo=night_repo),download=DOWNLOAD),'How to Turn Day into Night')
 
 if __name__=='__main__': main()
+
+# Apply the same canvas defaults after every regeneration.
+if __name__ == "__main__":
+    from workflow_defaults import normalize
+    normalize(Path(__file__).resolve().parents[1])

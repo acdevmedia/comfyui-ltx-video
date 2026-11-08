@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN python3 -m venv ${VENV_PATH}
 ENV PATH="${VENV_PATH}/bin:${PATH}"
 COPY versions /opt/ltx25-studio/versions
+COPY frontend/workflow-defaults/ /opt/ltx25-studio/ComfyUI/web/extensions/ACDEV-workflow-defaults/
 COPY scripts/build-comfy-stack.sh /opt/ltx25-studio/scripts/build-comfy-stack.sh
 RUN chmod +x /opt/ltx25-studio/scripts/build-comfy-stack.sh && /opt/ltx25-studio/scripts/build-comfy-stack.sh
 

@@ -251,11 +251,14 @@
           ]
         }
       ],
-      "title": "Extend Video — Lead In Before Your Clip",
+      "title": "Extend Video \u2014 Lead In Before Your Clip",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
-        "previewExposures": []
+        "previewExposures": [],
+        "acdevSeedModes": {
+          "value_5": "randomize"
+        }
       },
       "widgets_values": [
         "[Describe what happens just before the clip starts.] It leads straight into the opening of the original shot. Keep the same people, wardrobe, location, lighting and lens.",
@@ -275,54 +278,6 @@
         "value_5": 42,
         "value_6": "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, unwanted cuts, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, watermarks"
       }
-    },
-    {
-      "id": 57,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        0
-      ],
-      "size": [
-        500,
-        520
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "How to Extend a Clip",
-      "properties": {},
-      "widgets_values": [
-        "## How to extend a clip (before)\n\n1. Upload your clip in **Your Clip**.\n2. Write **What Happens Before**. Describe the action and any dialogue, and keep the people, wardrobe, location and lens the same as your clip.\n3. Set **Seconds to Add** (5 is a good start).\n4. **Frames of Your Clip to Match** sets how much of your clip's opening the model sees. 25 frames is about one second at 24 fps. More frames give smoother motion across the join; the value is rounded to 9, 17, 25, 33 and so on.\n5. Run. The saved video is the new section followed by your whole clip, with sound.\n\nYour clip is resized and centre-cropped to **Width x Height** (default 1280 x 704). Use multiples of 32 that match your clip's shape. The new section's sound is generated, using five seconds of your clip's own sound as a voice reference so the voices stay the same. Extend the result again to build a longer scene."
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
-    },
-    {
-      "id": 58,
-      "type": "MarkdownNote",
-      "pos": [
-        -1120,
-        0
-      ],
-      "size": [
-        500,
-        420
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "About the Negative Prompt",
-      "properties": {},
-      "widgets_values": [
-        "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
     }
   ],
   "links": [
@@ -357,7 +312,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Extend Video — Lead In Before Your Clip",
+        "name": "Extend Video \u2014 Lead In Before Your Clip",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -4141,7 +4096,7 @@
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",
-      "workflow": "Extend Video — Lead In Before Your Clip"
+      "workflow": "Extend Video \u2014 Lead In Before Your Clip"
     }
   },
   "version": 0.4

@@ -101,7 +101,7 @@
         {
           "name": "video",
           "type": "VIDEO",
-          "links": []
+          "links": null
         }
       ],
       "properties": {
@@ -114,30 +114,6 @@
         "auto"
       ],
       "title": "Save Video"
-    },
-    {
-      "id": 52,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        0
-      ],
-      "size": [
-        500,
-        520
-      ],
-      "flags": {},
-      "order": 51,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "How to Turn Day into Night",
-      "properties": {},
-      "widgets_values": [
-        "## How to turn day into night\n\n1. Upload a daylight clip at 24 fps in **Your Clip**.\n2. In **The Night Look**, describe the night and keep the last sentence, which holds the shot still. Steer the colour with phrases such as warm tungsten light or cool white LED light.\n3. Run. Composition, camera and motion come from your clip.\n\n768 x 448, 97 frames at 24 fps is what it was trained on; longer clips drift towards the end.\n\n**Width** and **Height** set the frame's area, and your clip sets its shape. **Frames** sets the length, and the shot stops at the end of your clip. Your clip's own sound is kept, so the new shot lines up on the same audio track.\n\n**This one needs a licence first.** Accept the terms at [Lightricks/LTX-2.5-22b-IC-LoRA-Day-To-Night](https://huggingface.co/Lightricks/LTX-2.5-22b-IC-LoRA-Day-To-Night) with the Hugging Face account behind `HF_TOKEN`. It needs the BF16 stack and this LoRA, which are not in the default download. Run `/opt/ltx25-studio/scripts/download-adapter-models.sh` in the Pod's terminal. Until then it reports a missing model; nothing else is affected."
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
     },
     {
       "id": 60,
@@ -243,10 +219,13 @@
           ]
         }
       ],
-      "title": "Day to Night — Filmmaker Controls",
+      "title": "Day to Night \u2014 Filmmaker Controls",
       "properties": {
         "cnr_id": "comfy-core",
-        "ver": "0.39.0"
+        "ver": "0.39.0",
+        "acdevSeedModes": {
+          "seed": "randomize"
+        }
       },
       "widgets_values": [
         "A realistic nighttime scene lit by street lamps and warm windows, with a dark sky and deep soft shadows. Only the lighting changes from day to night; identical composition, framing, camera movement and motion.",
@@ -266,30 +245,6 @@
         "seed": 42,
         "negative_prompt_cfg_1_0_little_no_effect": "daytime, bright sunlight, blue sky, overexposed, worst quality, inconsistent motion, blurry, jittery, distorted"
       }
-    },
-    {
-      "id": 61,
-      "type": "MarkdownNote",
-      "pos": [
-        -1120,
-        0
-      ],
-      "size": [
-        500,
-        420
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "About the Negative Prompt",
-      "properties": {},
-      "widgets_values": [
-        "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
     }
   ],
   "links": [
@@ -340,7 +295,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Day to Night — Filmmaker Controls",
+        "name": "Day to Night \u2014 Filmmaker Controls",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -835,12 +790,12 @@
               {
                 "name": "bit_depth",
                 "type": "COMBO",
-                "links": []
+                "links": null
               },
               {
                 "name": "color_space",
                 "type": "COMBO",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -874,12 +829,12 @@
               {
                 "name": "width",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "name": "height",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "name": "batch_size",
@@ -940,12 +895,12 @@
               {
                 "name": "INT",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1166,7 +1121,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1179,7 +1134,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1238,7 +1193,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1251,7 +1206,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1300,7 +1255,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1314,7 +1269,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1370,12 +1325,12 @@
               {
                 "name": "INT",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -2053,12 +2008,12 @@
               {
                 "name": "positive",
                 "type": "CONDITIONING",
-                "links": []
+                "links": null
               },
               {
                 "name": "negative",
                 "type": "CONDITIONING",
-                "links": []
+                "links": null
               },
               {
                 "name": "frozen_audio",
@@ -2569,7 +2524,7 @@
               {
                 "name": "denoised_output",
                 "type": "LATENT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -2610,7 +2565,7 @@
               {
                 "name": "audio_latent",
                 "type": "LATENT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -2654,12 +2609,12 @@
               {
                 "name": "positive",
                 "type": "CONDITIONING",
-                "links": []
+                "links": null
               },
               {
                 "name": "negative",
                 "type": "CONDITIONING",
-                "links": []
+                "links": null
               },
               {
                 "name": "latent",

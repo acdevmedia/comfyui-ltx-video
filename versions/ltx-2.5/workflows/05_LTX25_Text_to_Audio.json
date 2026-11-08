@@ -29,7 +29,7 @@
         {
           "name": "audio",
           "type": "AUDIO",
-          "links": []
+          "links": null
         }
       ],
       "properties": {},
@@ -65,7 +65,7 @@
         {
           "name": "audio",
           "type": "AUDIO",
-          "links": []
+          "links": null
         }
       ],
       "properties": {
@@ -75,54 +75,6 @@
       },
       "widgets_values": [],
       "title": "Listen"
-    },
-    {
-      "id": 14,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        0
-      ],
-      "size": [
-        583.3709400493758,
-        503.3281992746056
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Model Links",
-      "properties": {},
-      "widgets_values": [
-        "## Model Links\n\nText-to-audio uses the **audio VAE** and the **audio-only** wrapper around the diffusion model. There is no video VAE and no spatial upscaler in this flow.\n\n## Model Links\n\n**LTX-2.5 Model Weights**\n\nMake sure to click the \"Agree and Access\" button the first time you download.\n\n- [ Distilled model - ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors ](https://huggingface.co/Lightricks/LTX-2.5/blob/main/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors)\n\n- [ Audio VAE - ltx-2.5-audio-vae-bf16.safetensors ](https://huggingface.co/Lightricks/LTX-2.5/blob/main/vae/ltx-2.5-audio-vae-bf16.safetensors)\n\n\n**Text Encoder - finetuned for LTX-2.5**\n- [gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors](https://huggingface.co/Lightricks/LTX-2.5/blob/main/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors)\n\n**Text Enhancer**\n- [Google Gemma 4 E2B IT INT8 ConvRot (included in the default download)](https://huggingface.co/Comfy-Org/gemma-4/blob/main/text_encoders/gemma4_e2b_it_int8_convrot.safetensors)\n\n\n**Model Storage Location**\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 text_encoders/\n│   │      ├── gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors\n│   │      └── gemma4_e2b_it_int8_convrot.safetensors\n│   ├── 📂 diffusion_models/\n│   │      └── ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors\n│   ├── 📂 vae/\n│   │      └── ltx-2.5-audio-vae-bf16.safetensors\n```\n\n## Report Issues\nTo report any issues when running this workflow, [go to GitHub](https://github.com/Lightricks/ComfyUI-LTXVideo/issues)\n"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 15,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        480
-      ],
-      "size": [
-        400,
-        313
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "How to Use Text to Audio",
-      "properties": {},
-      "widgets_values": [
-        "## How to make sound from text\n\n1. In **Describe the Sound**, write what should be heard: dialogue, voices, ambience, effects or music.\n2. Set **Clip Length** in seconds.\n3. Run. Listen in the audio player; the file is saved by **Save Audio** (MP3).\n\n**Rewrite My Prompt with AI** expands a short prompt before generating; it is off by default and adds time. Change **Seed** for a different take of the same prompt."
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
     },
     {
       "id": 5581,
@@ -212,10 +164,13 @@
           ]
         }
       ],
-      "title": "Text to Audio — Sound Designer Controls",
+      "title": "Text to Audio \u2014 Sound Designer Controls",
       "properties": {
         "cnr_id": "comfy-core",
-        "ver": "0.39.0"
+        "ver": "0.39.0",
+        "acdevSeedModes": {
+          "seed": "randomize"
+        }
       },
       "widgets_values": [
         "",
@@ -233,30 +188,6 @@
         "rewrite_my_prompt_with_ai": false,
         "seed": 50
       }
-    },
-    {
-      "id": 5582,
-      "type": "MarkdownNote",
-      "pos": [
-        -1120,
-        0
-      ],
-      "size": [
-        500,
-        420
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "About the Negative Prompt",
-      "properties": {},
-      "widgets_values": [
-        "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
     }
   ],
   "links": [
@@ -1439,7 +1370,7 @@
                 ]
               }
             ],
-            "title": "🅛🅣🅧 Gemma API Text Encode - POSITIVE",
+            "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 Gemma API Text Encode - POSITIVE",
             "properties": {
               "Node name for S&R": "GemmaAPITextEncode"
             },
@@ -1503,7 +1434,7 @@
                 ]
               }
             ],
-            "title": "🅛🅣🅧 Gemma API Text Encode - NEGATIVE",
+            "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 Gemma API Text Encode - NEGATIVE",
             "properties": {
               "Node name for S&R": "GemmaAPITextEncode"
             },
@@ -1700,7 +1631,7 @@
                 "localized_name": "FLOAT",
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "INT",
@@ -1714,7 +1645,7 @@
                 "localized_name": "BOOL",
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "title": "calculate frames count - Math Expression",
@@ -2923,7 +2854,7 @@
                 "localized_name": "video_latent",
                 "name": "video_latent",
                 "type": "LATENT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "audio_latent",
@@ -2941,29 +2872,6 @@
               "ver": "0.10.0"
             },
             "widgets_values": []
-          },
-          {
-            "id": 5572,
-            "type": "Note",
-            "pos": [
-              80,
-              120
-            ],
-            "size": [
-              400,
-              120
-            ],
-            "flags": {},
-            "order": 0,
-            "mode": 0,
-            "inputs": [],
-            "outputs": [],
-            "properties": {},
-            "widgets_values": [
-              "Do explore various samplers and cfg values (although we advise them to be kept close to 1)"
-            ],
-            "color": "#432",
-            "bgcolor": "#653"
           },
           {
             "id": 5567,
@@ -3201,7 +3109,7 @@
                 "localized_name": "denoised_output",
                 "name": "denoised_output",
                 "type": "LATENT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -3482,7 +3390,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Text to Audio — Sound Designer Controls",
+        "name": "Text to Audio \u2014 Sound Designer Controls",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -3630,7 +3538,7 @@
               {
                 "name": "STRING",
                 "type": "STRING",
-                "links": []
+                "links": null
               }
             ],
             "title": "Effective positive prompt",
@@ -3855,8 +3763,7 @@
                 "name": "audio",
                 "type": "AUDIO",
                 "links": [
-                  20,
-                  13809
+                  20
                 ]
               }
             ],
@@ -3995,7 +3902,10 @@
             ],
             "properties": {
               "Node name for S&R": "89037276-a2fe-4f40-beb4-d07bcf50adea",
-              "previewExposures": []
+              "previewExposures": [],
+              "acdevSeedModes": {
+                "enhancer_seed": "randomize"
+              }
             },
             "widgets_values": [
               "",
@@ -4795,7 +4705,7 @@
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",
-      "workflow": "Text to Audio — Sound Designer"
+      "workflow": "Text to Audio \u2014 Sound Designer"
     }
   },
   "version": 0.4

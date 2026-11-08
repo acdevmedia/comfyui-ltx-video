@@ -169,7 +169,7 @@
         {
           "name": "video",
           "type": "VIDEO",
-          "links": []
+          "links": null
         }
       ],
       "properties": {
@@ -182,30 +182,6 @@
         "auto"
       ],
       "title": "Save Video"
-    },
-    {
-      "id": 57,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        0
-      ],
-      "size": [
-        500,
-        520
-      ],
-      "flags": {},
-      "order": 56,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "How to Relight a Shot",
-      "properties": {},
-      "widgets_values": [
-        "## How to relight a shot\n\n1. Upload your clip in **Your Clip**. This model was made for sunlit exteriors, and it works best on footage with no strong light direction already, such as an overcast day.\n2. Set **Light Direction**. Rotation 0 lights the scene from the camera's side, 90 from the right, 180 from behind and -90 from the left. The ball is added to the corner of the frame the model reads, and is not in the result.\n3. In **The Light**, keep the first sentence and match its end to the ball:\n\n`relight the video to match the light-direction ball. hard low-angle sunlight from the right`\n\n- **From:** the front · the front-right · the right · the back-right · behind · the back-left · the left · the front-left\n- **Looks:** hard directional sunlight · hard high-angle sunlight · hard low-angle sunlight · soft diffused daylight · soft warm afternoon light · cool soft daylight · dim overcast light · strong backlight with rim light · soft hazy backlight · warm golden low front sun · warm golden low side sun · frontal sunlight\n\nDescribe the light only, not the scene, and use one light setup per clip. If the words and the ball disagree, the ball wins. The default ball, elevation 15 at intensity 2, follows Lightricks' example. A higher sun brightens the ball's grey background, so lower **intensity** as you raise **elevation**: about 0.8 at elevation 45. 1280 x 704, 121 frames at 24 fps is what it was trained on, in a single pass.\n\n**Width** and **Height** set the frame's area, and your clip sets its shape. **Frames** sets the length, and the shot stops at the end of your clip. Your clip's own sound is kept, so the new shot lines up on the same audio track.\n\n**Not yet proven on LTX-2.5.** This LoRA was trained on LTX-2.3 and no 2.5 build exists, so check a short clip first.\n\n**This one needs a licence first.** Accept the terms at [Lightricks/LTX-2.3-22b-IC-LoRA-Relight](https://huggingface.co/Lightricks/LTX-2.3-22b-IC-LoRA-Relight) with the Hugging Face account behind `HF_TOKEN`. It needs the BF16 stack and this LoRA, which are not in the default download. Run `/opt/ltx25-studio/scripts/download-adapter-models.sh` in the Pod's terminal. Until then it reports a missing model; nothing else is affected."
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
     },
     {
       "id": 65,
@@ -318,10 +294,13 @@
           ]
         }
       ],
-      "title": "Relight — Filmmaker Controls",
+      "title": "Relight \u2014 Filmmaker Controls",
       "properties": {
         "cnr_id": "comfy-core",
-        "ver": "0.39.0"
+        "ver": "0.39.0",
+        "acdevSeedModes": {
+          "seed": "randomize"
+        }
       },
       "widgets_values": [
         "relight the video to match the light-direction ball. hard low-angle sunlight from the right",
@@ -341,30 +320,6 @@
         "seed": 42,
         "negative_prompt_cfg_1_0_little_no_effect": "worst quality, inconsistent motion, blurry, jittery, distorted"
       }
-    },
-    {
-      "id": 66,
-      "type": "MarkdownNote",
-      "pos": [
-        -1120,
-        0
-      ],
-      "size": [
-        500,
-        420
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "About the Negative Prompt",
-      "properties": {},
-      "widgets_values": [
-        "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
     }
   ],
   "links": [
@@ -423,7 +378,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Relight — Filmmaker Controls",
+        "name": "Relight \u2014 Filmmaker Controls",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -933,12 +888,12 @@
               {
                 "name": "bit_depth",
                 "type": "COMBO",
-                "links": []
+                "links": null
               },
               {
                 "name": "color_space",
                 "type": "COMBO",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -972,12 +927,12 @@
               {
                 "name": "width",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "name": "height",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "name": "batch_size",
@@ -1038,12 +993,12 @@
               {
                 "name": "INT",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1264,7 +1219,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1280,7 +1235,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1339,7 +1294,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1354,7 +1309,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1403,7 +1358,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1418,7 +1373,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1474,12 +1429,12 @@
               {
                 "name": "INT",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1656,7 +1611,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1670,7 +1625,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1719,7 +1674,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1732,7 +1687,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -1786,7 +1741,7 @@
               {
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "name": "INT",
@@ -1798,7 +1753,7 @@
               {
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -2970,7 +2925,7 @@
               {
                 "name": "denoised_output",
                 "type": "LATENT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -3011,7 +2966,7 @@
               {
                 "name": "audio_latent",
                 "type": "LATENT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -3055,12 +3010,12 @@
               {
                 "name": "positive",
                 "type": "CONDITIONING",
-                "links": []
+                "links": null
               },
               {
                 "name": "negative",
                 "type": "CONDITIONING",
-                "links": []
+                "links": null
               },
               {
                 "name": "latent",

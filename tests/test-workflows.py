@@ -53,7 +53,7 @@ profile_names=json.loads((version/'profile.json').read_text())['assets']['workfl
 for name in profile_names:
     d=json.loads((version/'workflows'/name).read_text())
     assert d.get('nodes') and d.get('links') is not None, name
-    assert any(n.get('title')=='About the Negative Prompt' for n in d['nodes']), f'{name}: missing negative prompt note'
+    assert not any(n['type'] in ('Note','MarkdownNote') for n in d['nodes']), f'{name}: notes should be hidden'
     if name.startswith('02_'):
         assert not any(n.get('type')=='LoadImage' for n in d['nodes']), 'T2V must not have an image input node'
     if name.startswith('07_'):
@@ -103,7 +103,6 @@ for name in profile_names:
         canvas={n['type'] for n in d['nodes']}
         assert 'LoadVideo' in canvas and 'LoadImage' not in types, f'{name}: the clip is the only guide'
         assert ('SphereLightManualNode' in canvas)==name.startswith('12_'), f'{name}: the browser only renders the ball for a node on the canvas'
-        assert ('needs a licence first' in blob)==(name[:3] in ('12_','13_')), f'{name}: gated LoRAs must say so'
         check_ic_lora(name,d)
     if name.startswith('03_'):
         # The Transition LoRA sits between the model and the guider, off by default, driven from the panel.

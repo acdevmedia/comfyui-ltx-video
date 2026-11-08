@@ -5,93 +5,6 @@
   "last_link_id": 13864,
   "nodes": [
     {
-      "id": 5527,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        0
-      ],
-      "size": [
-        500,
-        340
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "How to Use Ingredients",
-      "properties": {},
-      "widgets_values": [
-        "## Ingredients — Character and Scene Continuity\n\nUpload one reference sheet containing characters, props, wardrobe or locations. Describe the visible elements by position in the sheet. The reference sheet is repeated as an IC-LoRA guide through the full clip; it is not automatically the first frame.\n\n**Who Is in This Scene?** Describe the cast and identify each person by their position on the reference sheet.\n\n**What Happens in This Shot?** Describe the action, camera movement, and sound. Keep the same character and costume descriptions across separate clips.\n\nThe Ingredients IC-LoRA uses the dedicated guide-conditioning graph. This is a single-stage workflow."
-      ],
-      "widgets_values_named": {
-        "text": "## Ingredients — Character and Scene Continuity\n\nUpload one reference sheet containing characters, props, wardrobe or locations. Describe the visible elements by position in the sheet. The reference sheet is repeated as an IC-LoRA guide through the full clip; it is not automatically the first frame.\n\n**Who Is in This Scene?** Describe the cast and identify each person by their position on the reference sheet.\n\n**What Happens in This Shot?** Describe the action, camera movement, and sound. Keep the same character and costume descriptions across separate clips.\n\nThe Ingredients IC-LoRA uses the dedicated guide-conditioning graph. This is a single-stage workflow."
-      },
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 5529,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        400
-      ],
-      "size": [
-        500,
-        134
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Rendering Quality",
-      "properties": {},
-      "widgets_values": [
-        "## Rendering Quality\n\nIngredients is a single-stage distilled workflow. The published training bucket is 768 × 448 at 121 frames and 24 fps (about five seconds). Longer clips are out of distribution; keep this control explicit and test shorter segments for production continuity."
-      ],
-      "widgets_values_named": {
-        "text": "## Rendering Quality\n\nIngredients is a single-stage distilled workflow. The published training bucket is 768 × 448 at 121 frames and 24 fps (about five seconds). Longer clips are out of distribution; keep this control explicit and test shorter segments for production continuity."
-      },
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 5526,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        594
-      ],
-      "size": [
-        500,
-        420
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 2,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Model Limits",
-      "properties": {},
-      "widgets_values": [
-        "## Ingredients model limits\n\nThe adapter was trained around 768 × 448, 121 frames, and 24 fps. It expects a reference sheet repeated through the clip and the two-part prompt format: `Reference sheet: ...` followed by `Generated video: ...`. Longer durations or other sizes are out of distribution. The node graph here supplies the guide frames, crops them after sampling, and loads the dedicated adapter."
-      ],
-      "widgets_values_named": {
-        "text": "## Ingredients model limits\n\nThe adapter was trained around 768 × 448, 121 frames, and 24 fps. It expects a reference sheet repeated through the clip and the two-part prompt format: `Reference sheet: ...` followed by `Generated video: ...`. Longer durations or other sizes are out of distribution. The node graph here supplies the guide frames, crops them after sampling, and loads the dedicated adapter."
-      },
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
       "id": 2004,
       "type": "LoadImage",
       "pos": [
@@ -138,7 +51,7 @@
           "localized_name": "MASK",
           "name": "MASK",
           "type": "MASK",
-          "links": []
+          "links": null
         }
       ],
       "title": "Reference Characters and Objects",
@@ -222,7 +135,7 @@
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "links": []
+          "links": null
         }
       ],
       "properties": {
@@ -242,33 +155,6 @@
         "codec": "auto"
       },
       "title": "Save Video"
-    },
-    {
-      "id": 9018,
-      "type": "MarkdownNote",
-      "pos": [
-        -560,
-        1074
-      ],
-      "size": [
-        500,
-        420
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "About the Negative Prompt",
-      "properties": {},
-      "widgets_values": [
-        "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
-      ],
-      "widgets_values_named": {
-        "text": "## About the negative prompt\n\nThe negative prompt is a list of things you would rather not see or hear, such as flicker, extra fingers or background music.\n\n**With this workflow's default settings it has no effect.** LTX-2.5 Distilled runs at a guidance (CFG) of 1.0, and at that setting ComfyUI skips the negative prompt entirely to save time.\n\nIt only comes into play if you raise a CFG value above 1.0 in the sampler settings. Sampling then takes roughly twice as long, and the distilled model is not tuned for higher guidance, so try it on a short clip first.\n\nFor most shots, steer the result from the main prompt instead. Describe what you want (\"steady locked-off camera\", \"soft window light\", \"no music\") rather than listing what you don't."
-      },
-      "color": "#222",
-      "bgcolor": "#000"
     },
     {
       "id": 9022,
@@ -369,11 +255,14 @@
           ]
         }
       ],
-      "title": "Ingredients — Character and Scene Continuity",
+      "title": "Ingredients \u2014 Character and Scene Continuity",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
-        "previewExposures": []
+        "previewExposures": [],
+        "acdevSeedModes": {
+          "noise_seed": "randomize"
+        }
       },
       "widgets_values": [
         42,
@@ -1747,7 +1636,7 @@
                 "localized_name": "FLOAT",
                 "name": "FLOAT",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "INT",
@@ -1761,7 +1650,7 @@
                 "localized_name": "BOOL",
                 "name": "BOOL",
                 "type": "BOOLEAN",
-                "links": []
+                "links": null
               }
             ],
             "title": "calculate frames count - Math Expression",
@@ -1891,7 +1780,7 @@
                 ]
               }
             ],
-            "title": "🅛🅣🅧 Gemma API Text Encode - NEGATIVE",
+            "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 Gemma API Text Encode - NEGATIVE",
             "properties": {
               "cnr_id": "ComfyUI-LTXVideo",
               "ver": "220e1d45aa0469f518e982102fca4dca92a61862",
@@ -2078,7 +1967,7 @@
                 ]
               }
             ],
-            "title": "🅛🅣🅧 Gemma API Text Encode - POSITIVE",
+            "title": "\ud83c\udd5b\ud83c\udd63\ud83c\udd67 Gemma API Text Encode - POSITIVE",
             "properties": {
               "cnr_id": "ComfyUI-LTXVideo",
               "ver": "220e1d45aa0469f518e982102fca4dca92a61862",
@@ -2297,7 +2186,7 @@
                 "localized_name": "fps",
                 "name": "fps",
                 "type": "FLOAT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "bit_depth",
@@ -3134,32 +3023,6 @@
             }
           },
           {
-            "id": 4999,
-            "type": "Note",
-            "pos": [
-              -1557.8532773873035,
-              3645.422821367455
-            ],
-            "size": [
-              222.81278386605618,
-              88
-            ],
-            "flags": {},
-            "order": 1,
-            "mode": 0,
-            "inputs": [],
-            "outputs": [],
-            "properties": {},
-            "widgets_values": [
-              "Do explore various samplers and cfg values (although we advise them to be kept close to 1)"
-            ],
-            "widgets_values_named": {
-              "text": "Do explore various samplers and cfg values (although we advise them to be kept close to 1)"
-            },
-            "color": "#432",
-            "bgcolor": "#653"
-          },
-          {
             "id": 4829,
             "type": "SamplerCustomAdvanced",
             "pos": [
@@ -3218,7 +3081,7 @@
                 "localized_name": "denoised_output",
                 "name": "denoised_output",
                 "type": "LATENT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -3312,13 +3175,13 @@
                 "localized_name": "positive",
                 "name": "positive",
                 "type": "CONDITIONING",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "negative",
                 "name": "negative",
                 "type": "CONDITIONING",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "latent",
@@ -4828,19 +4691,19 @@
                 "localized_name": "width",
                 "name": "width",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "height",
                 "name": "height",
                 "type": "INT",
-                "links": []
+                "links": null
               },
               {
                 "localized_name": "batch_size",
                 "name": "batch_size",
                 "type": "INT",
-                "links": []
+                "links": null
               }
             ],
             "properties": {
@@ -5390,7 +5253,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Ingredients — Character and Scene Continuity",
+        "name": "Ingredients \u2014 Character and Scene Continuity",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -6149,8 +6012,8 @@
                 "name": "Audio VAE",
                 "type": "VAE",
                 "links": [
-                  13673,
-                  13763
+                  13763,
+                  13673
                 ]
               },
               {
@@ -6159,8 +6022,8 @@
                 "name": "VAE",
                 "type": "VAE",
                 "links": [
-                  13670,
-                  13762
+                  13762,
+                  13670
                 ]
               },
               {
@@ -6651,7 +6514,7 @@
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",
-      "workflow": "Ingredients — Character and Scene Continuity"
+      "workflow": "Ingredients \u2014 Character and Scene Continuity"
     }
   },
   "version": 0.4,
