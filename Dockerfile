@@ -31,13 +31,14 @@ COPY --from=builder /opt/ltx25-studio/ComfyUI /opt/ltx25-studio/ComfyUI
 COPY config /opt/ltx25-studio/config
 COPY versions /opt/ltx25-studio/versions
 COPY frontend/video-gallery/ /opt/ltx25-studio/ComfyUI/web/extensions/ACDEV-LTX25-video-gallery/
-COPY frontend/workflow-defaults/ /opt/ltx25-studio/ComfyUI/web/extensions/ACDEV-workflow-defaults/
+COPY custom_nodes/acdev_workflow_defaults/ /opt/ltx25-studio/ComfyUI/custom_nodes/acdev_workflow_defaults/
 COPY docker /opt/ltx25-studio/docker
 COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 COPY scripts /opt/ltx25-studio/scripts
 COPY backup /opt/ltx25-studio/backup
 COPY .env.example /opt/ltx25-studio/.env.example
 RUN chmod +x /opt/ltx25-studio/docker/*.sh /opt/ltx25-studio/scripts/*.sh /opt/ltx25-studio/backup/*.sh && \
+    python3 /opt/ltx25-studio/scripts/verify_frontend.py --comfy-root /opt/ltx25-studio/ComfyUI && \
     bash /opt/ltx25-studio/scripts/test-copyparty.sh && \
     mkdir -p /workspace /run/sshd && \
     rm -rf /opt/ltx25-studio/ComfyUI/models/* /opt/ltx25-studio/ComfyUI/input/* /opt/ltx25-studio/ComfyUI/output/*

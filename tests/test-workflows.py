@@ -138,7 +138,7 @@ with tempfile.TemporaryDirectory() as temp:
     env=os.environ.copy(); env['LTX_APP_DIR']=str(app); env['LTX_VERSION']='ltx-2.5'; env['COMFYUI_DIR']=str(temp/'comfy')
     env['LTX_DEFAULT_WORKFLOW']='02_LTX25_Text_to_Video'; env['LTX_DEFAULT_DURATION']='12'
     subprocess.run([sys.executable,str(root/'scripts/install-workflows.py')],env=env,check=True,capture_output=True,text=True)
-    installed=Path(env['COMFYUI_DIR'])/'user/default/workflows'
+    installed=Path(env['COMFYUI_DIR'])/'user/default/workflows/Packaged 2026-11-11'
     assert sorted(p.name for p in installed.glob('*.json') if p.name!='user-made.json')==sorted(profile_names)
     default=json.loads((app/'ComfyUI/web/templates/default.json').read_text())
     assert default['extra']['acdev_studio']['workflow']=='Text to Video — Filmmaker'

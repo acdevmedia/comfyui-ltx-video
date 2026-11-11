@@ -36,4 +36,4 @@ print("RunPod template payload is public, container-only, port-configured, and u
 
 for dockerfile in (root / "Dockerfile", root / ".runpod/Dockerfile"):
     text = dockerfile.read_text()
-    assert text.index("COPY frontend/workflow-defaults/") > text.index("AS runtime"), "Seed extension must be copied after the builder stage"
+    assert text.index("COPY custom_nodes/acdev_workflow_defaults/") > text.index("AS runtime"), "Seed extension must be copied after the builder stage"

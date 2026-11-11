@@ -9,7 +9,7 @@ PROFILE_DIR=APP/'versions'/VERSION
 PROFILE=json.loads((PROFILE_DIR/'profile.json').read_text())
 SOURCE=PROFILE_DIR/PROFILE['assets']['workflows']
 ROOT=Path(os.environ.get('COMFYUI_DIR','/workspace/ComfyUI'))
-DEST=ROOT/'user/default/workflows'
+DEST=ROOT/'user/default/workflows/Packaged 2026-11-11'
 NAMES=PROFILE['assets']['workflow_files']
 ASPECTS={'16:9':'16:9 (Widescreen)','9:16':'9:16 (Portrait)','4:3':'4:3','1:1':'1:1','21:9':'21:9'}
 
