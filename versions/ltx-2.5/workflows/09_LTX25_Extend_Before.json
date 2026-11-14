@@ -1,19 +1,19 @@
 {
   "id": "c33a472f-b216-45d9-8331-96a6e5c90fcf",
   "revision": 0,
-  "last_node_id": 58,
-  "last_link_id": 91,
+  "last_node_id": 59,
+  "last_link_id": 92,
   "nodes": [
     {
       "id": 1,
       "type": "LoadVideo",
       "pos": [
         0,
-        0
+        380
       ],
       "size": [
-        282.798828125,
-        82
+        480,
+        680
       ],
       "flags": {},
       "order": 0,
@@ -61,14 +61,16 @@
       "widgets_values_named": {
         "file": "",
         "upload": "image"
-      }
+      },
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 55,
       "type": "SaveVideo",
       "pos": [
-        1020,
-        0
+        1120,
+        100
       ],
       "size": [
         270,
@@ -130,7 +132,7 @@
           "links": null
         }
       ],
-      "title": "Save Extended Video",
+      "title": "03 \u00b7 Your video",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0"
@@ -146,14 +148,16 @@
         "format": "auto",
         "format.codec": "auto",
         "codec": "auto"
-      }
+      },
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 56,
       "type": "fa2fdbe1-a9a8-4d97-9ed7-db52860177bd",
       "pos": [
-        420,
-        0
+        540,
+        100
       ],
       "size": [
         520,
@@ -171,7 +175,7 @@
           "widget": {
             "name": "value"
           },
-          "link": null
+          "link": 92
         },
         {
           "label": "Seconds to Add",
@@ -251,7 +255,7 @@
           ]
         }
       ],
-      "title": "Extend Video \u2014 Lead In Before Your Clip",
+      "title": "02 \u00b7 Shot settings",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
@@ -277,7 +281,43 @@
         "value_4": 704,
         "value_5": 42,
         "value_6": "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, unwanted cuts, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, watermarks"
-      }
+      },
+      "color": "#484661",
+      "bgcolor": "#29283d"
+    },
+    {
+      "id": 59,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            92
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "[Describe what happens just before the clip starts.] It leads straight into the opening of the original shot. Keep the same people, wardrobe, location, lighting and lens."
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -296,6 +336,14 @@
       55,
       0,
       "VIDEO"
+    ],
+    [
+      92,
+      59,
+      0,
+      56,
+      0,
+      "STRING"
     ]
   ],
   "groups": [],
@@ -4086,13 +4134,6 @@
   },
   "config": {},
   "extra": {
-    "ds": {
-      "scale": 1,
-      "offset": [
-        0,
-        0
-      ]
-    },
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",

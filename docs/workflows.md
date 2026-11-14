@@ -2,6 +2,10 @@
 
 For the selected `LTX_VERSION`, thirteen JSONs are read from `versions/<LTX_VERSION>/workflows/` and installed into `/workspace/ComfyUI/user/default/workflows/` only when the same filename is not already present. The selected profile's default graph is also installed as the initial frontend graph.
 
+## Canvas, seeds and duration (shared with the Eros and H3 bundles)
+
+Every numbered workflow uses the same canvas as the Eros and H3 bundles: **01 · Describe your shot** (the prompt), your inputs (Starting image, First/Last frame, Your Clip, …), **02 · Shot settings** (the Filmmaker controls) and **03 · Your video** or **03 · Your audio**. Image to Video and Two Stage keep their separate **Negative prompt** box. Duration is set in seconds with no upper limit. Seeds are randomized before every queue across 1 to 2^53−1 (seed mode: randomize, fixed, increment, decrement); a seed of 0 in an API prompt is replaced by a random one on the server.
+
 ## Image to Video and Text to Video
 
 The v9 filmmaker subgraph remains the base of Image to Video. It controls prompt text and rewrite, negative prompt, duration and frame construction, resolution, first-frame preprocessing, random seed, model/text encoder/VAEs, sampler and sigma schedule for each stage, video/audio CFG, latent upscaling, tiled decode, and MP4 output. Text to Video uses the official text-only LTX graph so there is no dormant image input.

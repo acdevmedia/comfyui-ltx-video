@@ -1,15 +1,15 @@
 {
   "id": "07824bbb-6672-4bb0-ac36-4313a519e35b",
   "revision": 0,
-  "last_node_id": 413,
-  "last_link_id": 794,
+  "last_node_id": 414,
+  "last_link_id": 795,
   "nodes": [
     {
       "id": 75,
       "type": "SaveVideo",
       "pos": [
-        3000,
-        6550
+        1050,
+        100
       ],
       "size": [
         740,
@@ -55,14 +55,17 @@
         "video/LTX25_Text_to_Video",
         "auto",
         "auto"
-      ]
+      ],
+      "title": "03 \u00b7 Your video",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 405,
       "type": "8b4f085c-1bb3-4ecd-aeed-603a8d6d3970",
       "pos": [
-        2480,
-        6550
+        540,
+        100
       ],
       "size": [
         450,
@@ -79,7 +82,7 @@
           "widget": {
             "name": "text"
           },
-          "link": null
+          "link": 795
         },
         {
           "label": "prompt_enhance",
@@ -214,7 +217,43 @@
         "gemma4_e2b_it_int8_convrot.safetensors",
         "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, camera jump, unwanted cuts, camera zoom, sudden push-in, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, broken lip sync, added narration, unwanted subtitles, watermarks, audio pops, audio clipping"
       ],
-      "title": "Text to Video \u2014 Filmmaker Controls"
+      "title": "02 \u00b7 Shot settings",
+      "color": "#484661",
+      "bgcolor": "#29283d"
+    },
+    {
+      "id": 414,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            795
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "A quiet late-night diner after closing. A tired waitress wipes the counter while rain trails down the front window. The camera slowly pushes toward the empty booth as the neon sign hums outside. No music."
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -225,6 +264,14 @@
       75,
       0,
       "VIDEO"
+    ],
+    [
+      795,
+      414,
+      0,
+      405,
+      0,
+      "STRING"
     ]
   ],
   "groups": [],
@@ -3732,13 +3779,6 @@
   },
   "config": {},
   "extra": {
-    "ds": {
-      "scale": 1.110705025764077,
-      "offset": [
-        -1692.5956762704504,
-        -6820.331825023793
-      ]
-    },
     "frontendVersion": "1.48.7",
     "workflowRendererVersion": "Vue-corrected",
     "prompt": {

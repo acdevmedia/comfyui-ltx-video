@@ -1,19 +1,19 @@
 {
   "id": "07824bbb-6672-4bb0-ac36-4313a519e35b",
   "revision": 5,
-  "last_node_id": 411,
-  "last_link_id": 808,
+  "last_node_id": 412,
+  "last_link_id": 809,
   "nodes": [
     {
       "id": 395,
       "type": "LoadImage",
       "pos": [
-        40,
-        30
+        0,
+        380
       ],
       "size": [
-        620,
-        480
+        480,
+        680
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
           "links": null
         }
       ],
-      "title": "Opening Image",
+      "title": "Starting image",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.8.2",
@@ -58,14 +58,16 @@
       "widgets_values_named": {
         "image": "neon_cyborg_portrait.png",
         "upload": "image"
-      }
+      },
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 75,
       "type": "SaveVideo",
       "pos": [
-        1560,
-        30
+        1250,
+        100
       ],
       "size": [
         800,
@@ -119,14 +121,16 @@
         "format.codec": "auto",
         "codec": "auto"
       },
-      "title": "Final Cut \u2014 Export Video"
+      "title": "03 \u00b7 Your video",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 398,
       "type": "6e397a2b-68f7-48f6-8930-f3a5491a163c",
       "pos": [
-        760,
-        30
+        540,
+        100
       ],
       "size": [
         650,
@@ -149,7 +153,7 @@
           "widget": {
             "name": "value"
           },
-          "link": null
+          "link": 809
         },
         {
           "label": "Rewrite My Prompt with AI",
@@ -479,18 +483,20 @@
         "filmmaker_350_crf": 18,
         "exact_frame": false
       },
-      "title": "Two Stage Generation \u2014 Advanced Filmmaker Controls"
+      "title": "02 \u00b7 Shot settings",
+      "color": "#484661",
+      "bgcolor": "#29283d"
     },
     {
       "id": 407,
       "type": "PrimitiveStringMultiline",
       "pos": [
-        40,
-        800
+        0,
+        920
       ],
       "size": [
-        640,
-        600
+        480,
+        300
       ],
       "flags": {},
       "order": 10,
@@ -516,7 +522,7 @@
           ]
         }
       ],
-      "title": "Avoid \u2014 Visual, Anatomy, Motion, Lighting & Audio",
+      "title": "Negative prompt",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.16.3",
@@ -539,7 +545,43 @@
       ],
       "widgets_values_named": {
         "value": "pc game, console game, video game, cartoon, childish, ugly, underexposed, dark faces, muddy shadows, harsh shadows on faces, blown highlights, clipped whites, overexposure, uneven exposure, dramatic chiaroscuro, silhouetted faces, unnatural rim lighting, excessive bloom, lens flare, light streaks, volumetric light beams, god rays, spotlighting, theatrical lighting, orange and teal colour grading, oversaturated colours, unnatural skin tones, waxy skin, plastic skin, excessive skin smoothing, heavy colour grading, HDR look, artificial HDR, excessive sharpening, flat lifeless lighting, inconsistent lighting, exposure pumping, sudden colour shifts, background music, musical score, cinematic score, orchestral soundtrack, incidental music, dramatic music, ambient music, synthesizer music, musical stings, background singing, narration, voiceover, audience laughter, laugh track, applause, audio hiss, tape hiss, white noise, static, electrical interference, audio distortion, clipping, garbled dialogue, slurred speech, rushed dialogue, unnaturally fast speech, compressed speech, robotic voices, synthetic speech artifacts, audio glitches, audio popping, distorted environmental sounds, animation, CGI, 3D render, waxy face, distorted anatomy, extra fingers, fused hands, duplicate limbs, deformed face, inconsistent facial identity, flickering, frame jitter, temporal instability, camera jump, unwanted camera cut, text overlay, subtitles, watermark, black frames, frozen frames, harsh direct lighting, crushed blacks, unnatural colour cast, oversaturated grading, lighting flicker, cinematic soundtrack, orchestral music, unwanted narration, buzzing, crackling, robotic voice, repeated speech, lip sync errors"
-      }
+      },
+      "color": "#28524d",
+      "bgcolor": "#172f2c"
+    },
+    {
+      "id": 412,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            809
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "Use the provided start image as the first frame. The cybernetic figure slowly turns his head to the right, his glowing blue eyes scanning the horizon, mechanical joints in his neck whirring faintly. The camera follows his gaze, panning across the rooftop to reveal the city beyond: a river of light winding between dark towers, a flying vehicle gliding past between the buildings, its lights streaking. He watches it pass, then his eyes narrow slightly. The camera settles on his profile against the city glow, distant hover traffic humming, wind gusting across the rooftop. No text, no black frames."
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -565,6 +607,14 @@
       0,
       398,
       11,
+      "STRING"
+    ],
+    [
+      809,
+      412,
+      0,
+      398,
+      1,
       "STRING"
     ]
   ],
@@ -5816,13 +5866,6 @@
     "VHS_MetadataImage": true,
     "VHS_KeepIntermediate": true,
     "ue_links": [],
-    "ds": {
-      "scale": 0.656709115695176,
-      "offset": [
-        -1063.7582742730908,
-        -6188.3604204896965
-      ]
-    },
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",

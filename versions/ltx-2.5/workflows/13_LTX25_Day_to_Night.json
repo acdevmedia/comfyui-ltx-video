@@ -1,18 +1,18 @@
 {
   "id": "Day to Night",
-  "last_node_id": 61,
-  "last_link_id": 88,
+  "last_node_id": 62,
+  "last_link_id": 89,
   "nodes": [
     {
       "id": 1,
       "type": "LoadVideo",
       "pos": [
         0,
-        0
+        380
       ],
       "size": [
-        310,
-        160
+        480,
+        680
       ],
       "flags": {},
       "order": 0,
@@ -42,14 +42,16 @@
       "widgets_values": [
         ""
       ],
-      "title": "Your Clip"
+      "title": "Your Clip",
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 51,
       "type": "SaveVideo",
       "pos": [
-        1060,
-        0
+        1160,
+        100
       ],
       "size": [
         310,
@@ -113,14 +115,16 @@
         "auto",
         "auto"
       ],
-      "title": "Save Video"
+      "title": "03 \u00b7 Your video",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 60,
       "type": "b69baedc-9b73-53dc-b2e4-964c86913c79",
       "pos": [
-        420,
-        0
+        540,
+        100
       ],
       "size": [
         560,
@@ -138,7 +142,7 @@
           "widget": {
             "name": "the_night_look"
           },
-          "link": null
+          "link": 89
         },
         {
           "label": "Width",
@@ -219,7 +223,7 @@
           ]
         }
       ],
-      "title": "Day to Night \u2014 Filmmaker Controls",
+      "title": "02 \u00b7 Shot settings",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
@@ -244,7 +248,43 @@
         "ic_lora_strength": 1.0,
         "seed": 42,
         "negative_prompt_cfg_1_0_little_no_effect": "daytime, bright sunlight, blue sky, overexposed, worst quality, inconsistent motion, blurry, jittery, distorted"
-      }
+      },
+      "color": "#484661",
+      "bgcolor": "#29283d"
+    },
+    {
+      "id": 62,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            89
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "A realistic nighttime scene lit by street lamps and warm windows, with a dark sky and deep soft shadows. Only the lighting changes from day to night; identical composition, framing, camera movement and motion."
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -263,18 +303,19 @@
       51,
       0,
       "VIDEO"
+    ],
+    [
+      89,
+      62,
+      0,
+      60,
+      0,
+      "STRING"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
-    "ds": {
-      "scale": 0.75,
-      "offset": [
-        20,
-        70
-      ]
-    },
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",

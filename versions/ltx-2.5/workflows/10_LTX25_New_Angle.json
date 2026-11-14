@@ -1,19 +1,19 @@
 {
   "id": "ca7de004-1b75-41ad-9eb7-3fd7add58646",
   "revision": 0,
-  "last_node_id": 52,
-  "last_link_id": 79,
+  "last_node_id": 53,
+  "last_link_id": 80,
   "nodes": [
     {
       "id": 1,
       "type": "LoadVideo",
       "pos": [
         0,
-        0
+        380
       ],
       "size": [
-        282.798828125,
-        82
+        480,
+        520
       ],
       "flags": {},
       "order": 0,
@@ -61,18 +61,20 @@
       "widgets_values_named": {
         "file": "",
         "upload": "image"
-      }
+      },
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 2,
       "type": "LoadImage",
       "pos": [
         0,
-        162
+        920
       ],
       "size": [
-        282.798828125,
-        102
+        480,
+        520
       ],
       "flags": {},
       "order": 1,
@@ -126,14 +128,16 @@
       "widgets_values_named": {
         "image": "",
         "upload": "image"
-      }
+      },
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 49,
       "type": "SaveVideo",
       "pos": [
-        1020,
-        0
+        1120,
+        100
       ],
       "size": [
         270,
@@ -195,7 +199,7 @@
           "links": null
         }
       ],
-      "title": "Save New Angle",
+      "title": "03 \u00b7 Your video",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0"
@@ -211,14 +215,16 @@
         "format": "auto",
         "format.codec": "auto",
         "codec": "auto"
-      }
+      },
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 50,
       "type": "d418fa46-9844-49e0-a407-3f48b5d712b1",
       "pos": [
-        420,
-        0
+        540,
+        100
       ],
       "size": [
         520,
@@ -236,7 +242,7 @@
           "widget": {
             "name": "value"
           },
-          "link": null
+          "link": 80
         },
         {
           "label": "Start Time in Your Clip (s)",
@@ -323,7 +329,7 @@
           ]
         }
       ],
-      "title": "New Angle \u2014 Coverage Locked to Your Clip\u2019s Sound",
+      "title": "02 \u00b7 Shot settings",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
@@ -349,7 +355,43 @@
         "value_4": 448,
         "value_5": 42,
         "value_6": "blurry, out of focus, oversharpened, waxy skin, deformed faces, incorrect hands, extra fingers, duplicate limbs, identity drift, changing clothing, flicker, frame jitter, unwanted cuts, exposure pumping, inconsistent lighting, color shifts, CGI appearance, distorted voices, robotic speech, watermarks"
-      }
+      },
+      "color": "#484661",
+      "bgcolor": "#29283d"
+    },
+    {
+      "id": 53,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            80
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "Reference sheet: Top Left (Character): [name and describe the first person]. Top Right (Character): [the second person]. Bottom (Setting): [the location].\n\nGenerated video: [new camera position], for example an over-the-shoulder shot from behind [person A], their shoulder soft in the foreground, looking at [person B] as they speak. Same place, same lighting, same moment. [Camera movement, e.g. locked off.]"
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -376,6 +418,14 @@
       49,
       0,
       "VIDEO"
+    ],
+    [
+      80,
+      53,
+      0,
+      50,
+      0,
+      "STRING"
     ]
   ],
   "groups": [],
@@ -3641,13 +3691,6 @@
   },
   "config": {},
   "extra": {
-    "ds": {
-      "scale": 1,
-      "offset": [
-        0,
-        0
-      ]
-    },
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",

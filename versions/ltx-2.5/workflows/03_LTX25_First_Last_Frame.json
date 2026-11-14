@@ -1,19 +1,19 @@
 {
   "id": "0112e9af-5129-48ba-af78-92c40ac40b40",
   "revision": 0,
-  "last_node_id": 263,
-  "last_link_id": 400,
+  "last_node_id": 264,
+  "last_link_id": 401,
   "nodes": [
     {
       "id": 39,
       "type": "LoadImage",
       "pos": [
-        1300,
-        2950
+        0,
+        380
       ],
       "size": [
-        439.984375,
-        569.984375
+        480,
+        520
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
           "links": null
         }
       ],
-      "title": "Closing Frame",
+      "title": "Last frame",
       "properties": {
         "Node name for S&R": "LoadImage",
         "cnr_id": "comfy-core",
@@ -54,14 +54,16 @@
       "widgets_values": [
         "",
         "image"
-      ]
+      ],
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 68,
       "type": "SaveVideo",
       "pos": [
-        2510,
-        2300
+        1119.984375,
+        100
       ],
       "size": [
         1109.984375,
@@ -105,14 +107,17 @@
         "video/ltx2.5_flf2v",
         "auto",
         "auto"
-      ]
+      ],
+      "title": "03 \u00b7 Your video",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 251,
       "type": "cf70afc4-5a03-47ce-8210-734b1de6c6bc",
       "pos": [
-        1910,
-        2300
+        540,
+        100
       ],
       "size": [
         519.984375,
@@ -141,7 +146,7 @@
           "widget": {
             "name": "value"
           },
-          "link": null
+          "link": 401
         },
         {
           "label": "prompt_enhance",
@@ -277,18 +282,20 @@
         0.0,
         false
       ],
-      "title": "First and Last Frame \u2014 Filmmaker Controls"
+      "title": "02 \u00b7 Shot settings",
+      "color": "#484661",
+      "bgcolor": "#29283d"
     },
     {
       "id": 31,
       "type": "LoadImage",
       "pos": [
-        1300,
-        2310
+        0,
+        920
       ],
       "size": [
-        429.984375,
-        579.984375
+        480,
+        520
       ],
       "flags": {},
       "order": 4,
@@ -308,7 +315,7 @@
           "links": null
         }
       ],
-      "title": "Opening Frame",
+      "title": "First frame",
       "properties": {
         "Node name for S&R": "LoadImage",
         "cnr_id": "comfy-core",
@@ -329,6 +336,42 @@
       "widgets_values": [
         "",
         "image"
+      ],
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
+    },
+    {
+      "id": 264,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            401
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "Use the provided start image as the first frame and the provided end image as the final frame anchor. The video opens on the back of the robotic hand, four fingers slightly curled, joints glowing faintly in the darkness, a low electrical hum filling the space. The hand rotates slowly at the wrist, turning from the back view toward the palm side, the four visible fingers uncurling gently one by one, starting with the index finger, then the middle, ring, and pinky, each joint clicking softly. As the palm turns upward, the thumb swings out from the side of the hand into view, clearly separate from the four fingers, all five fingers spreading open. A blue energy crystal fades into existence above the palm, its hum rising into a resonant tone, thin energy threads coiling around it, particles crackling softly as they spiral away like sparks. The crystal rotates slowly, hovering above the fully open hand, light spilling between the five spread fingers, the crystal's steady hum filling the silence as the video ends on the open palm with the glowing crystal.\n"
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
       ]
     }
   ],
@@ -356,6 +399,14 @@
       68,
       0,
       "VIDEO"
+    ],
+    [
+      401,
+      264,
+      0,
+      251,
+      2,
+      "STRING"
     ]
   ],
   "groups": [],
@@ -4251,13 +4302,6 @@
   },
   "config": {},
   "extra": {
-    "ds": {
-      "scale": 0.7549903240569021,
-      "offset": [
-        -533.3832364559396,
-        -1981.8355277894173
-      ]
-    },
     "frontendVersion": "1.48.7",
     "workflowRendererVersion": "Vue-corrected",
     "ue_links": [],

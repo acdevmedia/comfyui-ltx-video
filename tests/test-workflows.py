@@ -80,9 +80,18 @@ for name in profile_names:
     every_node=d['nodes']+[n for sub in d.get('definitions',{}).get('subgraphs',[]) for n in sub.get('nodes',[])]
     types={n['type'] for n in every_node}
     if name[:3] in ('04_','05_','07_','08_','09_','10_','11_','12_','13_'):
-        # One-panel layout: only the inputs, the controls panel and the save node sit on the canvas.
+        # One-panel layout: only the prompt, the inputs, the controls panel and the save node sit on the canvas.
         visible=[n.get('title') or n['type'] for n in d['nodes'] if n['type']!='MarkdownNote']
-        assert len(visible)<=4, f'{name}: canvas should stay a single controls panel, found {visible}'
+        assert len(visible)<=5, f'{name}: canvas should stay a single controls panel, found {visible}'
+    if name[:2].isdigit():
+        # Same canvas as the Eros and H3 bundles: 01 prompt, inputs, 02 Shot settings, 03 output.
+        titles=[n.get('title') for n in d['nodes']]
+        assert '01 · Describe your shot' in titles and '02 · Shot settings' in titles, f'{name}: missing numbered panels {titles}'
+        assert any(t in ('03 · Your video','03 · Your audio') for t in titles), f'{name}: missing 03 output panel {titles}'
+        prompt=next(n for n in d['nodes'] if n.get('title')=='01 · Describe your shot')
+        assert prompt['type']=='PrimitiveStringMultiline' and isinstance(prompt['widgets_values'][0],str), f'{name}: prompt panel must be a text box (it may start empty, e.g. Audio to Video)'
+        link=prompt['outputs'][0]['links'][0];panel=next(n for n in d['nodes'] if n.get('title')=='02 · Shot settings')
+        assert any(i.get('link')==link and i.get('type')=='STRING' for i in panel['inputs']), f'{name}: prompt panel must feed Shot settings'
     if name[:3] in ('08_','09_','10_','11_','12_','13_'):
         # Video in, video out: each graph loads a clip and saves an MP4, and keeps the clip's sound path.
         assert {'LoadVideo','GetVideoComponents','CreateVideo','SaveVideo','AudioMerge'} <= types, f'{name}: missing video-in/video-out nodes'

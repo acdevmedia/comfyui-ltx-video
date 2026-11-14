@@ -2,18 +2,18 @@
   "id": "3f8c25d1-9a47-4be0-8d63-71c4ea9b5028",
   "revision": 0,
   "last_node_id": 9024,
-  "last_link_id": 13864,
+  "last_link_id": 13865,
   "nodes": [
     {
       "id": 2004,
       "type": "LoadImage",
       "pos": [
         0,
-        0
+        380
       ],
       "size": [
-        343.59614112612917,
-        326
+        480,
+        680
       ],
       "flags": {},
       "order": 3,
@@ -68,15 +68,15 @@
         "image": "",
         "upload": "image"
       },
-      "color": "#232",
-      "bgcolor": "#353"
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 4852,
       "type": "SaveVideo",
       "pos": [
-        1020,
-        0
+        1120,
+        100
       ],
       "size": [
         523.0556530433919,
@@ -154,14 +154,16 @@
         "format.codec": "auto",
         "codec": "auto"
       },
-      "title": "Save Video"
+      "title": "03 \u00b7 Your video",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 9022,
       "type": "9f0f25a5-c100-42df-b178-5a6bf486dc73",
       "pos": [
-        420,
-        0
+        540,
+        100
       ],
       "size": [
         520,
@@ -194,7 +196,7 @@
           "widget": {
             "name": "value_2"
           },
-          "link": null
+          "link": 13865
         },
         {
           "label": "Negative Prompt (CFG 1.0: little/no effect)",
@@ -255,7 +257,7 @@
           ]
         }
       ],
-      "title": "Ingredients \u2014 Character and Scene Continuity",
+      "title": "02 \u00b7 Shot settings",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
@@ -281,7 +283,43 @@
         "value_1": 24,
         "render_width": 768,
         "render_height": 448
-      }
+      },
+      "color": "#484661",
+      "bgcolor": "#29283d"
+    },
+    {
+      "id": 9023,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            13865
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "Reference sheet: [describe the characters, props, wardrobe, and setting by their positions in the sheet.]\n\nGenerated video: [describe the action, camera movement, and sound.]"
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -300,6 +338,14 @@
       4852,
       0,
       "VIDEO"
+    ],
+    [
+      13865,
+      9023,
+      0,
+      9022,
+      2,
+      "STRING"
     ]
   ],
   "groups": [
@@ -6504,13 +6550,6 @@
       "comfyui-kjnodes": "1.0.8"
     },
     "workflowRendererVersion": "LG",
-    "ds": {
-      "scale": 0.4085773452793583,
-      "offset": [
-        4797.631261966263,
-        -2597.9742046318565
-      ]
-    },
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",

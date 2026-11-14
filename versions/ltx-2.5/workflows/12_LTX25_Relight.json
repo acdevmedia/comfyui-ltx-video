@@ -1,18 +1,18 @@
 {
   "id": "Relight",
-  "last_node_id": 66,
-  "last_link_id": 101,
+  "last_node_id": 67,
+  "last_link_id": 102,
   "nodes": [
     {
       "id": 1,
       "type": "LoadVideo",
       "pos": [
         0,
-        0
+        380
       ],
       "size": [
-        310,
-        160
+        480,
+        520
       ],
       "flags": {},
       "order": 0,
@@ -42,18 +42,20 @@
       "widgets_values": [
         ""
       ],
-      "title": "Your Clip"
+      "title": "Your Clip",
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 28,
       "type": "SphereLightManualNode",
       "pos": [
         0,
-        340
+        920
       ],
       "size": [
-        310,
-        160
+        480,
+        520
       ],
       "flags": {},
       "order": 27,
@@ -110,14 +112,16 @@
         2.0,
         ""
       ],
-      "title": "Light Direction"
+      "title": "Light Direction",
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 56,
       "type": "SaveVideo",
       "pos": [
-        1060,
-        0
+        1160,
+        100
       ],
       "size": [
         310,
@@ -181,14 +185,16 @@
         "auto",
         "auto"
       ],
-      "title": "Save Video"
+      "title": "03 \u00b7 Your video",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 65,
       "type": "11714f55-eedc-5383-a20a-f6b99b358663",
       "pos": [
-        420,
-        0
+        540,
+        100
       ],
       "size": [
         560,
@@ -206,7 +212,7 @@
           "widget": {
             "name": "the_light"
           },
-          "link": null
+          "link": 102
         },
         {
           "label": "Width",
@@ -294,7 +300,7 @@
           ]
         }
       ],
-      "title": "Relight \u2014 Filmmaker Controls",
+      "title": "02 \u00b7 Shot settings",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
@@ -319,7 +325,43 @@
         "ic_lora_strength": 1.0,
         "seed": 42,
         "negative_prompt_cfg_1_0_little_no_effect": "worst quality, inconsistent motion, blurry, jittery, distorted"
-      }
+      },
+      "color": "#484661",
+      "bgcolor": "#29283d"
+    },
+    {
+      "id": 67,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            102
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "relight the video to match the light-direction ball. hard low-angle sunlight from the right"
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -346,18 +388,19 @@
       56,
       0,
       "VIDEO"
+    ],
+    [
+      102,
+      67,
+      0,
+      65,
+      0,
+      "STRING"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
-    "ds": {
-      "scale": 0.75,
-      "offset": [
-        20,
-        70
-      ]
-    },
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
       "version": "ltx-2.5",

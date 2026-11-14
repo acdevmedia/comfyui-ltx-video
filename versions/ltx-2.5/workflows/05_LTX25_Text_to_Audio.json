@@ -1,15 +1,15 @@
 {
   "id": "394ed254-7306-42a2-9ae6-aa880ce4456d",
   "revision": 0,
-  "last_node_id": 5582,
-  "last_link_id": 13831,
+  "last_node_id": 5583,
+  "last_link_id": 13832,
   "nodes": [
     {
       "id": 5574,
       "type": "SaveAudioAdvanced",
       "pos": [
-        1060,
-        0
+        1160,
+        100
       ],
       "size": [
         424.25079058166807,
@@ -38,14 +38,16 @@
         "mp3",
         "320k"
       ],
-      "title": "Save Audio (MP3)"
+      "title": "03 \u00b7 Your audio",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 12,
       "type": "PreviewAudio",
       "pos": [
-        1060,
-        260
+        1160,
+        660
       ],
       "size": [
         430,
@@ -74,14 +76,16 @@
         "ver": "0.24.0"
       },
       "widgets_values": [],
-      "title": "Listen"
+      "title": "Listen",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 5581,
       "type": "fb2bc448-7ea0-5a42-9e19-118cd5bcfe40",
       "pos": [
-        420,
-        0
+        540,
+        100
       ],
       "size": [
         560,
@@ -99,7 +103,7 @@
           "widget": {
             "name": "describe_the_sound"
           },
-          "link": null
+          "link": 13832
         },
         {
           "label": "Negative Prompt (CFG 1.0: little/no effect)",
@@ -164,7 +168,7 @@
           ]
         }
       ],
-      "title": "Text to Audio \u2014 Sound Designer Controls",
+      "title": "02 \u00b7 Shot settings",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
@@ -187,7 +191,43 @@
         "frames_per_second": 24,
         "rewrite_my_prompt_with_ai": false,
         "seed": 50
-      }
+      },
+      "color": "#484661",
+      "bgcolor": "#29283d"
+    },
+    {
+      "id": 5583,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            13832
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -206,6 +246,14 @@
       5574,
       0,
       "AUDIO"
+    ],
+    [
+      13832,
+      5583,
+      0,
+      5581,
+      0,
+      "STRING"
     ]
   ],
   "floatingLinks": [],
@@ -4665,13 +4713,6 @@
         ]
       }
     ],
-    "ds": {
-      "scale": 0.266128485756377,
-      "offset": [
-        5540.748692622188,
-        -1764.980236380612
-      ]
-    },
     "linkExtensions": [
       {
         "id": 1,

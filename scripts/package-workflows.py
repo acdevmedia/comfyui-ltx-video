@@ -4,6 +4,7 @@ import copy, json, uuid
 from api_to_ui import to_ui
 from v2v_graphs import PANEL, day_to_night, new_camera_angle, relight
 from workflow_panels import fold_into_panel
+from workflow_style import style_canvas
 from workflow_dimensions import apply_dimensions, fit_frame_to_image
 from pathlib import Path
 
@@ -405,6 +406,7 @@ def write(name, data):
                 for index in range(1,len(values)):
                     if values[index]=='fixed' and isinstance(values[index-1],int):
                         values[index]='randomize'
+    style_canvas(data)  # 01 prompt / inputs / 02 Shot settings / 03 output, as the Eros and H3 bundles
     (WORK/name).write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n')
 
 def main():

@@ -73,9 +73,10 @@ export function prepareSeeds(graph, execute = false, seen = new Set(), widgetsSe
       const min = Math.max(0, seed.options?.min ?? 0);
       const max = Math.min(Number.MAX_SAFE_INTEGER, seed.options?.max ?? Number.MAX_SAFE_INTEGER);
       if (mode === "randomize") {
-        let low = Math.max(min, 100000000000000);
-        let high = Math.min(max, 999999999999999);
-        if (low > high) { low = min; high = max; }
+        // Widest range JavaScript holds exactly (1 .. 2^53-1); 0 is avoided because the
+        // ACDEV seed node treats 0 as "pick a random seed on the server" (API default).
+        const low = Math.max(min, 1);
+        const high = max;
         const words = new Uint32Array(2);
         globalThis.crypto.getRandomValues(words);
         seed.value = low + Math.floor(((words[0] * 2097152 + (words[1] >>> 11)) /

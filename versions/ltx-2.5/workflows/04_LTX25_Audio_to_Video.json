@@ -41,11 +41,11 @@
       "type": "LoadImage",
       "pos": [
         0,
-        0
+        380
       ],
       "size": [
-        343.59614112612917,
-        326
+        480,
+        520
       ],
       "flags": {},
       "order": 0,
@@ -95,16 +95,16 @@
         "",
         "image"
       ],
-      "color": "#232",
-      "bgcolor": "#353",
-      "title": "Optional Opening Frame"
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b",
+      "title": "Optional starting image"
     },
     {
       "id": 4852,
       "type": "SaveVideo",
       "pos": [
-        1060,
-        0
+        1160,
+        100
       ],
       "size": [
         523.0556530433919,
@@ -165,18 +165,20 @@
         "auto",
         "auto"
       ],
-      "title": "Save Video"
+      "title": "03 \u00b7 Your video",
+      "color": "#3c5540",
+      "bgcolor": "#223025"
     },
     {
       "id": 5600,
       "type": "LoadAudio",
       "pos": [
         0,
-        340
+        920
       ],
       "size": [
-        343.6,
-        180
+        480,
+        520
       ],
       "flags": {},
       "order": 13,
@@ -231,15 +233,15 @@
         null,
         null
       ],
-      "color": "#232",
-      "bgcolor": "#353"
+      "color": "#334c63",
+      "bgcolor": "#1b2b3b"
     },
     {
       "id": 6017,
       "type": "3d9c81fb-0be4-51c6-bdf8-9c98e8a37aa3",
       "pos": [
-        420,
-        0
+        540,
+        100
       ],
       "size": [
         560,
@@ -257,7 +259,7 @@
           "widget": {
             "name": "describe_the_video"
           },
-          "link": null
+          "link": 14073
         },
         {
           "label": "Negative Prompt (CFG 1.0: little/no effect)",
@@ -384,7 +386,7 @@
           ]
         }
       ],
-      "title": "Audio to Video \u2014 Filmmaker Controls",
+      "title": "02 \u00b7 Shot settings",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.39.0",
@@ -417,7 +419,43 @@
         "rewrite_my_prompt_with_ai": false,
         "seed": 42,
         "exact_frame": false
-      }
+      },
+      "color": "#484661",
+      "bgcolor": "#29283d"
+    },
+    {
+      "id": 6022,
+      "type": "PrimitiveStringMultiline",
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            14073
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "01 \u00b7 Describe your shot",
+      "color": "#28524d",
+      "bgcolor": "#172f2c",
+      "pos": [
+        0,
+        100
+      ],
+      "size": [
+        480,
+        220
+      ]
     }
   ],
   "links": [
@@ -444,6 +482,14 @@
       "target_id": 4852,
       "target_slot": 0,
       "type": "VIDEO"
+    },
+    {
+      "id": 14073,
+      "origin_id": 6022,
+      "origin_slot": 0,
+      "target_id": 6017,
+      "target_slot": 0,
+      "type": "STRING"
     }
   ],
   "reroutes": [],
@@ -867,13 +913,6 @@
         ]
       }
     ],
-    "ds": {
-      "scale": 0.45,
-      "offset": [
-        3989.7088433291424,
-        -2923.781409399878
-      ]
-    },
     "lastRerouteId": 5039,
     "acdev_studio": {
       "product": "ACDEV LTX-2.5 Studio",
@@ -9468,6 +9507,6 @@
       }
     ]
   },
-  "last_node_id": 6021,
-  "last_link_id": 14072
+  "last_node_id": 6022,
+  "last_link_id": 14073
 }

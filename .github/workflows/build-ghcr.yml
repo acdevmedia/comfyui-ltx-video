@@ -34,6 +34,7 @@ jobs:
         run: |
           python3 scripts/audit-seeds.py
           node scripts/test-workflow-defaults.mjs
+          python3 scripts/test_seed_fallback.py
           python3 scripts/package-workflows.py
           git diff --exit-code -- versions/ltx-2.5/workflows
           bash tests/test-startup.sh
